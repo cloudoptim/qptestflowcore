@@ -1,0 +1,2 @@
+# qptestflowcore
+automation core
