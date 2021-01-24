@@ -17,6 +17,7 @@ namespace DataBaseModel
         public string FeatureName { get; set; }
         public string ApplicationName { get; set; }
         public bool IsActive { get; set; }
+        public string Type { get; set; }
         public  IList<WebModelGroup> WebModelGroups { get; set; }
     }
 }
