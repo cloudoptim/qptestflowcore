@@ -31,7 +31,7 @@ namespace QPCore.Controllers
 
         // GET api/<WebModelController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public WebModel Get(int id)
         {
             return _webModelService.GetWebModel(id);
         }
@@ -55,6 +55,7 @@ namespace QPCore.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _webModelService.deleteModel(id);
         }
     }
 }
