@@ -32,12 +32,15 @@ namespace QPCore.Service
             return webModel;
         }
         //todo: refector to move sql specific code into DAO
-        public void AddModel(WebModel webModel)
+        public WebModel AddModel(WebModel webModel)
         {
             string webmodelJson = JsonConvert.SerializeObject(webModel);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_model", webmodelJson, NpgsqlDbType.Json));
-            _postgresDataBase.ProcedureJson("createmodelusingjson", npgsqlParameters);
+            var json = _postgresDataBase.ProcedureJson("createmodelusingjson", npgsqlParameters).ToList().FirstOrDefault();
+            WebModel newwebModel = JsonConvert.DeserializeObject<WebModel>(json.createmodelusingjson);
+
+            return newwebModel;
         }
 
         public void deleteModel(int id)

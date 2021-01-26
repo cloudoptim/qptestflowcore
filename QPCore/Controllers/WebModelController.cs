@@ -38,9 +38,9 @@ namespace QPCore.Controllers
 
         // POST api/<WebModelController>
         [HttpPost]
-        public void Post(WebModel value)
+        public WebModel Post(WebModel value)
         {
-            _webModelService.AddModel(value);
+           return  _webModelService.AddModel(value);
         }
 
         // PUT api/<WebModelController>/5
