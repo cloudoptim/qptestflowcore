@@ -42,7 +42,6 @@ namespace QPCore.Service
 
         public void deleteModel(int id)
         {
-
              _postgresDataBase.Procedure("deletemodel", new { modelid = id }).ToList().FirstOrDefault();
         }
     }

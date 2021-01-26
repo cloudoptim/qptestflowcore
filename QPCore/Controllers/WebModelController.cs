@@ -40,8 +40,6 @@ namespace QPCore.Controllers
         [HttpPost]
         public void Post(WebModel value)
         {
-            
-            
             _webModelService.AddModel(value);
         }
 
