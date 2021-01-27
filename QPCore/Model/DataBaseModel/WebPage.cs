@@ -6,6 +6,10 @@ namespace DataBaseModel
     
     public partial class WebPage
     {
+        public WebPage()
+        {
+            this.WebElements = new List<WebElement>();
+        }
         public int pageid { get; set; }
         public int groupid { get; set; }
         public string pagename { get; set; }
@@ -14,5 +18,7 @@ namespace DataBaseModel
         public string updatename { get; set; }
         public Nullable<System.DateTime> updateddatetime { get; set; }
         public Nullable<bool> isactive { get; set; }
+
+        public List<WebElement> WebElements { set; get; }
     }
 }
