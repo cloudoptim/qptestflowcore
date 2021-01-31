@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace QPCore.Service
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class WebModelService
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
         PostgresDataBase _postgresDataBase;
         public WebModelService(PostgresDataBase postgresDataBase)

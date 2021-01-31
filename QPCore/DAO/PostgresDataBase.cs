@@ -315,7 +315,7 @@ namespace QPCore.DAO
 
         private dynamic CoreFunction(Func<string, NpgsqlCommand, dynamic, dynamic> function, Func<string, object[], string> formatQueryFunc, string query, params object[] parameters)
         {
-            const int maxEchoQueryLength = 200;
+          //  const int maxEchoQueryLength = 200;
 
             var commandText = formatQueryFunc(query, parameters);
 
