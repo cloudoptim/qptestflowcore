@@ -1,4 +1,5 @@
 ﻿using DataBaseModel;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.ViewModels;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AnyOrignPolicy")]
     [ApiController]
     public class WebElementController : ControllerBase
     {

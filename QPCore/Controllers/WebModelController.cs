@@ -1,4 +1,5 @@
 ﻿using DataBaseModel;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Service;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Produces("application/json")]
+    [EnableCors("AnyOrignPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class WebModelController : ControllerBase

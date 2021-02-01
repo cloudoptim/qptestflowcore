@@ -16,7 +16,7 @@ namespace QPCore
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "AnyOrignPolicy";
 
         public Startup(IConfiguration configuration)
         {
@@ -35,8 +35,11 @@ namespace QPCore
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://qpatestflowweb.s3-website-us-east-1.amazonaws.com/");
-                                                          
+                                      builder.AllowAnyOrigin()
+                                             .AllowAnyHeader()
+                                             .AllowAnyMethod();
+
+
                                   });
             });
 
