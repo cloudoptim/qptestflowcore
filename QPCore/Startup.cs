@@ -57,6 +57,7 @@ namespace QPCore
 
             services.AddSingleton<WebElementService>();
             services.AddSingleton<FeatureAppService>();
+            services.AddSingleton<StepService>();
             services.AddControllers();
             
             

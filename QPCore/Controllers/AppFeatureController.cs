@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using QPCore.Model.DataBaseModel;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using QPCore.Model.DataBaseModel;
 using QPCore.Service;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,6 +28,13 @@ namespace QPCore.Controllers
         {
             List<AppFeature> appfeatures = _featureService.GetAppFeature(); 
             return appfeatures;
+        }
+       
+        [HttpGet("{id}/steps")]
+        public List<Steps> Get(int id)
+        {
+            List<Steps> steps  = _featureService.GetAppFeatureSteps(id);
+            return steps;
         }
 
         // POST api/<AppFeatureController>

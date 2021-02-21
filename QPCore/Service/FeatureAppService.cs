@@ -42,6 +42,20 @@ namespace QPCore.Service
             return appFeature;
         }
 
+        internal List<Steps> GetAppFeatureSteps(int id)
+        {
+            var _data = _postgresDataBase.Procedure("getsteps", new
+            {   
+                featureid = id
+            }).ToList().FirstOrDefault();
+
+            if (_data.getsteps is System.DBNull)
+                return new List<Steps>();
+
+            List<Steps> stepList = JsonConvert.DeserializeObject<List<Steps>>(_data.getsteps);
+            return stepList;
+        }
+
         internal AppFeatureView UpdateFeature(AppFeatureView feature)
         {
             var _data = _postgresDataBase.Procedure("createapplicationfeature", new
@@ -64,7 +78,7 @@ namespace QPCore.Service
 
         internal void DeleteFeature(int id)
         {
-            throw new NotImplementedException();
+            _postgresDataBase.Procedure("deletefeature", new { pfeatureid = id }).ToList().FirstOrDefault();
         }
     }
 }
