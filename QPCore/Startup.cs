@@ -56,13 +56,11 @@ namespace QPCore
             services.AddSingleton<WebModelService>();
 
             services.AddSingleton<WebElementService>();
-            
+            services.AddSingleton<FeatureAppService>();
             services.AddControllers();
             
             
-            services.AddCors(c =>  {  
-    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());  
-                    });
+            services.AddCors(c =>{ c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());});
 
 
             // Register the Swagger generator, defining 1 or more Swagger documents
