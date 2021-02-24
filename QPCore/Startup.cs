@@ -59,6 +59,7 @@ namespace QPCore
             services.AddSingleton<FeatureAppService>();
             services.AddSingleton<StepService>();
             services.AddSingleton<CommandService>();
+            services.AddSingleton<TestFlowService>();
             services.AddControllers();
             
             
