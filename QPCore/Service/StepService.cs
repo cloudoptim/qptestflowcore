@@ -27,6 +27,8 @@ namespace QPCore.Service
         internal Steps CreateStep(Steps steps)
         {
             steps.StepId = 0;
+            SetStepColumnRowIdstoZero(steps);
+
             string stepsJson = JsonConvert.SerializeObject(steps);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_steps", stepsJson, NpgsqlDbType.Json));
@@ -55,6 +57,9 @@ namespace QPCore.Service
         internal Steps UpdateStep(Steps steps)
         {
             steps.StepId = 0;
+
+            SetStepColumnRowIdstoZero(steps);
+
             string stepsJson = JsonConvert.SerializeObject(steps);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_steps", stepsJson, NpgsqlDbType.Json));
@@ -63,6 +68,19 @@ namespace QPCore.Service
             Steps appFeature = JsonConvert.DeserializeObject<Steps>(_data.createstepsusingjson);
 
             return appFeature;
+        }
+
+        private void SetStepColumnRowIdstoZero(Steps steps)
+        {
+                foreach (var col in steps.Columns)
+                {
+                    col.ColumnId = 0;
+                    foreach (var row in col.Rows)
+                    {
+                        row.RowId = 0;
+                    }
+                }
+            
         }
         internal void DeleteStep(int id)
         {
