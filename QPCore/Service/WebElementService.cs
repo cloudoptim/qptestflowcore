@@ -1,14 +1,9 @@
-﻿using AutomationAssistant.Models.AppConfig;
-using DataBaseModel;
+﻿using DataBaseModel;
 using Newtonsoft.Json;
-using Npgsql;
-using NpgsqlTypes;
 using QPCore.DAO;
 using QPCore.Model.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace QPCore.Service
 {
@@ -44,7 +39,7 @@ namespace QPCore.Service
         public WebElement GetWebElement(int id)
         {
             var json = _postgresDataBase.Procedure("getElement", new { elementId = id }).ToList().FirstOrDefault();
-            WebElement webModel = JsonConvert.DeserializeObject<WebElement>(json.getmodeljson);
+            WebElement webModel = JsonConvert.DeserializeObject<WebElement>(json.getelement);
 
             return webModel;
         }
