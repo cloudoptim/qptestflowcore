@@ -56,7 +56,7 @@ namespace QPCore.Service
 
         internal Steps UpdateStep(Steps steps)
         {
-            steps.StepId = 0;
+            
 
             SetStepColumnRowIdstoZero(steps);
 
