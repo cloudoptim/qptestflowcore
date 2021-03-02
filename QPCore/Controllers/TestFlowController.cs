@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.DataBaseModel.TestFlows;
 using QPCore.Service;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AnyOrignPolicy")]
     [ApiController]
     public class TestFlowController : ControllerBase
     {
