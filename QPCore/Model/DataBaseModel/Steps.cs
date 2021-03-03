@@ -12,7 +12,7 @@ namespace QPCore.Model.DataBaseModel
         public string StepName { get; set; }
         public string StepDescription { get; set; }
         public string StepType { get; set; }
-        public object StepDataType { get; set; }
+        public string StepDataType { get; set; }
         public string DisplayStepName { get; set; }
         public string StepSource { get; set; }
         public bool IsActive { get; set; }
