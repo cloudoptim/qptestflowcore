@@ -85,7 +85,7 @@ namespace QPCore.Service
         {
             _postgresDataBase.Procedure("deletecommand", new
             {
-                p_commandid = id
+                P_CommandId = id
             }).ToList().FirstOrDefault();
         }
     }
