@@ -69,16 +69,16 @@ namespace QPCore.Controllers
         }
         // DELETE api/<CommandController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            configService.DeleteConfig(id);
+          return   configService.DeleteConfig(id);
         }
 
         [HttpDelete()]
         [Route("Key/{id}")]
-        public void Deletekey(int id)
+        public bool Deletekey(int id)
         {
-            configService.DeleteConfigKey(id);
+           return configService.DeleteConfigKey(id);
         }
     }
 }

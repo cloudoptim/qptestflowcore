@@ -141,20 +141,22 @@ namespace QPCore.Service
             return config;
         }
 
-        internal void DeleteConfig(int id)
+        internal bool DeleteConfig(int id)
         {
             _postgresDataBase.Procedure("deleteconfig", new
             {
                 P_ConfigId = id
             }).ToList().FirstOrDefault();
+            return true;
         }
 
-        internal void DeleteConfigKey(int id)
+        internal bool DeleteConfigKey(int id)
         {
             _postgresDataBase.Procedure("deleteconfigkey", new
             {
                 P_keyid = id
             }).ToList().FirstOrDefault();
+            return true;
         }
     }
 }
