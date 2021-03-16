@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Npgsql;
-using NpgsqlTypes;
 using QPCore.DAO;
-using QPCore.Model.DataBaseModel.Commands;
 using QPCore.Model.DataBaseModel.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace QPCore.Service
 {

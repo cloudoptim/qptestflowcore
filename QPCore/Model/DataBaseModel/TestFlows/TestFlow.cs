@@ -36,6 +36,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public string TestFlowStepDataType { get; set; }
         public string TestFlowStepSource { get; set; }
         public bool IsActive { get; set; }
+        public int OrderNumber { get; set; }
         public int ClientId { get; set; }
         public List<TestFlowStepColumn> Columns { get; set; }
     }

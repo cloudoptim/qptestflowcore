@@ -76,12 +76,15 @@ namespace QPCore.Service
             foreach(var step in value.Steps)
             {
                 step.TestFlowStepId = 0;
-                foreach(var col in step.Columns)
+                if (step.Columns != null)
                 {
-                    col.ColumnId = 0;
-                    foreach(var row in col.Rows)
+                    foreach (var col in step.Columns)
                     {
-                        row.RowId = 0;
+                        col.ColumnId = 0;
+                        foreach (var row in col.Rows)
+                        {
+                            row.RowId = 0;
+                        }
                     }
                 }
             }
