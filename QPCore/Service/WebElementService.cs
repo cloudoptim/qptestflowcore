@@ -47,8 +47,8 @@ namespace QPCore.Service
         internal WebElement AddWebElement(WebElement value)
         {
             //addorUpdateWebElement
-
-            var json = _postgresDataBase.Procedure("addorUpdateWebElement", new {
+            value.screenshot = value.screenshot == null ? string.Empty : value.screenshot;
+           var json = _postgresDataBase.Procedure("addorUpdateWebElement", new {
 
                 elementid = value.elementid,
                 elementaliasname = value.elementaliasname,
