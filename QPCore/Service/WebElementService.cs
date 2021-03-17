@@ -51,17 +51,17 @@ namespace QPCore.Service
            var json = _postgresDataBase.Procedure("addorUpdateWebElement", new {
 
                 elementid = value.elementid,
-                elementaliasname = value.elementaliasname,
-                elementtype = value.elementtype,
-                itype = value.itype,
-                ivalue = value.ivalue,
-                framenavigation = value.framenavigation,
-                command = value.command,
-                locationpath = value.locationpath,
-                screenshot = value.screenshot,
-                elementparentid = value.elementparentid,
-                applicationsection = value.applicationsection,
-                value = value.value,
+                elementaliasname = value.elementaliasname??string.Empty,
+                elementtype = value.elementtype??string.Empty,
+                itype = value.itype??string.Empty,
+                ivalue = value.ivalue??string.Empty,
+                framenavigation = value.framenavigation??string.Empty,
+                command = value.command??string.Empty,
+                locationpath = value.locationpath??string.Empty,
+                screenshot = value.screenshot??string.Empty,
+                elementparentid = value.elementparentid??0,
+                applicationsection = value.applicationsection??string.Empty,
+                value = value.value??string.Empty,
                 pageid =  value.pageid
 
             }).ToList().FirstOrDefault();
