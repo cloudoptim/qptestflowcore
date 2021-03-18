@@ -12,6 +12,7 @@ namespace QPTestClient.QPFlow.Results
         public string ErrorMessage { set; get; }
         public string SatckTrace { set; get; }
         public string Status { set; get; }
-        public string ExecutionTime { get; internal set; }
+        public string ExecutionTime { get; set; }
+        public string Screenshot { get; set; }
     }
 }
