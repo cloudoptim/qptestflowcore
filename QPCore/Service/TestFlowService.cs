@@ -40,6 +40,7 @@ namespace QPCore.Service
                 return new TestFlow();
 
             TestFlow Command = JsonConvert.DeserializeObject<TestFlow>(_data.gettestflow);
+            Command.GroupStep();
             return Command;
         }
 
