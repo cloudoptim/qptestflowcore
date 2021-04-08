@@ -1,0 +1,6 @@
+.vs/QPCore/DesignTimeBuild/.dtbcache.v2
+.vs/QPCore/v16/.suo
+.vscode/launch.json
+.vscode/tasks.json
+QPCore/bin/*
+QPCore/obj/*
