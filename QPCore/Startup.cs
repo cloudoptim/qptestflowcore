@@ -11,6 +11,8 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.IO;
+using AutoMapper;
+using QPCore.AutoMapper;
 
 namespace QPCore
 {
@@ -51,6 +53,8 @@ namespace QPCore
             services.AddSingleton<IAADatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AADatabaseSettings>>().Value);
 
+            // Auto Mapper Configurations
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddSingleton<PostgresDataBase>();
             services.AddSingleton<WebModelService>();

@@ -1,28 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace QPCore.Model.DataBaseModel.TestFlows
 {
-
-    public class TestFlow
+    public class StepResourceType
     {
-        public int TestFlowId { get; set; }
-        public string TestFlowName { get; set; }
-        public string TestFlowDescription { get; set; }
-        public int LockedBy { get; set; }
-        public string TestFlowStatus { get; set; }
-        public int AssignedTo { get; set; }
-        public string AssignedDatetTime { get; set; }
-        public int ClientId { get; set; }
-        public int LastUpdatedUserId { get; set; }
-        public string LastUpdatedDateTime { get; set; }
-        public string SourceFeatureName { get; set; }
-        public int SourceFeatureId { get; set; }
-        public bool Islocked { get; set; }
-        public bool IsActive { get; set; }
+        public const string DATA_DRIVEN = "Data Driven";
+        public const string DATA_RESOURCE = "Data Resource";
+        public const string DATA_STEP = "Data Step";
+    }
+
+    public class TestFlow : TestFlowBaseDTO
+    {
+        public TestFlow()
+        {
+            this.Steps = new List<TestFlowStep>();
+        }
         public List<TestFlowStep> Steps { get; set; }
+
+        public TestFlowGroup GroupStep()
+        {
+            var testFlowGroup = new TestFlowGroup();
+            if (this.Steps.Any())
+            {
+                testFlowGroup.DataDriven = this.Steps.FirstOrDefault(s => s.ResourceType == StepResourceType.DATA_DRIVEN);
+                testFlowGroup.DataResource = this.Steps.Where(s => s.ResourceType == StepResourceType.DATA_RESOURCE).ToList();
+                testFlowGroup.Step = this.Steps.Where(s => s.ResourceType == StepResourceType.DATA_STEP || (s.ResourceType != StepResourceType.DATA_DRIVEN && s.ResourceType != StepResourceType.DATA_RESOURCE)).ToList();
+            }
+
+            return testFlowGroup;
+        }
+    }
+
+    public class TestFlowGroup
+    {
+        public TestFlowGroup()
+        {
+            this.Step = new List<TestFlowStep>();
+            this.DataResource = new List<TestFlowStep>();
+        }
+        public TestFlowStep DataDriven { get; set; }
+
+        public List<TestFlowStep> Step { get; set; }
+
+        public List<TestFlowStep> DataResource { get; set; }
     }
 
     public class TestFlowStep
@@ -39,7 +63,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public int OrderNumber { get; set; }
         public int ClientId { get; set; }
         public string ResourceType { get; set; }
-        
+
         public List<TestFlowStepColumn> Columns { get; set; }
     }
 
