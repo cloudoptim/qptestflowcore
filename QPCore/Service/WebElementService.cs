@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using QPCore.DAO;
 using QPCore.Model.ViewModels;
+using QPCore.Model.WebElement;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -195,6 +196,19 @@ namespace QPCore.Service
         public void deleteElement(int id)
         {
             _postgresDataBase.Procedure("deleteElement", new { elementid = id }).ToList().FirstOrDefault();
+        }
+
+        public List<CheckingWebElementItem> CheckingWebElements(CheckingWebElementDTO webElementDTO)
+        {
+            var joinedElementString = string.Join(',', webElementDTO.ElementNames);
+
+            var result = _postgresDataBase.Procedure<CheckingWebElementItem>("checkingwebelementnames", new
+            {
+                p_pageId = webElementDTO.PageId,
+                p_elementnames = joinedElementString,
+            }).ToList();
+
+            return result;
         }
     }
 }

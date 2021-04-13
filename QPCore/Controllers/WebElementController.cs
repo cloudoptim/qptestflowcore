@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.ViewModels;
+using QPCore.Model.WebElement;
 using QPCore.Service;
 using System;
 using System.Collections.Generic;
@@ -163,6 +164,18 @@ namespace QPCore.Controllers
         public void Delete(int id)
         {
             _webElementService.deleteElement(id);
+        }
+
+        /// <summary>
+        /// API to  check web element name , If element name exists return true and else return false 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("checkingelements")]
+        public List<CheckingWebElementItem> CheckingElements(CheckingWebElementDTO data)
+        {
+            var result = _webElementService.CheckingWebElements(data);
+            return result;
         }
     }
 }
