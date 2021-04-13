@@ -47,9 +47,18 @@ namespace QPCore.Controllers
 
         // DELETE api/<StepController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _stepService.DeleteStep(id);
+            var isUsed = _stepService.CheckIsUsed(id);
+            if (isUsed)
+            {
+                return BadRequest("This step is being used by a TestFlow. Please remove it in the TestFlow before you do this action.");
+            }
+            else
+            {
+                _stepService.DeleteStep(id);
+                return Ok();
+            }
         }
 
         [HttpGet("checkunique")]

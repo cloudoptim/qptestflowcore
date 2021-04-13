@@ -17,16 +17,20 @@ namespace QPCore.Service
     {
         private PostgresDataBase _postgresDataBase;
         private IRepository<StepGlossary> _stepGlossaryRepository;
+        private IRepository<TestFlowStep> _testFlowStep;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
         /// <param name="stepGlossaryRepository"></param>
+        /// <param name="testFlowStep"></param>
         public StepService(PostgresDataBase postgresDataBase,
-            IRepository<StepGlossary> stepGlossaryRepository)
+            IRepository<StepGlossary> stepGlossaryRepository,
+            IRepository<TestFlowStep> testFlowStep)
         {
             _postgresDataBase = postgresDataBase;
             _stepGlossaryRepository = stepGlossaryRepository;
+            _testFlowStep = testFlowStep;
         }
 
         internal Steps CreateStep(Steps steps)
@@ -109,6 +113,19 @@ namespace QPCore.Service
             };
 
             return result;
+        }
+
+        /// <summary>
+        /// Check step is used by step flow
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal bool CheckIsUsed(int id)
+        {
+            var query = _testFlowStep.GetQuery()
+                 .Any(p => p.StepGlossaryStepId == id);
+
+            return query;
         }
     }
 }
