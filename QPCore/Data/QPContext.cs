@@ -55,14 +55,6 @@ namespace QPCore.Data
         public virtual DbSet<WebPage> WebPages { get; set; }
         public virtual DbSet<WebPageGroup> WebPageGroups { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql("Host=qpairpostgres.cnryqwkkelel.us-east-1.rds.amazonaws.com;Database=qptestflow;Username=aravin;Password=Qpair@2019");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "en_US.UTF-8");

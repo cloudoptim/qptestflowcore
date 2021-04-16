@@ -2,6 +2,8 @@
 using Npgsql;
 using NpgsqlTypes;
 using QPCore.DAO;
+using QPCore.Data;
+using QPCore.Data.Enitites;
 using QPCore.Model.DataBaseModel;
 using System;
 using System.Collections.Generic;
@@ -12,17 +14,19 @@ namespace QPCore.Service
 {
     public class StepService
     {
-        PostgresDataBase _postgresDataBase;
+        private PostgresDataBase _postgresDataBase;
+        private IRepository<StepGlossary> _stepGlossaryRepository;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
-        public StepService(PostgresDataBase postgresDataBase)
+        /// <param name="stepGlossaryRepository"></param>
+        public StepService(PostgresDataBase postgresDataBase,
+            IRepository<StepGlossary> stepGlossaryRepository)
         {
             _postgresDataBase = postgresDataBase;
+            _stepGlossaryRepository = stepGlossaryRepository;
         }
-
-      
 
         internal Steps CreateStep(Steps steps)
         {
@@ -32,13 +36,13 @@ namespace QPCore.Service
             string stepsJson = JsonConvert.SerializeObject(steps);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_steps", stepsJson, NpgsqlDbType.Json));
-           
+
             var _data = _postgresDataBase.ProcedureJson("createstepsusingjson", npgsqlParameters).ToList().FirstOrDefault();
             Steps appFeature = JsonConvert.DeserializeObject<Steps>(_data.createstepsusingjson);
 
             return appFeature;
         }
-        
+
         internal Steps Getstep(int id)
         {
             var _data = _postgresDataBase.Procedure("getstep", new
@@ -56,7 +60,7 @@ namespace QPCore.Service
 
         internal Steps UpdateStep(Steps steps)
         {
-            
+
 
             SetStepColumnRowIdstoZero(steps);
 
@@ -72,21 +76,28 @@ namespace QPCore.Service
 
         private void SetStepColumnRowIdstoZero(Steps steps)
         {
-                foreach (var col in steps.Columns)
+            foreach (var col in steps.Columns)
+            {
+                col.ColumnId = 0;
+                foreach (var row in col.Rows)
                 {
-                    col.ColumnId = 0;
-                    foreach (var row in col.Rows)
-                    {
-                        row.RowId = 0;
-                    }
+                    row.RowId = 0;
                 }
-            
+            }
+
         }
         internal void DeleteStep(int id)
         {
             _postgresDataBase.Procedure("deletestep", new { pstepid = id }).ToList().FirstOrDefault();
         }
 
-       
+        internal bool CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
+        {
+            var result = _stepGlossaryRepository.GetQuery()
+                .Any(p => p.FeatureId == featureId
+                && p.StepName.Trim().ToLower() == stepGlossaryName.Trim().ToLower());
+
+            return !result;
+        }
     }
 }

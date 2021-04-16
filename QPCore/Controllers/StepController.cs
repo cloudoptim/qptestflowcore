@@ -22,13 +22,13 @@ namespace QPCore.Controllers
             _stepService = stepService;
         }
 
-         // GET api/<StepController>/5
-         [HttpGet("{id}")]
+        // GET api/<StepController>/5
+        [HttpGet("{id}")]
         public Steps Get(int id)
         {
             return _stepService.Getstep(id);
         }
-        
+
         // POST api/<StepController>
         [HttpPost]
         public Steps Post(Steps value)
@@ -49,6 +49,13 @@ namespace QPCore.Controllers
         public void Delete(int id)
         {
             _stepService.DeleteStep(id);
+        }
+
+        [HttpGet("checkunique")]
+        public ActionResult CheckUniqueStepGlossary(int featureId, string stepName)
+        {
+            var result = _stepService.CheckUniqueStepGlossary(featureId, stepName);
+            return Ok(new { isUnique = result });
         }
     }
 }
