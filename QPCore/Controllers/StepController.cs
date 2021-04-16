@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel;
 using QPCore.Service;
 using System;
@@ -52,10 +53,10 @@ namespace QPCore.Controllers
         }
 
         [HttpGet("checkunique")]
-        public ActionResult CheckUniqueStepGlossary(int featureId, string stepName)
+        public CheckUniqueDTO CheckUniqueStepGlossary(int featureId, string stepName)
         {
             var result = _stepService.CheckUniqueStepGlossary(featureId, stepName);
-            return Ok(new { isUnique = result });
+            return result;
         }
     }
 }

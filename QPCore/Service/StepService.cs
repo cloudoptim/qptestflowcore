@@ -4,6 +4,7 @@ using NpgsqlTypes;
 using QPCore.DAO;
 using QPCore.Data;
 using QPCore.Data.Enitites;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel;
 using System;
 using System.Collections.Generic;
@@ -91,13 +92,23 @@ namespace QPCore.Service
             _postgresDataBase.Procedure("deletestep", new { pstepid = id }).ToList().FirstOrDefault();
         }
 
-        internal bool CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
+        /// <summary>
+        /// Checking unique step
+        /// </summary>
+        /// <param name="featureId"></param>
+        /// <param name="stepGlossaryName"></param>
+        /// <returns></returns>
+        internal CheckUniqueDTO CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
         {
-            var result = _stepGlossaryRepository.GetQuery()
+            var status = _stepGlossaryRepository.GetQuery()
                 .Any(p => p.FeatureId == featureId
                 && p.StepName.Trim().ToLower() == stepGlossaryName.Trim().ToLower());
+            var result = new CheckUniqueDTO()
+            {
+                IsUnique = status
+            };
 
-            return !result;
+            return result;
         }
     }
 }

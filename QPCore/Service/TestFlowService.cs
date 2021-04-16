@@ -2,6 +2,8 @@
 using Npgsql;
 using NpgsqlTypes;
 using QPCore.DAO;
+using QPCore.Data;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel.TestFlows;
 using System;
 using System.Collections.Generic;
@@ -13,13 +15,17 @@ namespace QPCore.Service
     public class TestFlowService
     {
         PostgresDataBase _postgresDataBase;
+        private IRepository<QPCore.Data.Enitites.TestFlow> _testFlowRepository;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
-        public TestFlowService(PostgresDataBase postgresDataBase)
+        /// <param name="testFlowRepository"></param>
+        public TestFlowService(PostgresDataBase postgresDataBase,
+            IRepository<QPCore.Data.Enitites.TestFlow> testFlowRepository)
         {
             _postgresDataBase = postgresDataBase;
+            _testFlowRepository = testFlowRepository;
         }
 
         internal List<TestFlow> GetTestFlows()
@@ -73,7 +79,7 @@ namespace QPCore.Service
 
         private void SetStepColumnRowIdstoZero(TestFlow value)
         {
-            foreach(var step in value.Steps)
+            foreach (var step in value.Steps)
             {
                 step.TestFlowStepId = 0;
                 if (step.Columns != null)
@@ -95,6 +101,81 @@ namespace QPCore.Service
             {
                 ptestflowid = id
             }).ToList().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Check unique Test Flow name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        internal CheckUniqueDTO CheckUniqueTestFlow(string name)
+        {
+            var status = _testFlowRepository.GetQuery()
+               .Any(p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower());
+            var result = new CheckUniqueDTO()
+            {
+                IsUnique = !status
+            };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lock a test flow
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal async Task<Data.Enitites.TestFlow> LockTestFlowAsync(int id)
+        {
+            Data.Enitites.TestFlow result = null;
+            var item = _testFlowRepository.GetQuery()
+                .FirstOrDefault(p => p.TestFlowId == id);
+
+            if (item != null)
+            {
+                item.Islocked = true;
+                result = await _testFlowRepository.UpdateAsync(item);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lock a test flow
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal async Task<Data.Enitites.TestFlow> UnTestFlowAsync(int id)
+        {
+            Data.Enitites.TestFlow result = null;
+            var item = _testFlowRepository.GetQuery()
+                .FirstOrDefault(p => p.TestFlowId == id);
+
+            if (item != null)
+            {
+                item.Islocked = false;
+                result = await _testFlowRepository.UpdateAsync(item);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Check locking test flow
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal CheckLockingDTO CheckLockedTestFlow(int id)
+        {
+            var status = _testFlowRepository.GetQuery()
+                .Any(p => p.TestFlowId == id && p.Islocked == true);
+
+            var result = new CheckLockingDTO()
+            {
+                IsLocked = status
+            };
+
+            return result;
         }
     }
 }

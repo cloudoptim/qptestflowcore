@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel.TestFlows;
 using QPCore.Service;
 using System;
@@ -69,6 +70,34 @@ namespace QPCore.Controllers
         public void Delete(int id)
         {
             testFlowService.DeleteTestFlow(id);
+        }
+
+        [HttpGet("checkunique")]
+        public CheckUniqueDTO CheckUniqueTestFlow(string name)
+        {
+            var result = testFlowService.CheckUniqueTestFlow(name);
+            return result;
+        }
+
+        [HttpPost("lock")]
+        public async Task<IActionResult> LockTestFlow(int id)
+        {
+            var lockedResult = await testFlowService.LockTestFlowAsync(id);
+            return Ok(lockedResult);
+        }
+
+        [HttpPost("unlock")]
+        public async Task<IActionResult> UnTestFlow(int id)
+        {
+            var lockedResult = await testFlowService.UnTestFlowAsync(id);
+            return Ok(lockedResult);
+        }
+
+        [HttpGet("checklocking")]
+        public CheckLockingDTO CheckLockingTestFlow(int id)
+        {
+            var result = testFlowService.CheckLockedTestFlow(id);
+            return result;
         }
     }
 }
