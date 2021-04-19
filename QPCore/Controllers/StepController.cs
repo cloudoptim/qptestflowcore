@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel;
 using QPCore.Service;
 using System;
@@ -22,13 +23,13 @@ namespace QPCore.Controllers
             _stepService = stepService;
         }
 
-         // GET api/<StepController>/5
-         [HttpGet("{id}")]
+        // GET api/<StepController>/5
+        [HttpGet("{id}")]
         public Steps Get(int id)
         {
             return _stepService.Getstep(id);
         }
-        
+
         // POST api/<StepController>
         [HttpPost]
         public Steps Post(Steps value)
@@ -46,9 +47,25 @@ namespace QPCore.Controllers
 
         // DELETE api/<StepController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _stepService.DeleteStep(id);
+            var isUsed = _stepService.CheckIsUsed(id);
+            if (isUsed)
+            {
+                return BadRequest("This step is being used by a TestFlow. Please remove it in the TestFlow before you do this action.");
+            }
+            else
+            {
+                _stepService.DeleteStep(id);
+                return Ok();
+            }
+        }
+
+        [HttpGet("checkunique")]
+        public CheckUniqueDTO CheckUniqueStepGlossary(int featureId, string stepName)
+        {
+            var result = _stepService.CheckUniqueStepGlossary(featureId, stepName);
+            return result;
         }
     }
 }

@@ -13,6 +13,8 @@ using System.Reflection;
 using System.IO;
 using AutoMapper;
 using QPCore.AutoMapper;
+using QPCore.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace QPCore
 {
@@ -52,6 +54,11 @@ namespace QPCore
 
             services.AddSingleton<IAADatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AADatabaseSettings>>().Value);
+            
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<QPContext>(options =>
+                options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString")));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
@@ -61,9 +68,9 @@ namespace QPCore
 
             services.AddSingleton<WebElementService>();
             services.AddSingleton<FeatureAppService>();
-            services.AddSingleton<StepService>();
+            services.AddTransient<StepService>();
             services.AddSingleton<CommandService>();
-            services.AddSingleton<TestFlowService>();
+            services.AddTransient<TestFlowService>();
             services.AddSingleton<ConfigService>();
             services.AddSingleton<TestRunService>();
             services.AddControllers();
