@@ -82,22 +82,61 @@ namespace QPCore.Controllers
         [HttpPost("lock")]
         public async Task<IActionResult> LockTestFlow(int id)
         {
-            var lockedResult = await testFlowService.LockTestFlowAsync(id);
+            var userId = GetUserId();
+            if (userId < 0)
+            {
+                return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
+            }
+
+            var lockedResult = await testFlowService.LockTestFlowAsync(id, userId);
+            if (lockedResult == null)
+            {
+                return BadRequest("The user id or test flow id is invalid.");
+            }
+
             return Ok(lockedResult);
         }
 
         [HttpPost("unlock")]
-        public async Task<IActionResult> UnTestFlow(int id)
+        public async Task<IActionResult> UnlockTestFlow(int id)
         {
-            var lockedResult = await testFlowService.UnTestFlowAsync(id);
+            var userId = GetUserId();
+            if (userId < 0)
+            {
+                return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
+            }
+            var lockedResult = await testFlowService.UnlockTestFlowAsync(id, userId);
+
+            if (lockedResult == null)
+            {
+                return BadRequest("The user id or test flow id is invalid.");
+            }
             return Ok(lockedResult);
         }
 
         [HttpGet("checklocking")]
-        public CheckLockingDTO CheckLockingTestFlow(int id)
+        public IActionResult CheckLockingTestFlow(int id)
         {
-            var result = testFlowService.CheckLockedTestFlow(id);
-            return result;
+            var userId = GetUserId();
+            if (userId < 0)
+            {
+                return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
+            }
+            var result = testFlowService.CheckLockedTestFlow(id, userId);
+            return Ok(result);
+        }
+
+        private int GetUserId()
+        {
+            var userId = 0;
+            if (Request.Headers.TryGetValue("UserId", out Microsoft.Extensions.Primitives.StringValues stringValues))
+            {
+                if (stringValues != Microsoft.Extensions.Primitives.StringValues.Empty)
+                {
+                    int.TryParse(stringValues.FirstOrDefault(), out userId);
+                }
+            }
+            return userId;
         }
     }
 }

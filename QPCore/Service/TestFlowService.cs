@@ -120,20 +120,35 @@ namespace QPCore.Service
             return result;
         }
 
+        #region Locking Test Flow
+        /*
+         * A user should able to lock the testflow.
+         * a) When userA is locking we needs to update lockedby,Lastupdatedby, lastupdated datetime
+         * b) When userA checks for tesflow locking it should be give false.
+         * c) When userB check for testflow locking if it is locked by UserA then it should give true.
+         * e) UserB  can't unlock the test flow in case UserA is locked Testflow.
+         */
+
         /// <summary>
         /// Lock a test flow
+        /// A user should able to lock the testflow.
+        /// a) When userA is locking we needs to update lockedby, Lastupdatedby, lastupdated datetime
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        internal async Task<Data.Enitites.TestFlow> LockTestFlowAsync(int id)
+        internal async Task<Data.Enitites.TestFlow> LockTestFlowAsync(int id, int userId)
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id);
+                .FirstOrDefault(p => p.TestFlowId == id && p.Islocked == false);
 
             if (item != null)
             {
                 item.Islocked = true;
+                item.LockedBy = userId;
+                item.LastUpdatedUserId = userId;
+                item.LastUpdatedDateTime = DateTime.UtcNow;
                 result = await _testFlowRepository.UpdateAsync(item);
             }
 
@@ -142,18 +157,24 @@ namespace QPCore.Service
 
         /// <summary>
         /// Lock a test flow
+        /// A user should able to lock the testflow.
+        /// e) UserB can't unlock the test flow in case UserA is locked Testflow.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        internal async Task<Data.Enitites.TestFlow> UnTestFlowAsync(int id)
+        internal async Task<Data.Enitites.TestFlow> UnlockTestFlowAsync(int id, int userId)
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id);
+                .FirstOrDefault(p => p.TestFlowId == id && p.LockedBy == userId);
 
             if (item != null)
             {
                 item.Islocked = false;
+                item.LockedBy = null;
+                item.LastUpdatedUserId = userId;
+                item.LastUpdatedDateTime = DateTime.UtcNow;
                 result = await _testFlowRepository.UpdateAsync(item);
             }
 
@@ -162,13 +183,17 @@ namespace QPCore.Service
 
         /// <summary>
         /// Check locking test flow
+        /// A user should able to lock the testflow.
+        /// b) When userA checks for tesflow locking it should be give false.
+        /// c) When userB check for testflow locking if it is locked by UserA then it should give true.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        internal CheckLockingDTO CheckLockedTestFlow(int id)
+        internal CheckLockingDTO CheckLockedTestFlow(int id, int userId)
         {
             var status = _testFlowRepository.GetQuery()
-                .Any(p => p.TestFlowId == id && p.Islocked == true);
+                .Any(p => p.TestFlowId == id && p.Islocked == true && p.LockedBy != userId);
 
             var result = new CheckLockingDTO()
             {
@@ -177,5 +202,6 @@ namespace QPCore.Service
 
             return result;
         }
+        #endregion
     }
 }
