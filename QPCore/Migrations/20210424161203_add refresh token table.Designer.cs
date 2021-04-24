@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210424161203_add refresh token table")]
+    partial class addrefreshtokentable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,10 +233,6 @@ namespace QPCore.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("userid");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("date")
-                        .HasColumnName("created");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
@@ -245,17 +243,17 @@ namespace QPCore.Migrations
                         .HasColumnType("bit(1)")
                         .HasColumnName("enabled");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Firstname")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("firstname");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Lastname")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("lastname");
 
-                    b.Property<string>("LoginName")
+                    b.Property<string>("Loginname")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
@@ -266,11 +264,11 @@ namespace QPCore.Migrations
                         .HasColumnName("orgid");
 
                     b.Property<string>("Password")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("password");
 
-                    b.Property<BitArray>("UseWindowsAuth")
+                    b.Property<BitArray>("Usewindowsauth")
                         .HasColumnType("bit(1)")
                         .HasColumnName("usewindowsauth");
 
@@ -311,14 +309,6 @@ namespace QPCore.Migrations
                         .HasName("orgid");
 
                     b.ToTable("Organization");
-
-                    b.HasData(
-                        new
-                        {
-                            Orgid = 1,
-                            CreatedDate = new DateTime(2021, 4, 25, 0, 1, 50, 86, DateTimeKind.Local).AddTicks(3592),
-                            OrgName = "Default Organization"
-                        });
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.RefreshToken", b =>

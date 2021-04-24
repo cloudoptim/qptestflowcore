@@ -15,6 +15,13 @@ using AutoMapper;
 using QPCore.AutoMapper;
 using QPCore.Data;
 using Microsoft.EntityFrameworkCore;
+using QPCore.Service.Interfaces;
+using QPCore.Middleware;
+using QPCore.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace QPCore
 {
@@ -47,6 +54,7 @@ namespace QPCore
                                   });
             });
 
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // requires using Microsoft.Extensions.Options
             services.Configure<AADatabaseSettings>(
@@ -54,11 +62,11 @@ namespace QPCore
 
             services.AddSingleton<IAADatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AADatabaseSettings>>().Value);
-            
-            services.AddDbContext<QPContext>(options =>
-                options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString")));
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
+            services.AddDbContext<QPContext>(options =>
+                options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString"), o => o.SetPostgresVersion(9, 6)));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IAccountService), typeof(AccountService));
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
 
@@ -73,9 +81,23 @@ namespace QPCore
             services.AddSingleton<ConfigService>();
             services.AddSingleton<TestRunService>();
             services.AddControllers();
-            
-            
-            services.AddCors(c =>{ c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());});
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetValue<string>("AppSettings:Secret"))),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+
+            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()); });
 
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -110,30 +132,10 @@ namespace QPCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QPContext context)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-        
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-            app.UseCors(options => options.AllowAnyOrigin());  
-
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-           
+            context.Database.Migrate();
             app.UseSwagger();
 
 
@@ -144,6 +146,25 @@ namespace QPCore
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 //c.RoutePrefix = string.Empty;
 
+            });
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseCors(options => options.AllowAnyOrigin());
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
         }
     }
