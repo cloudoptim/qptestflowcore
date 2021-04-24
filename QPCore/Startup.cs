@@ -55,8 +55,7 @@ namespace QPCore
             services.AddSingleton<IAADatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AADatabaseSettings>>().Value);
             
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<QPContext>(options =>
+            services.AddDbContext<QPContext>(options =>
                 options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString")));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 

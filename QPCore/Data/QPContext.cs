@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using QPCore.Data.Enitites;
 
 #nullable disable
@@ -201,6 +199,10 @@ namespace QPCore.Data
                 entity.Property(e => e.Usewindowsauth)
                     .HasColumnType("bit(1)")
                     .HasColumnName("usewindowsauth");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(256)
+                    .HasColumnName("email");
 
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.OrgUsers)

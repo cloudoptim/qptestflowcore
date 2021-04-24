@@ -16,6 +16,7 @@ namespace QPCore.Data.Enitites
         public BitArray Usewindowsauth { get; set; }
         public string Password { get; set; }
         public BitArray Enabled { get; set; }
+        public string Email { get; set; }
 
         public virtual Organization Org { get; set; }
     }
