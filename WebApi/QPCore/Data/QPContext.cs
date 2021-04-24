@@ -19,7 +19,7 @@ namespace QPCore.Data
         }
 
         public virtual DbSet<AppUser> AppUsers { get; set; }
-        public virtual DbSet<Application> Applications { get; set; }
+        public virtual DbSet<QPCore.Data.Enitites.Application> Applications { get; set; }
         public virtual DbSet<ApplicationFeature> ApplicationFeatures { get; set; }
         public virtual DbSet<ConfigTestFlowConfig> ConfigTestFlowConfigs { get; set; }
         public virtual DbSet<ConfigTestFlowConfigValue> ConfigTestFlowConfigValues { get; set; }
@@ -78,7 +78,7 @@ namespace QPCore.Data
                 entity.Property(e => e.Userid).HasColumnName("userid");
             });
 
-            modelBuilder.Entity<Application>(entity =>
+            modelBuilder.Entity<QPCore.Data.Enitites.Application>(entity =>
             {
                 entity.HasKey(e => e.ClientId)
                     .HasName("clientId");

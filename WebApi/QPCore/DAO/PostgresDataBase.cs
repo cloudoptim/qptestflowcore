@@ -336,7 +336,7 @@ namespace QPCore.DAO
             catch (Exception ex)
             {
                
-                throw;
+                throw ex;
             }
         }
         private bool IsNullable(Type type)
