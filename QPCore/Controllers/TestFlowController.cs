@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.Common;
@@ -16,7 +17,7 @@ namespace QPCore.Controllers
     [Route("api/[controller]")]
     [EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class TestFlowController : ControllerBase
+    public class TestFlowController : BaseController
     {
         TestFlowService testFlowService;
         private readonly IMapper _mapper;
@@ -80,9 +81,10 @@ namespace QPCore.Controllers
         }
 
         [HttpPost("lock")]
+        [Authorize]
         public async Task<IActionResult> LockTestFlow(int id)
         {
-            var userId = GetUserId();
+            var userId = Account.UserId;
             if (userId < 0)
             {
                 return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
@@ -98,9 +100,10 @@ namespace QPCore.Controllers
         }
 
         [HttpPost("unlock")]
+        [Authorize]
         public async Task<IActionResult> UnlockTestFlow(int id)
         {
-            var userId = GetUserId();
+            var userId = Account.UserId;
             if (userId < 0)
             {
                 return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
@@ -115,28 +118,16 @@ namespace QPCore.Controllers
         }
 
         [HttpGet("checklocking")]
+        [Authorize]
         public IActionResult CheckLockingTestFlow(int id)
         {
-            var userId = GetUserId();
+            var userId = Account.UserId;
             if (userId < 0)
             {
                 return BadRequest("You should add UserId into to header of request: Ex: request.Header['UserId']= 1");
             }
             var result = testFlowService.CheckLockedTestFlow(id, userId);
             return Ok(result);
-        }
-
-        private int GetUserId()
-        {
-            var userId = 0;
-            if (Request.Headers.TryGetValue("UserId", out Microsoft.Extensions.Primitives.StringValues stringValues))
-            {
-                if (stringValues != Microsoft.Extensions.Primitives.StringValues.Empty)
-                {
-                    int.TryParse(stringValues.FirstOrDefault(), out userId);
-                }
-            }
-            return userId;
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using QPCore.Data;
 using QPCore.Helpers;
+using QPCore.Model.Accounts;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -27,12 +28,12 @@ namespace QPCore.Middleware
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await attachAccountToContext(context, dataContext, token);
+                attachAccountToContext(context, dataContext, token);
 
             await _next(context);
         }
 
-        private async Task attachAccountToContext(HttpContext context, QPContext dataContext, string token)
+        private void attachAccountToContext(HttpContext context, QPContext dataContext, string token)
         {
             try
             {
@@ -50,9 +51,20 @@ namespace QPCore.Middleware
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var orgId = int.Parse(jwtToken.Claims.First(x => x.Type == "orgId").Value);
+                var firstName = jwtToken.Claims.First(x => x.Type == "firstname").Value;
+                var lastName = jwtToken.Claims.First(x => x.Type == "lastname").Value;
+
+                var user = new UserIdentity()
+                {
+                    UserId = accountId,
+                    OrgId = orgId,
+                    LastName = lastName,
+                    FirstName = firstName
+                };
 
                 // attach account to context on successful jwt validation
-                context.Items["Account"] = await dataContext.OrgUsers.FindAsync(accountId);
+                context.Items["Account"] = user;
             }
             catch (Exception ex)
             {

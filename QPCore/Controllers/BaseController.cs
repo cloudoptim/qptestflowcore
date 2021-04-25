@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Data.Enitites;
+using QPCore.Model.Accounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace QPCore.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        public OrgUser Account => (OrgUser)HttpContext.Items["Account"];
+        public UserIdentity Account => (UserIdentity)HttpContext.Items["Account"];
     }
 }

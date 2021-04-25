@@ -35,18 +35,6 @@ namespace QPCore.Controllers
             return Ok(new { message = "Registration successful, please check your email for verification instructions" });
         }
 
-        [Authorize]
-        [HttpGet("{id:int}")]
-        public ActionResult<AccountResponse> GetById(int id)
-        {
-            // users can get their own account and admins can get any account
-            if (id != Account.Userid)
-                return Unauthorized(new { message = "Unauthorized" });
-
-            var account = _accountService.GetById(id);
-            return Ok(account);
-        }
-
         #region private method
         private string ipAddress()
         {

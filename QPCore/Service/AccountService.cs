@@ -65,8 +65,6 @@ namespace QPCore.Service
             // validate
             if (this._orgUsersRepository.GetQuery().Any(x => x.Email == model.Email))
             {
-                // send already registered error in email to prevent account enumeration
-                //sendAlreadyRegisteredEmail(model.Email, origin);
                 throw new AppException("Email has already used in the system. Please use the other one then try again.");
             }
 
@@ -110,9 +108,16 @@ namespace QPCore.Service
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            var claims = new List<Claim>();
+            claims.Add(new Claim("id", account.Userid.ToString()));
+            claims.Add(new Claim("orgId", account.Orgid.ToString()));
+            claims.Add(new Claim("firstname", account.FirstName));
+            claims.Add(new Claim("lastname", account.LastName));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", account.Userid.ToString()) }),
+                Subject = new ClaimsIdentity(claims.ToArray()),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
