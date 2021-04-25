@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using QPCore.Model.Organizations;
 
 namespace QPCore.AutoMapper
 {
@@ -25,6 +26,8 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.LoginName, opt => opt.MapFrom(s => s.Email));
 
             CreateMap<DB.OrgUser, AccountResponse>();
+
+            CreateMap<DB.Organization, OrganizationResponse>();
         }
     }
 }
