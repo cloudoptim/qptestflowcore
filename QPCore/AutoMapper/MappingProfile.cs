@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QPCore.Model.Organizations;
+using QPCore.Model.Applications;
 
 namespace QPCore.AutoMapper
 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210425104249_add verified column to orguser")]
+    partial class addverifiedcolumntoorguser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,10 +102,6 @@ namespace QPCore.Migrations
 
                     b.HasKey("Userclientid")
                         .HasName("userclientassoc");
-
-                    b.HasIndex("Client");
-
-                    b.HasIndex("Userid");
 
                     b.ToTable("AppUsers");
                 });
@@ -236,7 +234,7 @@ namespace QPCore.Migrations
                         .HasColumnName("userid");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("date")
                         .HasColumnName("created");
 
                     b.Property<string>("Email")
@@ -274,18 +272,10 @@ namespace QPCore.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("password");
 
-                    b.Property<DateTime?>("PasswordReset")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("passwordreset");
-
                     b.Property<string>("ResetToken")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
                         .HasColumnName("resettoken");
-
-                    b.Property<DateTime?>("ResetTokenExpires")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("resettokenexpires");
 
                     b.Property<BitArray>("UseWindowsAuth")
                         .HasColumnType("bit(1)")
@@ -342,7 +332,7 @@ namespace QPCore.Migrations
                         new
                         {
                             Orgid = 1,
-                            CreatedDate = new DateTime(2021, 4, 25, 23, 17, 17, 226, DateTimeKind.Local).AddTicks(2712),
+                            CreatedDate = new DateTime(2021, 4, 25, 17, 42, 49, 101, DateTimeKind.Local).AddTicks(2318),
                             OrgName = "Default Organization"
                         });
                 });
@@ -356,7 +346,7 @@ namespace QPCore.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("date")
                         .HasColumnName("created");
 
                     b.Property<string>("CreatedByIp")
@@ -365,7 +355,7 @@ namespace QPCore.Migrations
                         .HasColumnName("createdbyip");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("date")
                         .HasColumnName("expires");
 
                     b.Property<int>("OrgUserId")
@@ -378,7 +368,7 @@ namespace QPCore.Migrations
                         .HasColumnName("replacedbytoken");
 
                     b.Property<DateTime?>("Revoked")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("date")
                         .HasColumnName("revoked");
 
                     b.Property<string>("RevokedByIp")
@@ -1272,25 +1262,6 @@ namespace QPCore.Migrations
                     b.ToTable("WebPageGroup");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.AppUser", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.Application", "Application")
-                        .WithMany("AppUsers")
-                        .HasForeignKey("Client")
-                        .HasConstraintName("fk_application_appuser_client")
-                        .IsRequired();
-
-                    b.HasOne("QPCore.Data.Enitites.OrgUser", "OrgUser")
-                        .WithMany("AppUsers")
-                        .HasForeignKey("Userid")
-                        .HasConstraintName("fk_orguser_appuser_userid")
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("OrgUser");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Organization", "Org")
@@ -1536,8 +1507,6 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
-                    b.Navigation("AppUsers");
-
                     b.Navigation("ConfigTestFlowConfigs");
 
                     b.Navigation("RunTestBatches");
@@ -1563,8 +1532,6 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.OrgUser", b =>
                 {
-                    b.Navigation("AppUsers");
-
                     b.Navigation("RefreshTokens");
                 });
 

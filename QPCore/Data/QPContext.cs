@@ -74,6 +74,18 @@ namespace QPCore.Data
                     .HasColumnName("enabled");
 
                 entity.Property(e => e.Userid).HasColumnName("userid");
+
+                entity.HasOne(e => e.Application)
+                    .WithMany(p => p.AppUsers)
+                    .HasForeignKey(d => d.Client)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_application_appuser_client");
+
+                entity.HasOne(e => e.OrgUser)
+                    .WithMany(p => p.AppUsers)
+                    .HasForeignKey(d => d.Userid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orguser_appuser_userid");
             });
 
             modelBuilder.Entity<Application>(entity =>
@@ -196,6 +208,9 @@ namespace QPCore.Data
                     .HasMaxLength(250)
                     .HasColumnName("password");
 
+                entity.Property(e => e.PasswordReset)
+                    .HasColumnName("passwordreset");
+
                 entity.Property(e => e.UseWindowsAuth)
                     .HasColumnType("bit(1)")
                     .HasColumnName("usewindowsauth");
@@ -206,9 +221,22 @@ namespace QPCore.Data
 
                 entity.Property(e => e.Created)
                     .IsRequired()
-                    .HasColumnName("created")
-                    .HasColumnType("date");
+                    .HasColumnName("created");
 
+                entity.Property(e => e.VerificationToken)
+                    .HasMaxLength(500)
+                    .HasColumnName("verificationtoken");
+
+                entity.Property(e => e.ResetToken)
+                    .HasMaxLength(500)
+                    .HasColumnName("resettoken");
+
+                entity.Property(e => e.ResetTokenExpires)
+                    .HasColumnName("resettokenexpires");
+
+                entity.Property(e => e.Verified)
+                    .HasColumnName("verified");
+        
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.OrgUsers)
                     .HasForeignKey(d => d.Orgid)
@@ -868,12 +896,10 @@ namespace QPCore.Data
                     .HasMaxLength(4000);
 
                 entity.Property(e => e.Expires)
-                    .HasColumnType("date")
                     .IsRequired()
                     .HasColumnName("expires");
 
                 entity.Property(e => e.Created)
-                    .HasColumnType("date")
                     .IsRequired()
                     .HasColumnName("created");
 
@@ -882,8 +908,7 @@ namespace QPCore.Data
                     .HasMaxLength(15);
 
                 entity.Property(e => e.Revoked)
-                    .HasColumnName("revoked")
-                    .HasColumnType("date");
+                    .HasColumnName("revoked");
 
                 entity.Property(e => e.RevokedByIp)
                     .HasColumnName("revokedbyip")

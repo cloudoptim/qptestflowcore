@@ -66,9 +66,11 @@ namespace QPCore
             services.AddDbContext<QPContext>(options =>
                 options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString"), o => o.SetPostgresVersion(9, 6)));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IEmailService), typeof(EmailService));
             services.AddTransient(typeof(IAccountService), typeof(AccountService));
             services.AddTransient(typeof(IOrganizationService), typeof(OrganizationService));
-            
+            services.AddTransient(typeof(IApplicationService), typeof(ApplicationService));
+
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
 

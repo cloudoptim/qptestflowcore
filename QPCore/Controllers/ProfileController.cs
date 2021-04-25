@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.Accounts;
+using QPCore.Model.Applications;
 using QPCore.Model.Organizations;
 using QPCore.Service.Interfaces;
 using System;
@@ -18,12 +19,15 @@ namespace QPCore.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IOrganizationService _organizationService;
+        private readonly IApplicationService _applicationService;
 
         public ProfileController(IAccountService accountService, 
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IApplicationService applicationService)
         {
             this._accountService = accountService;
             this._organizationService = organizationService;
+            this._applicationService = applicationService;
         }
 
         [HttpGet("")]
@@ -39,10 +43,19 @@ namespace QPCore.Controllers
         [HttpGet("organization")]
         public ActionResult<OrganizationResponse> GetOrganization()
         {
-            var orgId = Account.UserId;
+            var orgId = Account.OrgId;
             var org = _organizationService.GetById(orgId);
 
             return Ok(org);
+        }
+
+        [HttpGet("applications")]
+        public ActionResult<ApplicationResponse> GetApplications()
+        {
+            var userId = Account.UserId;
+            var applications = _applicationService.GetUserApplications(userId);
+
+            return Ok(applications);
         }
     }
 }

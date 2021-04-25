@@ -82,7 +82,7 @@ namespace QPCore.Controllers
 
         [HttpPost("lock")]
         [Authorize]
-        public async Task<ActionResult<Data.Enitites.TestFlow>> LockTestFlow(int id)
+        public async Task<IActionResult> LockTestFlow(int id)
         {
             var userId = Account.UserId;
             if (userId < 0)
@@ -101,7 +101,7 @@ namespace QPCore.Controllers
 
         [HttpPost("unlock")]
         [Authorize]
-        public async Task<ActionResult<Data.Enitites.TestFlow>> UnlockTestFlow(int id)
+        public async Task<IActionResult> UnlockTestFlow(int id)
         {
             var userId = Account.UserId;
             if (userId < 0)

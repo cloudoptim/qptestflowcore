@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210425152128_add passwordreset column to orguser table")]
+    partial class addpasswordresetcolumntoorgusertable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,10 +102,6 @@ namespace QPCore.Migrations
 
                     b.HasKey("Userclientid")
                         .HasName("userclientassoc");
-
-                    b.HasIndex("Client");
-
-                    b.HasIndex("Userid");
 
                     b.ToTable("AppUsers");
                 });
@@ -342,7 +340,7 @@ namespace QPCore.Migrations
                         new
                         {
                             Orgid = 1,
-                            CreatedDate = new DateTime(2021, 4, 25, 23, 17, 17, 226, DateTimeKind.Local).AddTicks(2712),
+                            CreatedDate = new DateTime(2021, 4, 25, 22, 21, 27, 493, DateTimeKind.Local).AddTicks(1630),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1272,25 +1270,6 @@ namespace QPCore.Migrations
                     b.ToTable("WebPageGroup");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.AppUser", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.Application", "Application")
-                        .WithMany("AppUsers")
-                        .HasForeignKey("Client")
-                        .HasConstraintName("fk_application_appuser_client")
-                        .IsRequired();
-
-                    b.HasOne("QPCore.Data.Enitites.OrgUser", "OrgUser")
-                        .WithMany("AppUsers")
-                        .HasForeignKey("Userid")
-                        .HasConstraintName("fk_orguser_appuser_userid")
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("OrgUser");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Organization", "Org")
@@ -1536,8 +1515,6 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
-                    b.Navigation("AppUsers");
-
                     b.Navigation("ConfigTestFlowConfigs");
 
                     b.Navigation("RunTestBatches");
@@ -1563,8 +1540,6 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.OrgUser", b =>
                 {
-                    b.Navigation("AppUsers");
-
                     b.Navigation("RefreshTokens");
                 });
 
