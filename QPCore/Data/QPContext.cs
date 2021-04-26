@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using QPCore.Data.Enitites;
 
 #nullable disable
@@ -76,6 +74,18 @@ namespace QPCore.Data
                     .HasColumnName("enabled");
 
                 entity.Property(e => e.Userid).HasColumnName("userid");
+
+                entity.HasOne(e => e.Application)
+                    .WithMany(p => p.AppUsers)
+                    .HasForeignKey(d => d.Client)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_application_appuser_client");
+
+                entity.HasOne(e => e.OrgUser)
+                    .WithMany(p => p.AppUsers)
+                    .HasForeignKey(d => d.Userid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orguser_appuser_userid");
             });
 
             modelBuilder.Entity<Application>(entity =>
@@ -179,15 +189,15 @@ namespace QPCore.Data
                     .HasColumnType("bit(1)")
                     .HasColumnName("enabled");
 
-                entity.Property(e => e.Firstname)
+                entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
                     .HasColumnName("firstname");
 
-                entity.Property(e => e.Lastname)
+                entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .HasColumnName("lastname");
 
-                entity.Property(e => e.Loginname)
+                entity.Property(e => e.LoginName)
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("loginname");
@@ -195,13 +205,38 @@ namespace QPCore.Data
                 entity.Property(e => e.Orgid).HasColumnName("orgid");
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .HasColumnName("password");
 
-                entity.Property(e => e.Usewindowsauth)
+                entity.Property(e => e.PasswordReset)
+                    .HasColumnName("passwordreset");
+
+                entity.Property(e => e.UseWindowsAuth)
                     .HasColumnType("bit(1)")
                     .HasColumnName("usewindowsauth");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(256)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Created)
+                    .IsRequired()
+                    .HasColumnName("created");
+
+                entity.Property(e => e.VerificationToken)
+                    .HasMaxLength(500)
+                    .HasColumnName("verificationtoken");
+
+                entity.Property(e => e.ResetToken)
+                    .HasMaxLength(500)
+                    .HasColumnName("resettoken");
+
+                entity.Property(e => e.ResetTokenExpires)
+                    .HasColumnName("resettokenexpires");
+
+                entity.Property(e => e.Verified)
+                    .HasColumnName("verified");
+        
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.OrgUsers)
                     .HasForeignKey(d => d.Orgid)
@@ -841,6 +876,54 @@ namespace QPCore.Data
                 entity.Property(e => e.Versionid).HasColumnName("versionid");
             });
 
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.ToTable("RefreshToken");
+
+                entity.HasKey(e => e.RefreshTokenId)
+                    .HasName("pr_refreshtoken_refreshtokenid");
+
+                entity.Property(e => e.RefreshTokenId)
+                    .HasColumnType("serial")
+                    .HasColumnName("refreshtokenid");
+
+                entity.Property(e => e.OrgUserId)
+                    .HasColumnName("orguserid");
+
+                entity.Property(e => e.Token)
+                    .HasColumnName("token")
+                    .IsRequired()
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.Expires)
+                    .IsRequired()
+                    .HasColumnName("expires");
+
+                entity.Property(e => e.Created)
+                    .IsRequired()
+                    .HasColumnName("created");
+
+                entity.Property(e => e.CreatedByIp)
+                    .HasColumnName("createdbyip")
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.Revoked)
+                    .HasColumnName("revoked");
+
+                entity.Property(e => e.RevokedByIp)
+                    .HasColumnName("revokedbyip")
+                    .HasMaxLength(15);
+
+                entity.Property(e => e.ReplacedByToken)
+                    .HasColumnName("replacedbytoken")
+                    .HasMaxLength(4000);
+
+                entity.HasOne(e => e.OrgUser)
+                    .WithMany(o => o.RefreshTokens)
+                    .HasForeignKey(k => k.OrgUserId)
+                    .HasConstraintName("fk_orgusers_refreshtoken_orguserid");
+            });
+
             modelBuilder.HasSequence("applicationfeaturesseq");
 
             modelBuilder.HasSequence("batchseq");
@@ -892,6 +975,8 @@ namespace QPCore.Data
             modelBuilder.HasSequence("webmodelpropseq").HasMin(0);
 
             modelBuilder.HasSequence("webmodelseq").HasMin(0);
+
+            modelBuilder.HasSequence("refreshtokenseq").HasMin(0);
 
             OnModelCreatingPartial(modelBuilder);
         }

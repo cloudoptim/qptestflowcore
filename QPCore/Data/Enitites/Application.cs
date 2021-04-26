@@ -15,6 +15,7 @@ namespace QPCore.Data.Enitites
             TestFlowCategories = new HashSet<TestFlowCategory>();
             TestFlows = new HashSet<TestFlow>();
             WebCommands = new HashSet<WebCommand>();
+            AppUsers = new HashSet<AppUser>();
         }
 
         public int ClientId { get; set; }
@@ -32,5 +33,6 @@ namespace QPCore.Data.Enitites
         public virtual ICollection<TestFlowCategory> TestFlowCategories { get; set; }
         public virtual ICollection<TestFlow> TestFlows { get; set; }
         public virtual ICollection<WebCommand> WebCommands { get; set; }
+        public virtual ICollection<AppUser> AppUsers { get; set; }
     }
 }

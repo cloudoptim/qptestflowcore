@@ -12,5 +12,8 @@ namespace QPCore.Data.Enitites
         public int Userid { get; set; }
         public int Client { get; set; }
         public BitArray Enabled { get; set; }
+
+        public virtual Application Application { get; set; }
+        public virtual OrgUser OrgUser { get; set; }
     }
 }
