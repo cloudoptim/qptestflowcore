@@ -41,18 +41,20 @@ namespace QPCore
         {
 
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
-                                  builder =>
-                                  {
-                                      builder.AllowAnyOrigin()
-                                             .AllowAnyHeader()
-                                             .AllowAnyMethod();
+            // services.AddCors(options =>
+            // {
+            //     options.AddPolicy(name: MyAllowSpecificOrigins,
+            //                       builder =>
+            //                       {
+            //                           builder.AllowAnyOrigin()
+            //                                  .AllowAnyHeader()
+            //                                  .AllowAnyMethod();
 
 
-                                  });
-            });
+            //                       });
+            // });
+             services.AddCors();
+
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
@@ -156,10 +158,20 @@ namespace QPCore
 
 
             app.UseRouting();
-            app.UseCors(MyAllowSpecificOrigins);
+            //app.UseCors(MyAllowSpecificOrigins);
+            
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
+
+            // global cors policy
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseHttpsRedirection();
