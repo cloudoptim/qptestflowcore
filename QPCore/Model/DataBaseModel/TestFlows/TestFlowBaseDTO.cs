@@ -10,7 +10,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public int TestFlowId { get; set; }
         public string TestFlowName { get; set; }
         public string TestFlowDescription { get; set; }
-        public int LockedBy { get; set; }
+        public int? LockedBy { get; set; }
         public string TestFlowStatus { get; set; }
         public int AssignedTo { get; set; }
         public string AssignedDatetTime { get; set; }
