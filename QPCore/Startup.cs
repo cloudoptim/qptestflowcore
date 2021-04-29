@@ -167,7 +167,6 @@ namespace QPCore
             // global cors policy
             app.UseCors(x => x
                 .SetIsOriginAllowed(origin => true)
-                .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
