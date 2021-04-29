@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("AnyOrignPolicy")]
+    //[EnableCors("AnyOrignPolicy")]
     [ApiController]
     public class TestConfigController : ControllerBase
     {

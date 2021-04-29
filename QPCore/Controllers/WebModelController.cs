@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Produces("application/json")]
-    [EnableCors("AnyOrignPolicy")]
+    //[EnableCors("AnyOrignPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class WebModelController : ControllerBase

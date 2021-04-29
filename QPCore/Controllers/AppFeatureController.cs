@@ -8,7 +8,7 @@ using QPCore.Service;
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("AnyOrignPolicy")]
+    //[EnableCors("AnyOrignPolicy")]
     [ApiController]
     public class AppFeatureController : ControllerBase
     {
