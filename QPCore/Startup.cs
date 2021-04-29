@@ -101,9 +101,6 @@ namespace QPCore
                 });
 
 
-            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()); });
-
-
             // Register the Swagger generator, defining 1 or more Swagger documents
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -160,8 +157,7 @@ namespace QPCore
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseCors(options => options.AllowAnyOrigin());
-            app.UseCors("MyAllowSpecificOrigins");
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
