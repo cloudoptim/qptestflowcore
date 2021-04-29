@@ -154,7 +154,6 @@ namespace QPCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
@@ -163,6 +162,7 @@ namespace QPCore
             app.UseMiddleware<JwtMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHttpsRedirection();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
