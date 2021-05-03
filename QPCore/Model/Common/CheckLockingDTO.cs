@@ -11,5 +11,6 @@ namespace QPCore.Model.Common
         public string LockedByName { get; set; }
         public int? LockedById { get; set; }
         public string LockedByEmail { get; set; }
+        public DateTime? LockedDate { get; set; }
     }
 }

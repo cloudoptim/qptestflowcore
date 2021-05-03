@@ -207,7 +207,8 @@ namespace QPCore.Service
                     IsLocked = l.Islocked.Value,
                     LockedById = r.Userid,
                     LockedByName = $"{r.FirstName} {r.LastName}",
-                    LockedByEmail = r.Email
+                    LockedByEmail = r.Email,
+                    LockedDate = l.LastUpdatedDateTime
                 })
                 .FirstOrDefault();
 
