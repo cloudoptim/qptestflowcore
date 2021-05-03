@@ -16,16 +16,19 @@ namespace QPCore.Service
     {
         PostgresDataBase _postgresDataBase;
         private IRepository<QPCore.Data.Enitites.TestFlow> _testFlowRepository;
+        private IRepository<QPCore.Data.Enitites.OrgUser> _orgUserRepository;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
         /// <param name="testFlowRepository"></param>
         public TestFlowService(PostgresDataBase postgresDataBase,
-            IRepository<QPCore.Data.Enitites.TestFlow> testFlowRepository)
+            IRepository<QPCore.Data.Enitites.TestFlow> testFlowRepository,
+            IRepository<QPCore.Data.Enitites.OrgUser> orgUserRepository)
         {
             _postgresDataBase = postgresDataBase;
             _testFlowRepository = testFlowRepository;
+            _orgUserRepository = orgUserRepository;
         }
 
         internal List<TestFlow> GetTestFlows()
@@ -192,13 +195,27 @@ namespace QPCore.Service
         /// <returns></returns>
         internal CheckLockingDTO CheckLockedTestFlow(int id, int userId)
         {
-            var status = _testFlowRepository.GetQuery()
-                .Any(p => p.TestFlowId == id && p.Islocked == true && p.LockedBy != userId);
-
             var result = new CheckLockingDTO()
             {
-                IsLocked = status
+                IsLocked = false
             };
+
+            var query = _testFlowRepository.GetQuery()
+                .Where(p => p.TestFlowId == id && p.Islocked == true && p.LockedBy != userId)
+                .Join(_orgUserRepository.GetQuery(), l => l.LockedBy, r => r.Userid, (l, r) => new CheckLockingDTO()
+                {
+                    IsLocked = l.Islocked.Value,
+                    LockedById = r.Userid,
+                    LockedByName = $"{r.FirstName} {r.LastName}",
+                    LockedByEmail = r.Email,
+                    LockedDate = l.LastUpdatedDateTime
+                })
+                .FirstOrDefault();
+
+            if (query != null)
+            {
+                result = query;
+            }
 
             return result;
         }
