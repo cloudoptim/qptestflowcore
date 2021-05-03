@@ -10,6 +10,8 @@ namespace QPCore.Data.Enitites
     {
         public int Roleid { get; set; }
         public string Rolename { get; set; }
-        public BitArray Enabled { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsSystem { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

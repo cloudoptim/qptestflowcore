@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210503162906_add issystem and isdefault to role table")]
+    partial class addissystemandisdefaulttoroletable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,7 +344,7 @@ namespace QPCore.Migrations
                         new
                         {
                             Orgid = 1,
-                            CreatedDate = new DateTime(2021, 5, 3, 23, 42, 26, 639, DateTimeKind.Local).AddTicks(6453),
+                            CreatedDate = new DateTime(2021, 5, 3, 23, 29, 5, 655, DateTimeKind.Local).AddTicks(400),
                             OrgName = "Default Organization"
                         });
                 });
@@ -427,24 +429,6 @@ namespace QPCore.Migrations
                     b.HasKey("Roleid");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Roleid = 1,
-                            IsActive = true,
-                            IsDefault = false,
-                            IsSystem = true,
-                            Rolename = "Administrator"
-                        },
-                        new
-                        {
-                            Roleid = 2,
-                            IsActive = true,
-                            IsDefault = true,
-                            IsSystem = true,
-                            Rolename = "User"
-                        });
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.RunConfiguration", b =>

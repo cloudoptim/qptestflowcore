@@ -276,15 +276,22 @@ namespace QPCore.Data
                     .ValueGeneratedNever()
                     .HasColumnName("roleid");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("isactive");
 
                 entity.Property(e => e.Rolename)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("rolename");
+
+                entity.Property(e => e.IsSystem)
+                    .IsRequired()
+                    .HasColumnName("issystem");
+
+                entity.Property(e => e.IsDefault)
+                    .IsRequired()
+                    .HasColumnName("isdefault");
             });
 
             modelBuilder.Entity<RunConfiguration>(entity =>

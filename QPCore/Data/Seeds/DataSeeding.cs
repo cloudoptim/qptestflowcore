@@ -12,6 +12,7 @@ namespace QPCore.Data
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
             DefaultOrganizationSeeds.Seed(modelBuilder);
+            DefaultRoleSeeds.Seed(modelBuilder);
         }
     }
 }
