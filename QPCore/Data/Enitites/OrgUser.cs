@@ -12,9 +12,10 @@ namespace QPCore.Data.Enitites
         {
             this.RefreshTokens = new HashSet<RefreshToken>();
             this.AppUsers = new HashSet<AppUser>();
+            this.UserRoles = new HashSet<UserRole>();
         }
-        public int Userid { get; set; }
-        public int Orgid { get; set; }
+        public int UserId { get; set; }
+        public int OrgId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string LoginName { get; set; }
@@ -32,5 +33,6 @@ namespace QPCore.Data.Enitites
         public virtual Organization Org { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210504142114_add role code column")]
+    partial class addrolecodecolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,7 +344,7 @@ namespace QPCore.Migrations
                         new
                         {
                             Orgid = 1,
-                            CreatedDate = new DateTime(2021, 5, 5, 21, 31, 28, 877, DateTimeKind.Local).AddTicks(9335),
+                            CreatedDate = new DateTime(2021, 5, 4, 21, 21, 12, 602, DateTimeKind.Local).AddTicks(2660),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1006,31 +1008,25 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.UserRole", b =>
                 {
-                    b.Property<int>("ClientRoleAssoc")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("clientroleassoc")
-                        .HasIdentityOptions(100L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("isactive");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Roleid")
                         .HasColumnType("integer")
                         .HasColumnName("roleid");
 
-                    b.Property<int>("UserClientId")
+                    b.Property<int>("Clientroleassoc")
+                        .HasColumnType("integer")
+                        .HasColumnName("clientroleassoc");
+
+                    b.Property<BitArray>("Enabled")
+                        .IsRequired()
+                        .HasColumnType("bit(1)")
+                        .HasColumnName("enabled");
+
+                    b.Property<int>("Userclientid")
                         .HasColumnType("integer")
                         .HasColumnName("userclientid");
 
-                    b.HasKey("ClientRoleAssoc")
-                        .HasName("pk_userrole_clientroleassoc");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserClientId");
+                    b.HasKey("Roleid")
+                        .HasName("clientroleassoc");
 
                     b.ToTable("UserRoles");
                 });
@@ -1540,25 +1536,6 @@ namespace QPCore.Migrations
                     b.Navigation("TestFlow");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.UserRole", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("fk_role_userrole_roleid_roleid")
-                        .IsRequired();
-
-                    b.HasOne("QPCore.Data.Enitites.OrgUser", "OrgUser")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserClientId")
-                        .HasConstraintName("fk_orguser_userrole_userclientid_userid")
-                        .IsRequired();
-
-                    b.Navigation("OrgUser");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.WebCommand", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Application", "Client")
@@ -1624,8 +1601,6 @@ namespace QPCore.Migrations
                     b.Navigation("AppUsers");
 
                     b.Navigation("RefreshTokens");
-
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.Organization", b =>
@@ -1633,11 +1608,6 @@ namespace QPCore.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("OrgUsers");
-                });
-
-            modelBuilder.Entity("QPCore.Data.Enitites.Role", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.RunTestBatch", b =>

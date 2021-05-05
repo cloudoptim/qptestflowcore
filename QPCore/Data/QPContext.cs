@@ -177,10 +177,10 @@ namespace QPCore.Data
 
             modelBuilder.Entity<OrgUser>(entity =>
             {
-                entity.HasKey(e => e.Userid)
+                entity.HasKey(e => e.UserId)
                     .HasName("orguser");
 
-                entity.Property(e => e.Userid)
+                entity.Property(e => e.UserId)
                     .ValueGeneratedNever()
                     .HasColumnName("userid");
 
@@ -202,7 +202,7 @@ namespace QPCore.Data
                     .HasMaxLength(100)
                     .HasColumnName("loginname");
 
-                entity.Property(e => e.Orgid).HasColumnName("orgid");
+                entity.Property(e => e.OrgId).HasColumnName("orgid");
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(250)
@@ -239,7 +239,7 @@ namespace QPCore.Data
         
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.OrgUsers)
-                    .HasForeignKey(d => d.Orgid)
+                    .HasForeignKey(d => d.OrgId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("orguser_fk");
             });
@@ -272,7 +272,7 @@ namespace QPCore.Data
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.Roleid)
+                entity.Property(e => e.RoleId)
                     .ValueGeneratedNever()
                     .HasColumnName("roleid");
 
@@ -284,6 +284,11 @@ namespace QPCore.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("rolename");
+
+                entity.Property(e => e.RoleCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("rolecode");
 
                 entity.Property(e => e.IsSystem)
                     .IsRequired()
@@ -646,21 +651,34 @@ namespace QPCore.Data
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.HasKey(e => e.Roleid)
-                    .HasName("clientroleassoc");
+                entity.HasKey(e => e.ClientRoleAssoc)
+                    .HasName("pk_userrole_clientroleassoc");
 
-                entity.Property(e => e.Roleid)
-                    .ValueGeneratedNever()
+                entity.Property(e => e.RoleId)
                     .HasColumnName("roleid");
 
-                entity.Property(e => e.Clientroleassoc).HasColumnName("clientroleassoc");
+                entity.Property(e => e.ClientRoleAssoc)
+                    .HasIdentityOptions(startValue: 100)
+                    .HasColumnName("clientroleassoc");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("isactive");
 
-                entity.Property(e => e.Userclientid).HasColumnName("userclientid");
+                entity.Property(e => e.UserClientId)
+                    .HasColumnName("userclientid");
+
+                entity.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_role_userrole_roleid_roleid");
+
+                entity.HasOne(ur => ur.OrgUser)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orguser_userrole_userclientid_userid");
             });
 
             modelBuilder.Entity<WebCommand>(entity =>

@@ -23,6 +23,7 @@ namespace QPCore.Service
     public class AccountService : IAccountService
     {
         private readonly IRepository<OrgUser> _orgUsersRepository;
+        private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
@@ -30,6 +31,7 @@ namespace QPCore.Service
 
         public AccountService(IRepository<OrgUser> orgUsersRepository,
             IRepository<RefreshToken> refreshTokenRepository,
+            IRepository<Role> roleRepository,
             IOptions<AppSettings> appSettings,
             IMapper mapper,
             IEmailService emailService)
@@ -39,6 +41,7 @@ namespace QPCore.Service
             this._mapper = mapper;
             this._emailService = emailService;
             this._refreshTokenRepository = refreshTokenRepository;
+            this._roleRepository = roleRepository;
         }
 
         public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest model, string ipAddress)
@@ -120,13 +123,13 @@ namespace QPCore.Service
             var maxId = 0;
             if (_orgUsersRepository.GetQuery().Any())
             {
-                maxId = _orgUsersRepository.GetQuery().Max(p => p.Userid);
+                maxId = _orgUsersRepository.GetQuery().Max(p => p.UserId);
             }
-            account.Userid = maxId + 1;
+            account.UserId = maxId + 1;
             account.Password = BC.HashPassword(model.Password);
             account.Enabled = new BitArray(new bool[] { true });
             account.UseWindowsAuth = new BitArray(new bool[] { false });
-            account.Orgid = GlobalConstants.DEFAUTL_ORGANIZATION_ID;
+            account.OrgId = GlobalConstants.DEFAUTL_ORGANIZATION_ID;
             account.VerificationToken = randomTokenString();
             account.Created = DateTime.UtcNow;
 
@@ -139,7 +142,7 @@ namespace QPCore.Service
 
         public AccountResponse GetById(int id)
         {
-            var account = _orgUsersRepository.GetQuery().FirstOrDefault(p => p.Userid == id);
+            var account = _orgUsersRepository.GetQuery().FirstOrDefault(p => p.UserId == id);
             return _mapper.Map<AccountResponse>(account);
         }
 
@@ -205,7 +208,7 @@ namespace QPCore.Service
         public bool OwnsToken(int userId, string token)
         {
             var query = _orgUsersRepository.GetQuery()
-                            .Any(p => p.Userid == userId && p.RefreshTokens.Any(k => k.Token == token));
+                            .Any(p => p.UserId == userId && p.RefreshTokens.Any(k => k.Token == token));
 
             return query;
         }
@@ -217,10 +220,23 @@ namespace QPCore.Service
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
             var claims = new List<Claim>();
-            claims.Add(new Claim("id", account.Userid.ToString()));
-            claims.Add(new Claim("orgId", account.Orgid.ToString()));
+            claims.Add(new Claim("id", account.UserId.ToString()));
+            claims.Add(new Claim("orgId", account.OrgId.ToString()));
             claims.Add(new Claim("firstname", account.FirstName));
             claims.Add(new Claim("lastname", account.LastName));
+
+            // Get Role
+            var roles = _roleRepository.GetQuery()
+                            .Where(p => p.UserRoles.Any(r => r.UserClientId == account.UserId))
+                            .ToList();
+
+            if (roles.Any())
+            {
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.RoleCode));
+                }
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -231,6 +247,7 @@ namespace QPCore.Service
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
 
         private RefreshToken generateRefreshToken(string ipAddress)
         {

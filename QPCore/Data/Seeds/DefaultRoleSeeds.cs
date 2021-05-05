@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QPCore.Common;
 using QPCore.Data.Enitites;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,18 @@ namespace QPCore.Data.Seeds
         {
             modelBuilder.Entity<Role>().HasData(new Enitites.Role()
             {
-                Roleid = 1,
+                RoleId = 1,
                 Rolename = "Administrator",
+                RoleCode = GlobalConstants.ADMIN_ROLE_CODE,
                 IsActive = true,
                 IsDefault = false,
                 IsSystem = true
             },
             new Enitites.Role()
             {
-                Roleid = 2,
+                RoleId = 2,
                 Rolename = "User",
+                RoleCode = GlobalConstants.USER_ROLE_CODE,
                 IsActive = true,
                 IsDefault = true,
                 IsSystem = true

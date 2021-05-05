@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using QPCore.Model.Organizations;
 using QPCore.Model.Applications;
+using QPCore.Model.Roles;
 
 namespace QPCore.AutoMapper
 {
@@ -29,6 +30,8 @@ namespace QPCore.AutoMapper
             CreateMap<DB.OrgUser, AccountResponse>();
 
             CreateMap<DB.Organization, OrganizationResponse>();
+
+            CreateMap<DB.Role, RoleResponse>();
         }
     }
 }
