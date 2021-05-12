@@ -14,7 +14,7 @@ namespace QPCore.Data.Seeds
         {
             modelBuilder.Entity<Organization>().HasData(new Enitites.Organization()
             {
-                Orgid = GlobalConstants.DEFAUTL_ORGANIZATION_ID,
+                OrgId = GlobalConstants.DEFAUTL_ORGANIZATION_ID,
                 CreatedDate = DateTime.Now,
                 OrgName = "Default Organization",
             });

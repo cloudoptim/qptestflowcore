@@ -12,5 +12,7 @@ namespace QPCore.Data
         Task<TEntity> AddAsync(TEntity entity);
 
         Task<TEntity> UpdateAsync(TEntity entity);
+
+        Task DeleteAsync(int id);
     }
 }

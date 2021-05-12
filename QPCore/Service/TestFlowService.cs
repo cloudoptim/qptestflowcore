@@ -111,11 +111,11 @@ namespace QPCore.Service
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        internal CheckUniqueDTO CheckUniqueTestFlow(string name)
+        internal CheckUniqueResponse CheckUniqueTestFlow(string name)
         {
             var status = _testFlowRepository.GetQuery()
                .Any(p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower());
-            var result = new CheckUniqueDTO()
+            var result = new CheckUniqueResponse()
             {
                 IsUnique = !status
             };

@@ -65,5 +65,22 @@ namespace QPCore.Data
                 throw new Exception($"{nameof(entity)} could not be updated: {ex.Message}");
             }
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            try
+            {
+                var entity = await QPDataContext.Set<TEntity>().FindAsync(id);
+                if (entity != null)
+                {
+                    QPDataContext.Remove(entity);
+                   await QPDataContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{typeof(TEntity).Name} could not be deleted: {ex.Message}");
+            }
+        }
     }
 }

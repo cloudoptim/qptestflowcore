@@ -29,9 +29,12 @@ namespace QPCore.AutoMapper
 
             CreateMap<DB.OrgUser, AccountResponse>();
 
+            // Organization
             CreateMap<DB.Organization, OrganizationResponse>();
+            CreateMap<CreateOrganizationRequest, DB.Organization>();
 
             CreateMap<DB.Role, RoleResponse>();
+
         }
     }
 }

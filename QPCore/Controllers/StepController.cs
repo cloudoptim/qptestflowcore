@@ -62,7 +62,7 @@ namespace QPCore.Controllers
         }
 
         [HttpGet("checkunique")]
-        public CheckUniqueDTO CheckUniqueStepGlossary(int featureId, string stepName)
+        public CheckUniqueResponse CheckUniqueStepGlossary(int featureId, string stepName)
         {
             var result = _stepService.CheckUniqueStepGlossary(featureId, stepName);
             return result;

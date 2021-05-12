@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace QPCore.Model.Common
 {
-    public class CheckUniqueResponse
+    public class BadRequestResponse
     {
-        public bool IsUnique { get; set; }
+        public string Message { get; set; }
     }
 }

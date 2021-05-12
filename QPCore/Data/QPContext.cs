@@ -246,22 +246,26 @@ namespace QPCore.Data
 
             modelBuilder.Entity<Organization>(entity =>
             {
-                entity.HasKey(e => e.Orgid)
+                entity.HasKey(e => e.OrgId)
                     .HasName("orgid");
 
                 entity.ToTable("Organization");
 
-                entity.Property(e => e.Orgid)
-                    .ValueGeneratedNever()
+                entity.Property(e => e.OrgId)
+                    .HasIdentityOptions(startValue: 1)
                     .HasColumnName("orgid");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(255)
-                    .HasColumnName("createdBy");
+                   .HasColumnName("createdby");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updatedby");
 
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("date")
-                    .HasColumnName("createdDate");
+                    .HasColumnName("createddate");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updateddate");
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 

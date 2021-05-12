@@ -102,12 +102,12 @@ namespace QPCore.Service
         /// <param name="featureId"></param>
         /// <param name="stepGlossaryName"></param>
         /// <returns></returns>
-        internal CheckUniqueDTO CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
+        internal CheckUniqueResponse CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
         {
             var status = _stepGlossaryRepository.GetQuery()
                 .Any(p => p.FeatureId == featureId
                 && p.StepName.Trim().ToLower() == stepGlossaryName.Trim().ToLower());
-            var result = new CheckUniqueDTO()
+            var result = new CheckUniqueResponse()
             {
                 IsUnique = status
             };
