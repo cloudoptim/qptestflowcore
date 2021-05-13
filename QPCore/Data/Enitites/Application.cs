@@ -19,11 +19,13 @@ namespace QPCore.Data.Enitites
         }
 
         public int ClientId { get; set; }
-        public int Orgid { get; set; }
+        public int OrgId { get; set; }
         public int ApplicationId { get; set; }
         public string ApplicationName { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? CreatedDateTime { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int UpdatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public bool? IsActive { get; set; }
 
         public virtual Organization Org { get; set; }

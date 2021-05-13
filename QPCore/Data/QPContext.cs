@@ -95,22 +95,37 @@ namespace QPCore.Data
 
                 entity.ToTable("Application");
 
-                entity.HasIndex(e => e.ApplicationId, "ApplicationId")
+                entity.HasIndex(e => e.ApplicationId, "ix_application_id")
                     .IsUnique();
 
-                entity.Property(e => e.ClientId).ValueGeneratedNever();
+                entity.Property(e => e.ClientId)
+                    .HasColumnName("client_id")
+                    .HasIdentityOptions(startValue: 1);
 
-                entity.Property(e => e.ApplicationName).HasMaxLength(255);
+                entity.Property(e => e.ApplicationId)
+                    .HasColumnName("application_id")
+                    .IsRequired()
+                    .HasIdentityOptions(startValue: 1);
+
+                entity.Property(e => e.ApplicationName)
+                    .HasColumnName("application_name")
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(255)
-                    .HasColumnName("createdBy");
+                    .HasColumnName("created_by");
 
-                entity.Property(e => e.CreatedDateTime).HasColumnType("date");
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
 
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.Applications)
-                    .HasForeignKey(d => d.Orgid)
+                    .HasForeignKey(d => d.OrgId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("AppOrgId");
             });
