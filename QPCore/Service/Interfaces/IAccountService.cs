@@ -27,5 +27,12 @@ namespace QPCore.Service.Interfaces
         Task RevokeTokenAsync(string token, string ipAddress);
 
         bool OwnsToken(int userId, string token);
+
+        /// <summary>
+        /// Check existed user id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        bool CheckExistedId(int userId);
     }
 }

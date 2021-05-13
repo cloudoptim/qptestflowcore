@@ -53,18 +53,9 @@ namespace QPCore.Service
         {
             name = name.Trim().ToLower();
 
-            var isExisted = false;
-
-            if (clientId.HasValue)
-            {
-                isExisted = _repository.GetQuery()
-                        .Any(p => p.ApplicationName.ToLower() == name && p.ClientId != clientId.Value);
-            }
-            else
-            {
-                isExisted = _repository.GetQuery()
-                        .Any(p => p.ApplicationName.ToLower() == name);
-            }
+            var isExisted = _repository.GetQuery()
+                        .Any(p => p.ApplicationName.ToLower() == name
+                                && (!clientId.HasValue || (clientId.HasValue && p.ClientId != clientId.Value)));
 
             var result = new CheckUniqueResponse()
             {

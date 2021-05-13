@@ -671,22 +671,34 @@ namespace QPCore.Data
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.HasKey(e => e.ClientRoleAssoc)
+                entity.HasKey(e => e.UserRoleId)
                     .HasName("pk_userrole_clientroleassoc");
 
                 entity.Property(e => e.RoleId)
-                    .HasColumnName("roleid");
+                    .HasColumnName("role_id");
 
-                entity.Property(e => e.ClientRoleAssoc)
+                entity.Property(e => e.UserRoleId)
                     .HasIdentityOptions(startValue: 100)
                     .HasColumnName("clientroleassoc");
 
                 entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnName("isactive");
+                    .HasColumnName("is_active");
 
-                entity.Property(e => e.UserClientId)
-                    .HasColumnName("userclientid");
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
 
                 entity.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)
@@ -696,7 +708,7 @@ namespace QPCore.Data
 
                 entity.HasOne(ur => ur.OrgUser)
                     .WithMany(u => u.UserRoles)
-                    .HasForeignKey(ur => ur.UserClientId)
+                    .HasForeignKey(ur => ur.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_orguser_userrole_userclientid_userid");
             });

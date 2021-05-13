@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using QPCore.Model.Organizations;
 using QPCore.Model.Applications;
 using QPCore.Model.Roles;
+using QPCore.Model.UserRoles;
 
 namespace QPCore.AutoMapper
 {
@@ -41,6 +42,20 @@ namespace QPCore.AutoMapper
 
             CreateMap<CreateApplicationRequest, DB.Application>();
 
+            // User Role
+            CreateMap<DB.UserRole, UserRoleResponse>()
+                .ForMember(d => d.RoleName, s => s.MapFrom(f => f.Role.Rolename))
+                .ForMember(d => d.FirstName, s => s.MapFrom(f => f.OrgUser.FirstName))
+                .ForMember(d => d.LastName, s => s.MapFrom(f => f.OrgUser.LastName));
+
+            CreateMap<DB.UserRole, UserRoleInRoleResponse>()
+                .ForMember(d => d.RoleName, s => s.MapFrom(f => f.Role.Rolename));
+
+            CreateMap<DB.UserRole, UserRoleInUserResponse>()
+                .ForMember(d => d.FirstName, s => s.MapFrom(f => f.OrgUser.FirstName))
+                .ForMember(d => d.LastName, s => s.MapFrom(f => f.OrgUser.LastName));
+
+            CreateMap<CreateUserRoleRequest, DB.UserRole>();
         }
     }
 }

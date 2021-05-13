@@ -22,6 +22,14 @@ namespace QPCore.Service
             _mapper = mapper;
         }
 
+        public bool CheckExistedId(int id)
+        {
+            var query = _roleRepository.GetQuery()
+                        .Any(p => p.RoleId == id);
+
+            return query;
+        }
+
         public List<RoleResponse> GetAll()
         {
             var query = _roleRepository.GetQuery()
@@ -30,5 +38,6 @@ namespace QPCore.Service
 
             return query;
         }
+
     }
 }

@@ -69,7 +69,6 @@ namespace QPCore.Controllers.Admin
             return Ok(isUniqueResult);
         }
 
-
         /// <summary>
         /// Create new application
         /// </summary>

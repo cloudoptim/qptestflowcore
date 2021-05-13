@@ -213,6 +213,14 @@ namespace QPCore.Service
             return query;
         }
 
+        public bool CheckExistedId(int userId)
+        {
+            var query = _orgUsersRepository.GetQuery()
+                        .Any(p => p.UserId == userId);
+
+            return query;
+        }
+
         #region private methods
         private string generateJwtToken(OrgUser account)
         {
@@ -227,7 +235,7 @@ namespace QPCore.Service
 
             // Get Role
             var roles = _roleRepository.GetQuery()
-                            .Where(p => p.UserRoles.Any(r => r.UserClientId == account.UserId))
+                            .Where(p => p.UserRoles.Any(r => r.UserId == account.UserId))
                             .ToList();
 
             if (roles.Any())
@@ -355,7 +363,6 @@ namespace QPCore.Service
                          {message}"
             );
         }
-
         #endregion
     }
 }

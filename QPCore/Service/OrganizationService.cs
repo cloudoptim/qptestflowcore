@@ -44,18 +44,9 @@ namespace QPCore.Service
         {
             name = name.Trim().ToLower();
 
-            var isExisted = false;
-
-            if (orgId.HasValue)
-            {
-                isExisted = _repository.GetQuery()
-                        .Any(p => p.OrgName.ToLower() == name && p.OrgId != orgId.Value);
-            }
-            else
-            {
-                isExisted = _repository.GetQuery()
-                        .Any(p => p.OrgName.ToLower() == name);
-            }
+             var   isExisted = _repository.GetQuery()
+                        .Any(p => p.OrgName.ToLower() == name 
+                                && (!orgId.HasValue || (orgId.HasValue && p.OrgId != orgId.Value)));
 
             var result = new CheckUniqueResponse()
             {
