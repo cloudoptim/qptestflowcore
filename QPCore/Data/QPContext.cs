@@ -105,7 +105,8 @@ namespace QPCore.Data
                 entity.Property(e => e.ApplicationId)
                     .HasColumnName("application_id")
                     .IsRequired()
-                    .HasIdentityOptions(startValue: 1);
+                    .HasIdentityOptions(startValue: 1)
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.ApplicationName)
                     .HasColumnName("application_name")

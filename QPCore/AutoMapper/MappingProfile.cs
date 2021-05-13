@@ -35,6 +35,12 @@ namespace QPCore.AutoMapper
 
             CreateMap<DB.Role, RoleResponse>();
 
+            // Application
+            CreateMap<DB.Application, ApplicationResponse>()
+                .ForMember(d => d.OrgName, s => s.MapFrom(r => r.Org.OrgName));
+
+            CreateMap<CreateApplicationRequest, DB.Application>();
+
         }
     }
 }
