@@ -108,6 +108,8 @@ namespace QPCore.Service
                                 ApplicationId = p.Application.ApplicationId,
                                 ApplicationName = p.Application.ApplicationName,
                                 IsActive = p.Application.IsActive,
+                                OrgName = p.OrgUser.Org.OrgName,
+                                OrgId = p.OrgUser.OrgId
                             })
                             .ToList();
 
