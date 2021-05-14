@@ -22,9 +22,12 @@ namespace QPCore.Data.Enitites
         public BitArray UseWindowsAuth { get; set; }
         public string Password { get; set; }
         public DateTime? PasswordReset { get; set; }
-        public BitArray Enabled { get; set; }
+        public bool IsActive { get; set; }
         public string Email { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedBy { get; set; }
         public string VerificationToken { get; set; }
         public DateTime? Verified { get; set; }
         public string ResetToken { get; set; }

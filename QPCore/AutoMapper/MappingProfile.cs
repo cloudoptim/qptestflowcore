@@ -28,7 +28,8 @@ namespace QPCore.AutoMapper
             CreateMap<RegisterRequest, DB.OrgUser>()
                 .ForMember(d => d.LoginName, opt => opt.MapFrom(s => s.Email));
 
-            CreateMap<DB.OrgUser, AccountResponse>();
+            CreateMap<DB.OrgUser, AccountResponse>()
+                .ForMember(d => d.OrgName, s => s.MapFrom(f => f.Org.OrgName));
 
             // Organization
             CreateMap<DB.Organization, OrganizationResponse>();

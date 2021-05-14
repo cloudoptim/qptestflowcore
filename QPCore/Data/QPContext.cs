@@ -198,57 +198,67 @@ namespace QPCore.Data
 
                 entity.Property(e => e.UserId)
                     .ValueGeneratedNever()
-                    .HasColumnName("userid");
+                    .HasColumnName("user-id");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("is-active");
 
                 entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
-                    .HasColumnName("firstname");
+                    .HasColumnName("first-name");
 
                 entity.Property(e => e.LastName)
                     .HasMaxLength(50)
-                    .HasColumnName("lastname");
+                    .HasColumnName("last-name");
 
                 entity.Property(e => e.LoginName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("loginname");
+                    .HasColumnName("login-name");
 
-                entity.Property(e => e.OrgId).HasColumnName("orgid");
+                entity.Property(e => e.OrgId)
+                    .HasColumnName("org-id");
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(250)
                     .HasColumnName("password");
 
                 entity.Property(e => e.PasswordReset)
-                    .HasColumnName("passwordreset");
+                    .HasColumnName("password-reset");
 
                 entity.Property(e => e.UseWindowsAuth)
                     .HasColumnType("bit(1)")
-                    .HasColumnName("usewindowsauth");
+                    .HasColumnName("use-windows-auth");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(256)
                     .HasColumnName("email");
 
-                entity.Property(e => e.Created)
+                entity.Property(e => e.CreatedDate)
                     .IsRequired()
-                    .HasColumnName("created");
+                    .HasColumnName("created-date");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created-by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .IsRequired()
+                    .HasColumnName("updated-date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated-by");
 
                 entity.Property(e => e.VerificationToken)
                     .HasMaxLength(500)
-                    .HasColumnName("verificationtoken");
+                    .HasColumnName("verification-token");
 
                 entity.Property(e => e.ResetToken)
                     .HasMaxLength(500)
-                    .HasColumnName("resettoken");
+                    .HasColumnName("reset-token");
 
                 entity.Property(e => e.ResetTokenExpires)
-                    .HasColumnName("resettokenexpires");
+                    .HasColumnName("reset-token-expires");
 
                 entity.Property(e => e.Verified)
                     .HasColumnName("verified");

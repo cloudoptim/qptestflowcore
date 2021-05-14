@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using QPCore.Common;
@@ -127,11 +128,11 @@ namespace QPCore.Service
             }
             account.UserId = maxId + 1;
             account.Password = BC.HashPassword(model.Password);
-            account.Enabled = new BitArray(new bool[] { true });
+            account.IsActive = true;
             account.UseWindowsAuth = new BitArray(new bool[] { false });
             account.OrgId = GlobalConstants.DEFAUTL_ORGANIZATION_ID;
             account.VerificationToken = randomTokenString();
-            account.Created = DateTime.UtcNow;
+            account.CreatedDate = DateTime.UtcNow;
 
             // save account
             await _orgUsersRepository.AddAsync(account);
@@ -142,8 +143,11 @@ namespace QPCore.Service
 
         public AccountResponse GetById(int id)
         {
-            var account = _orgUsersRepository.GetQuery().FirstOrDefault(p => p.UserId == id);
-            return _mapper.Map<AccountResponse>(account);
+            var account = _orgUsersRepository.GetQuery()
+                .Where(p => p.UserId == id)
+                .ProjectTo<AccountResponse>(_mapper.ConfigurationProvider)
+                .FirstOrDefault();
+            return account;
         }
 
         public async Task VerifyEmailAsync(string token)
@@ -219,6 +223,59 @@ namespace QPCore.Service
                         .Any(p => p.UserId == userId);
 
             return query;
+        }
+
+        public bool CheckExistedEmail(string email, int? userId = null)
+        {
+            email = email.Trim().ToLower();
+            var query = _orgUsersRepository.GetQuery()
+                        .Any(p => p.Email.ToLower().Trim() == email &&
+                                    (!userId.HasValue || (userId.HasValue && userId.Value == p.UserId))
+                        );
+
+            return query;
+        }
+
+        public List<AccountResponse> GetAll()
+        {
+            var query = _orgUsersRepository.GetQuery()
+                        .ProjectTo<AccountResponse>(_mapper.ConfigurationProvider)
+                        .ToList();
+
+            return query;
+        }
+
+        public List<AccountResponse> GetByOrgId(int orgId)
+        {
+            var query = _orgUsersRepository.GetQuery()
+                        .Where(p => p.OrgId == orgId)
+                        .ProjectTo<AccountResponse>(_mapper.ConfigurationProvider)
+                        .ToList();
+
+            return query;
+        }
+
+        public async Task<AccountResponse> UpdateAsync(EditAccountRequest editAccountRequest, int userId)
+        {
+            var account = _orgUsersRepository.GetQuery()
+                            .FirstOrDefault(p => p.UserId == editAccountRequest.UserId);
+
+            if (account != null)
+            {
+                account.LastName = editAccountRequest.LastName;
+                account.FirstName = editAccountRequest.FirstName;
+                account.Email = editAccountRequest.Email;
+                account.IsActive = editAccountRequest.IsActive;
+                account.OrgId = editAccountRequest.OrgId;
+                account.UpdatedBy = userId;
+                account.UpdatedDate = DateTime.Now;
+
+               await _orgUsersRepository.UpdateAsync(account);
+
+                return GetById(editAccountRequest.UserId);
+            }
+
+            return null;
         }
 
         #region private methods
