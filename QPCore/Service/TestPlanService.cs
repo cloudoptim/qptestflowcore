@@ -78,6 +78,7 @@ namespace QPCore.Service
         {
             var testPlans = _repository.GetQuery()
                         .ProjectTo<TestPlanResponse>(_mapper.ConfigurationProvider)
+                        .OrderByDescending(p => p.CreatedDate)
                         .ToList();
 
             return testPlans;
@@ -96,6 +97,7 @@ namespace QPCore.Service
             var query = _repository.GetQuery()
                         .Where(p => p.ParentId == parentId)
                         .ProjectTo<TestPlanResponse>(_mapper.ConfigurationProvider)
+                        .OrderByDescending(p => p.CreatedDate)
                         .ToList();
             return query;
         }

@@ -11,6 +11,7 @@ using QPCore.Model.Applications;
 using QPCore.Model.Roles;
 using QPCore.Model.UserRoles;
 using QPCore.Model.TestPlans;
+using QPCore.Model.TestPlanTestCases;
 
 namespace QPCore.AutoMapper
 {
@@ -66,6 +67,11 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.AssignToLastName, s => s.MapFrom(p => p.OrgUser.LastName));
 
             CreateMap<CreateTestPlanRequest, DB.TestPlan>();
+
+            // TestPlan TestCase
+            CreateMap<DB.TestPlanTestCaseAssociation, TestPlanTestCaseResponse>()
+                .ForMember(d => d.TestPlanName, s => s.MapFrom(e => e.TestPlan.Name))
+                .ForMember(d => d.TestCaseName, s => s.MapFrom(e => e.TestCase.TestFlowName));
         }
     }
 }

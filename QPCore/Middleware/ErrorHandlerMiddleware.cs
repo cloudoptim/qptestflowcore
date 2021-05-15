@@ -45,7 +45,7 @@ namespace QPCore.Middleware
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var result = JsonSerializer.Serialize(new { message = error?.GetaAllMessages() });
                 await response.WriteAsync(result);
             }
         }

@@ -46,6 +46,25 @@ namespace QPCore.Data
             }
         }
 
+        public async Task AddRangeAsync(List<TEntity> entities)
+        {
+            if (entities == null || entities.Count == 0)
+            {
+                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+            }
+
+            try
+            {
+                await QPDataContext.AddRangeAsync(entities);
+                await QPDataContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entities)} could not be saved: {ex.Message}");
+            }
+        }
+
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             if (entity == null)
