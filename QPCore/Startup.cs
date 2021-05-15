@@ -74,6 +74,7 @@ namespace QPCore
             services.AddTransient(typeof(IApplicationService), typeof(ApplicationService));
             services.AddTransient(typeof(IRoleService), typeof(RoleService));
             services.AddTransient(typeof(IUserRoleService), typeof(UserRoleService));
+            services.AddTransient(typeof(ITestPlanService), typeof(TestPlanService));
             
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));

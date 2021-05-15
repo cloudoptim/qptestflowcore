@@ -991,6 +991,111 @@ namespace QPCore.Data
                     .HasConstraintName("fk_orgusers_refreshtoken_orguserid");
             });
 
+            modelBuilder.Entity<TestPlan>(entity =>
+            {
+                entity.ToTable("TestPlan");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_testplan_testplan_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("testplan_id")
+                    .HasIdentityOptions(startValue: 1);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.HasIndex(e => e.Name, "ix_testplan_name")
+                    .IsUnique();
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .IsRequired();
+
+                entity.Property(e => e.AssignTo)
+                    .HasColumnName("assign_to");                
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date")
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasMany(e => e.Childs)
+                    .WithOne(e => e.Parent)
+                    .HasForeignKey(e => e.ParentId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("fk_testplan_parent_id_testplan_id");
+
+                entity.HasOne(e => e.OrgUser)
+                    .WithMany(e => e.TestPlans)
+                    .HasForeignKey(e => e.AssignTo)
+                    .HasConstraintName("fk_testplan_orguser_assign_to_user_id")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+            });
+
+            modelBuilder.Entity<TestPlanTestCaseAssociation>(entity =>
+            {
+                entity.ToTable("TestPlanTestCaseAssociation");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_testplantestcaseassociation_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("testplan_testcase_id")
+                    .HasIdentityOptions(startValue: 1);
+
+                entity.Property(e => e.TestPlanId)
+                    .HasColumnName("testplan_id");
+
+                entity.Property(e => e.TestCaseId)
+                    .HasColumnName("testcase_id");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date")
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasOne(e => e.TestPlan)
+                    .WithMany(e => e.TestPlanTestCaseAssociations)
+                    .HasForeignKey(e => e.TestPlanId)
+                    .HasConstraintName("fk_testplan_testcase_testplan_id")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(e => e.TestCase)
+                    .WithMany(e => e.TestPlanTestCaseAssociations)
+                    .HasConstraintName("fk_testflow_testplantestcase_testcase_id")
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasForeignKey(e => e.TestCaseId);
+            });
+
             modelBuilder.HasSequence("applicationfeaturesseq");
 
             modelBuilder.HasSequence("batchseq");

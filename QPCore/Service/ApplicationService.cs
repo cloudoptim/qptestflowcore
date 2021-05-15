@@ -83,11 +83,11 @@ namespace QPCore.Service
 
         public List<ApplicationResponse> GetAll()
         {
-            var orgs = _repository.GetQuery()
+            var apps = _repository.GetQuery()
                         .ProjectTo<ApplicationResponse>(_mapper.ConfigurationProvider)
                         .ToList();
 
-            return orgs;
+            return apps;
         }
 
         public ApplicationResponse GetById(int clientId)

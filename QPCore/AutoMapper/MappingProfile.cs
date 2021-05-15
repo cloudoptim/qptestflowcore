@@ -10,6 +10,7 @@ using QPCore.Model.Organizations;
 using QPCore.Model.Applications;
 using QPCore.Model.Roles;
 using QPCore.Model.UserRoles;
+using QPCore.Model.TestPlans;
 
 namespace QPCore.AutoMapper
 {
@@ -57,6 +58,14 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.LastName, s => s.MapFrom(f => f.OrgUser.LastName));
 
             CreateMap<CreateUserRoleRequest, DB.UserRole>();
+
+            // TestPlan
+            CreateMap<DB.TestPlan, TestPlanResponse>()
+                .ForMember(d => d.ParentName, s => s.MapFrom(p => p.Parent.Name))
+                .ForMember(d => d.AssignToFirstName, s => s.MapFrom(p => p.OrgUser.FirstName))
+                .ForMember(d => d.AssignToLastName, s => s.MapFrom(p => p.OrgUser.LastName));
+
+            CreateMap<CreateTestPlanRequest, DB.TestPlan>();
         }
     }
 }
