@@ -46,6 +46,25 @@ namespace QPCore.Data
             }
         }
 
+        public async Task AddRangeAsync(List<TEntity> entities)
+        {
+            if (entities == null || entities.Count == 0)
+            {
+                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+            }
+
+            try
+            {
+                await QPDataContext.AddRangeAsync(entities);
+                await QPDataContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entities)} could not be saved: {ex.Message}");
+            }
+        }
+
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             if (entity == null)
@@ -63,6 +82,23 @@ namespace QPCore.Data
             catch (Exception ex)
             {
                 throw new Exception($"{nameof(entity)} could not be updated: {ex.Message}");
+            }
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            try
+            {
+                var entity = await QPDataContext.Set<TEntity>().FindAsync(id);
+                if (entity != null)
+                {
+                    QPDataContext.Remove(entity);
+                   await QPDataContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{typeof(TEntity).Name} could not be deleted: {ex.Message}");
             }
         }
     }

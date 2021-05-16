@@ -11,6 +11,9 @@ namespace QPCore.Model.Accounts
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public DateTime Created { get; set; }
+        public bool IsActive { get; set; }
+        public int OrgId { get; set; }
+        public string OrgName { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

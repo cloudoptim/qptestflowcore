@@ -8,8 +8,18 @@ namespace QPCore.Data.Enitites
 {
     public partial class Role
     {
-        public int Roleid { get; set; }
+        public Role()
+        {
+            this.UserRoles = new HashSet<UserRole>();
+        }
+
+        public int RoleId { get; set; }
+        public string RoleCode { get; set; }
         public string Rolename { get; set; }
-        public BitArray Enabled { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsSystem { get; set; }
+        public bool IsDefault { get; set; }
+
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

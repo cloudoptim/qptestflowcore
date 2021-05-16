@@ -111,35 +111,52 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
                     b.Property<int>("ClientId")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("client_id")
+                        .HasIdentityOptions(1L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<int>("ApplicationId")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("application_id")
+                        .HasIdentityOptions(1L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<string>("ApplicationName")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("createdBy");
+                        .HasColumnName("application_name");
 
-                    b.Property<DateTime?>("CreatedDateTime")
-                        .HasColumnType("date");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_date");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("Orgid")
+                    b.Property<int>("OrgId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated_by");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_date");
 
                     b.HasKey("ClientId")
                         .HasName("clientId");
 
-                    b.HasIndex("Orgid");
+                    b.HasIndex("OrgId");
 
-                    b.HasIndex(new[] { "ApplicationId" }, "ApplicationId")
+                    b.HasIndex(new[] { "ApplicationId" }, "ix_application_id")
                         .IsUnique();
 
                     b.ToTable("Application");
@@ -231,43 +248,46 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.OrgUser", b =>
                 {
-                    b.Property<int>("Userid")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("userid");
+                        .HasColumnName("user-id");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created-by");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created");
+                        .HasColumnName("created-date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("email");
 
-                    b.Property<BitArray>("Enabled")
-                        .IsRequired()
-                        .HasColumnType("bit(1)")
-                        .HasColumnName("enabled");
-
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("firstname");
+                        .HasColumnName("first-name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is-active");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("lastname");
+                        .HasColumnName("last-name");
 
                     b.Property<string>("LoginName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("loginname");
+                        .HasColumnName("login-name");
 
-                    b.Property<int>("Orgid")
+                    b.Property<int>("OrgId")
                         .HasColumnType("integer")
-                        .HasColumnName("orgid");
+                        .HasColumnName("org-id");
 
                     b.Property<string>("Password")
                         .HasMaxLength(250)
@@ -276,52 +296,63 @@ namespace QPCore.Migrations
 
                     b.Property<DateTime?>("PasswordReset")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("passwordreset");
+                        .HasColumnName("password-reset");
 
                     b.Property<string>("ResetToken")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
-                        .HasColumnName("resettoken");
+                        .HasColumnName("reset-token");
 
                     b.Property<DateTime?>("ResetTokenExpires")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("resettokenexpires");
+                        .HasColumnName("reset-token-expires");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated-by");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .IsRequired()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated-date");
 
                     b.Property<BitArray>("UseWindowsAuth")
                         .HasColumnType("bit(1)")
-                        .HasColumnName("usewindowsauth");
+                        .HasColumnName("use-windows-auth");
 
                     b.Property<string>("VerificationToken")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
-                        .HasColumnName("verificationtoken");
+                        .HasColumnName("verification-token");
 
                     b.Property<DateTime?>("Verified")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("verified");
 
-                    b.HasKey("Userid")
+                    b.HasKey("UserId")
                         .HasName("orguser");
 
-                    b.HasIndex("Orgid");
+                    b.HasIndex("OrgId");
 
                     b.ToTable("OrgUsers");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.Organization", b =>
                 {
-                    b.Property<int>("Orgid")
+                    b.Property<int>("OrgId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("orgid");
+                        .HasColumnName("orgid")
+                        .HasIdentityOptions(1L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("createdBy");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("createdby");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("date")
-                        .HasColumnName("createdDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("createddate");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("date");
@@ -333,7 +364,15 @@ namespace QPCore.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("date");
 
-                    b.HasKey("Orgid")
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updatedby");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updateddate");
+
+                    b.HasKey("OrgId")
                         .HasName("orgid");
 
                     b.ToTable("Organization");
@@ -341,8 +380,9 @@ namespace QPCore.Migrations
                     b.HasData(
                         new
                         {
-                            Orgid = 1,
-                            CreatedDate = new DateTime(2021, 4, 25, 23, 17, 17, 226, DateTimeKind.Local).AddTicks(2712),
+                            OrgId = 1,
+                            CreatedBy = 0,
+                            CreatedDate = new DateTime(2021, 5, 15, 17, 43, 8, 712, DateTimeKind.Local).AddTicks(5042),
                             OrgName = "Default Organization"
                         });
                 });
@@ -402,14 +442,27 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.Role", b =>
                 {
-                    b.Property<int>("Roleid")
+                    b.Property<int>("RoleId")
                         .HasColumnType("integer")
                         .HasColumnName("roleid");
 
-                    b.Property<BitArray>("Enabled")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isactive");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isdefault");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("issystem");
+
+                    b.Property<string>("RoleCode")
                         .IsRequired()
-                        .HasColumnType("bit(1)")
-                        .HasColumnName("enabled");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("rolecode");
 
                     b.Property<string>("Rolename")
                         .IsRequired()
@@ -417,9 +470,29 @@ namespace QPCore.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("rolename");
 
-                    b.HasKey("Roleid");
+                    b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            IsActive = true,
+                            IsDefault = false,
+                            IsSystem = true,
+                            RoleCode = "ADMIN",
+                            Rolename = "Administrator"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            IsActive = true,
+                            IsDefault = true,
+                            IsSystem = true,
+                            RoleCode = "USER",
+                            Rolename = "User"
+                        });
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.RunConfiguration", b =>
@@ -971,27 +1044,152 @@ namespace QPCore.Migrations
                     b.ToTable("TestFlowStep");
                 });
 
+            modelBuilder.Entity("QPCore.Data.Enitites.TestPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("testplan_id")
+                        .HasIdentityOptions(1L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+
+                    b.Property<int>("AssignTo")
+                        .HasColumnType("integer")
+                        .HasColumnName("assign_to");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_id");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated_by");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_testplan_testplan_id");
+
+                    b.HasIndex("AssignTo");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex(new[] { "Name" }, "ix_testplan_name")
+                        .IsUnique();
+
+                    b.ToTable("TestPlan");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.TestPlanTestCaseAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("testplan_testcase_id")
+                        .HasIdentityOptions(1L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<int>("TestCaseId")
+                        .HasColumnType("integer")
+                        .HasColumnName("testcase_id");
+
+                    b.Property<int>("TestPlanId")
+                        .HasColumnType("integer")
+                        .HasColumnName("testplan_id");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated_by");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_testplantestcaseassociation_id");
+
+                    b.HasIndex("TestCaseId");
+
+                    b.HasIndex("TestPlanId");
+
+                    b.ToTable("TestPlanTestCaseAssociation");
+                });
+
             modelBuilder.Entity("QPCore.Data.Enitites.UserRole", b =>
                 {
-                    b.Property<int>("Roleid")
+                    b.Property<int>("UserRoleId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("roleid");
+                        .HasColumnName("clientroleassoc")
+                        .HasIdentityOptions(100L, null, null, null, null, null)
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
-                    b.Property<int>("Clientroleassoc")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("integer")
-                        .HasColumnName("clientroleassoc");
+                        .HasColumnName("created_by");
 
-                    b.Property<BitArray>("Enabled")
-                        .IsRequired()
-                        .HasColumnType("bit(1)")
-                        .HasColumnName("enabled");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_date");
 
-                    b.Property<int>("Userclientid")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<int>("RoleId")
                         .HasColumnType("integer")
-                        .HasColumnName("userclientid");
+                        .HasColumnName("role_id");
 
-                    b.HasKey("Roleid")
-                        .HasName("clientroleassoc");
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated_by");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_date");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("UserRoleId")
+                        .HasName("pk_userrole_clientroleassoc");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
                 });
@@ -1295,7 +1493,7 @@ namespace QPCore.Migrations
                 {
                     b.HasOne("QPCore.Data.Enitites.Organization", "Org")
                         .WithMany("Applications")
-                        .HasForeignKey("Orgid")
+                        .HasForeignKey("OrgId")
                         .HasConstraintName("AppOrgId")
                         .IsRequired();
 
@@ -1327,7 +1525,7 @@ namespace QPCore.Migrations
                 {
                     b.HasOne("QPCore.Data.Enitites.Organization", "Org")
                         .WithMany("OrgUsers")
-                        .HasForeignKey("Orgid")
+                        .HasForeignKey("OrgId")
                         .HasConstraintName("orguser_fk")
                         .IsRequired();
 
@@ -1501,6 +1699,66 @@ namespace QPCore.Migrations
                     b.Navigation("TestFlow");
                 });
 
+            modelBuilder.Entity("QPCore.Data.Enitites.TestPlan", b =>
+                {
+                    b.HasOne("QPCore.Data.Enitites.OrgUser", "OrgUser")
+                        .WithMany("TestPlans")
+                        .HasForeignKey("AssignTo")
+                        .HasConstraintName("fk_testplan_orguser_assign_to_user_id")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("QPCore.Data.Enitites.TestPlan", "Parent")
+                        .WithMany("Childs")
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_testplan_parent_id_testplan_id")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("OrgUser");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.TestPlanTestCaseAssociation", b =>
+                {
+                    b.HasOne("QPCore.Data.Enitites.TestFlow", "TestCase")
+                        .WithMany("TestPlanTestCaseAssociations")
+                        .HasForeignKey("TestCaseId")
+                        .HasConstraintName("fk_testflow_testplantestcase_testcase_id")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("QPCore.Data.Enitites.TestPlan", "TestPlan")
+                        .WithMany("TestPlanTestCaseAssociations")
+                        .HasForeignKey("TestPlanId")
+                        .HasConstraintName("fk_testplan_testcase_testplan_id")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("TestCase");
+
+                    b.Navigation("TestPlan");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.UserRole", b =>
+                {
+                    b.HasOne("QPCore.Data.Enitites.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("fk_role_userrole_roleid_roleid")
+                        .IsRequired();
+
+                    b.HasOne("QPCore.Data.Enitites.OrgUser", "OrgUser")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_orguser_userrole_userclientid_userid")
+                        .IsRequired();
+
+                    b.Navigation("OrgUser");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("QPCore.Data.Enitites.WebCommand", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Application", "Client")
@@ -1566,6 +1824,10 @@ namespace QPCore.Migrations
                     b.Navigation("AppUsers");
 
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("TestPlans");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.Organization", b =>
@@ -1573,6 +1835,11 @@ namespace QPCore.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("OrgUsers");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.RunTestBatch", b =>
@@ -1607,6 +1874,8 @@ namespace QPCore.Migrations
                     b.Navigation("TestFlowCategoryAssocs");
 
                     b.Navigation("TestFlowSteps");
+
+                    b.Navigation("TestPlanTestCaseAssociations");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlowCategory", b =>
@@ -1617,6 +1886,13 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlowStep", b =>
                 {
                     b.Navigation("TestFlowColumns");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.TestPlan", b =>
+                {
+                    b.Navigation("Childs");
+
+                    b.Navigation("TestPlanTestCaseAssociations");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.WebModel", b =>

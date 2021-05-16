@@ -12,18 +12,23 @@ namespace QPCore.Data.Enitites
         {
             this.RefreshTokens = new HashSet<RefreshToken>();
             this.AppUsers = new HashSet<AppUser>();
+            this.UserRoles = new HashSet<UserRole>();
+            this.TestPlans = new HashSet<TestPlan>();
         }
-        public int Userid { get; set; }
-        public int Orgid { get; set; }
+        public int UserId { get; set; }
+        public int OrgId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string LoginName { get; set; }
         public BitArray UseWindowsAuth { get; set; }
         public string Password { get; set; }
         public DateTime? PasswordReset { get; set; }
-        public BitArray Enabled { get; set; }
+        public bool IsActive { get; set; }
         public string Email { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedBy { get; set; }
         public string VerificationToken { get; set; }
         public DateTime? Verified { get; set; }
         public string ResetToken { get; set; }
@@ -32,5 +37,7 @@ namespace QPCore.Data.Enitites
         public virtual Organization Org { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<TestPlan> TestPlans { get; set; }
     }
 }

@@ -95,22 +95,38 @@ namespace QPCore.Data
 
                 entity.ToTable("Application");
 
-                entity.HasIndex(e => e.ApplicationId, "ApplicationId")
+                entity.HasIndex(e => e.ApplicationId, "ix_application_id")
                     .IsUnique();
 
-                entity.Property(e => e.ClientId).ValueGeneratedNever();
+                entity.Property(e => e.ClientId)
+                    .HasColumnName("client_id")
+                    .HasIdentityOptions(startValue: 1);
 
-                entity.Property(e => e.ApplicationName).HasMaxLength(255);
+                entity.Property(e => e.ApplicationId)
+                    .HasColumnName("application_id")
+                    .IsRequired()
+                    .HasIdentityOptions(startValue: 1)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ApplicationName)
+                    .HasColumnName("application_name")
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(255)
-                    .HasColumnName("createdBy");
+                    .HasColumnName("created_by");
 
-                entity.Property(e => e.CreatedDateTime).HasColumnType("date");
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
 
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.Applications)
-                    .HasForeignKey(d => d.Orgid)
+                    .HasForeignKey(d => d.OrgId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("AppOrgId");
             });
@@ -177,91 +193,105 @@ namespace QPCore.Data
 
             modelBuilder.Entity<OrgUser>(entity =>
             {
-                entity.HasKey(e => e.Userid)
+                entity.HasKey(e => e.UserId)
                     .HasName("orguser");
 
-                entity.Property(e => e.Userid)
+                entity.Property(e => e.UserId)
                     .ValueGeneratedNever()
-                    .HasColumnName("userid");
+                    .HasColumnName("user-id");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("is-active");
 
                 entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
-                    .HasColumnName("firstname");
+                    .HasColumnName("first-name");
 
                 entity.Property(e => e.LastName)
                     .HasMaxLength(50)
-                    .HasColumnName("lastname");
+                    .HasColumnName("last-name");
 
                 entity.Property(e => e.LoginName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("loginname");
+                    .HasColumnName("login-name");
 
-                entity.Property(e => e.Orgid).HasColumnName("orgid");
+                entity.Property(e => e.OrgId)
+                    .HasColumnName("org-id");
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(250)
                     .HasColumnName("password");
 
                 entity.Property(e => e.PasswordReset)
-                    .HasColumnName("passwordreset");
+                    .HasColumnName("password-reset");
 
                 entity.Property(e => e.UseWindowsAuth)
                     .HasColumnType("bit(1)")
-                    .HasColumnName("usewindowsauth");
+                    .HasColumnName("use-windows-auth");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(256)
                     .HasColumnName("email");
 
-                entity.Property(e => e.Created)
+                entity.Property(e => e.CreatedDate)
                     .IsRequired()
-                    .HasColumnName("created");
+                    .HasColumnName("created-date");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created-by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .IsRequired()
+                    .HasColumnName("updated-date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated-by");
 
                 entity.Property(e => e.VerificationToken)
                     .HasMaxLength(500)
-                    .HasColumnName("verificationtoken");
+                    .HasColumnName("verification-token");
 
                 entity.Property(e => e.ResetToken)
                     .HasMaxLength(500)
-                    .HasColumnName("resettoken");
+                    .HasColumnName("reset-token");
 
                 entity.Property(e => e.ResetTokenExpires)
-                    .HasColumnName("resettokenexpires");
+                    .HasColumnName("reset-token-expires");
 
                 entity.Property(e => e.Verified)
                     .HasColumnName("verified");
         
                 entity.HasOne(d => d.Org)
                     .WithMany(p => p.OrgUsers)
-                    .HasForeignKey(d => d.Orgid)
+                    .HasForeignKey(d => d.OrgId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("orguser_fk");
             });
 
             modelBuilder.Entity<Organization>(entity =>
             {
-                entity.HasKey(e => e.Orgid)
+                entity.HasKey(e => e.OrgId)
                     .HasName("orgid");
 
                 entity.ToTable("Organization");
 
-                entity.Property(e => e.Orgid)
-                    .ValueGeneratedNever()
+                entity.Property(e => e.OrgId)
+                    .HasIdentityOptions(startValue: 1)
                     .HasColumnName("orgid");
 
                 entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(255)
-                    .HasColumnName("createdBy");
+                   .HasColumnName("createdby");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updatedby");
 
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("date")
-                    .HasColumnName("createdDate");
+                    .HasColumnName("createddate");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updateddate");
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
@@ -272,19 +302,31 @@ namespace QPCore.Data
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.Roleid)
+                entity.Property(e => e.RoleId)
                     .ValueGeneratedNever()
                     .HasColumnName("roleid");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("isactive");
 
                 entity.Property(e => e.Rolename)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("rolename");
+
+                entity.Property(e => e.RoleCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("rolecode");
+
+                entity.Property(e => e.IsSystem)
+                    .IsRequired()
+                    .HasColumnName("issystem");
+
+                entity.Property(e => e.IsDefault)
+                    .IsRequired()
+                    .HasColumnName("isdefault");
             });
 
             modelBuilder.Entity<RunConfiguration>(entity =>
@@ -639,21 +681,46 @@ namespace QPCore.Data
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.HasKey(e => e.Roleid)
-                    .HasName("clientroleassoc");
+                entity.HasKey(e => e.UserRoleId)
+                    .HasName("pk_userrole_clientroleassoc");
 
-                entity.Property(e => e.Roleid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("roleid");
+                entity.Property(e => e.RoleId)
+                    .HasColumnName("role_id");
 
-                entity.Property(e => e.Clientroleassoc).HasColumnName("clientroleassoc");
+                entity.Property(e => e.UserRoleId)
+                    .HasIdentityOptions(startValue: 100)
+                    .HasColumnName("clientroleassoc");
 
-                entity.Property(e => e.Enabled)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("enabled");
+                    .HasColumnName("is_active");
 
-                entity.Property(e => e.Userclientid).HasColumnName("userclientid");
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_role_userrole_roleid_roleid");
+
+                entity.HasOne(ur => ur.OrgUser)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orguser_userrole_userclientid_userid");
             });
 
             modelBuilder.Entity<WebCommand>(entity =>
@@ -922,6 +989,111 @@ namespace QPCore.Data
                     .WithMany(o => o.RefreshTokens)
                     .HasForeignKey(k => k.OrgUserId)
                     .HasConstraintName("fk_orgusers_refreshtoken_orguserid");
+            });
+
+            modelBuilder.Entity<TestPlan>(entity =>
+            {
+                entity.ToTable("TestPlan");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_testplan_testplan_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("testplan_id")
+                    .HasIdentityOptions(startValue: 1);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.HasIndex(e => e.Name, "ix_testplan_name")
+                    .IsUnique();
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .IsRequired();
+
+                entity.Property(e => e.AssignTo)
+                    .HasColumnName("assign_to");                
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date")
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasMany(e => e.Childs)
+                    .WithOne(e => e.Parent)
+                    .HasForeignKey(e => e.ParentId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("fk_testplan_parent_id_testplan_id");
+
+                entity.HasOne(e => e.OrgUser)
+                    .WithMany(e => e.TestPlans)
+                    .HasForeignKey(e => e.AssignTo)
+                    .HasConstraintName("fk_testplan_orguser_assign_to_user_id")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+            });
+
+            modelBuilder.Entity<TestPlanTestCaseAssociation>(entity =>
+            {
+                entity.ToTable("TestPlanTestCaseAssociation");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_testplantestcaseassociation_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("testplan_testcase_id")
+                    .HasIdentityOptions(startValue: 1);
+
+                entity.Property(e => e.TestPlanId)
+                    .HasColumnName("testplan_id");
+
+                entity.Property(e => e.TestCaseId)
+                    .HasColumnName("testcase_id");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date")
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasOne(e => e.TestPlan)
+                    .WithMany(e => e.TestPlanTestCaseAssociations)
+                    .HasForeignKey(e => e.TestPlanId)
+                    .HasConstraintName("fk_testplan_testcase_testplan_id")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(e => e.TestCase)
+                    .WithMany(e => e.TestPlanTestCaseAssociations)
+                    .HasConstraintName("fk_testflow_testplantestcase_testcase_id")
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasForeignKey(e => e.TestCaseId);
             });
 
             modelBuilder.HasSequence("applicationfeaturesseq");

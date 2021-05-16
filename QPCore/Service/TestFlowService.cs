@@ -111,11 +111,11 @@ namespace QPCore.Service
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        internal CheckUniqueDTO CheckUniqueTestFlow(string name)
+        internal CheckUniqueResponse CheckUniqueTestFlow(string name)
         {
             var status = _testFlowRepository.GetQuery()
                .Any(p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower());
-            var result = new CheckUniqueDTO()
+            var result = new CheckUniqueResponse()
             {
                 IsUnique = !status
             };
@@ -202,10 +202,10 @@ namespace QPCore.Service
 
             var query = _testFlowRepository.GetQuery()
                 .Where(p => p.TestFlowId == id && p.Islocked == true && p.LockedBy != userId)
-                .Join(_orgUserRepository.GetQuery(), l => l.LockedBy, r => r.Userid, (l, r) => new CheckLockingDTO()
+                .Join(_orgUserRepository.GetQuery(), l => l.LockedBy, r => r.UserId, (l, r) => new CheckLockingDTO()
                 {
                     IsLocked = l.Islocked.Value,
-                    LockedById = r.Userid,
+                    LockedById = r.UserId,
                     LockedByName = $"{r.FirstName} {r.LastName}",
                     LockedByEmail = r.Email,
                     LockedDate = l.LastUpdatedDateTime

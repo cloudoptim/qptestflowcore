@@ -74,7 +74,7 @@ namespace QPCore.Controllers
         }
 
         [HttpGet("checkunique")]
-        public CheckUniqueDTO CheckUniqueTestFlow(string name)
+        public CheckUniqueResponse CheckUniqueTestFlow(string name)
         {
             var result = testFlowService.CheckUniqueTestFlow(name);
             return result;

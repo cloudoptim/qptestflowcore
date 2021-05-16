@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace QPCore.Model.Common
 {
-    public class CheckUniqueDTO
+    public class CheckUniqueResponse
     {
         public bool IsUnique { get; set; }
     }

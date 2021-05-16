@@ -8,6 +8,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using QPCore.Model.Organizations;
 using QPCore.Model.Applications;
+using QPCore.Model.Roles;
+using QPCore.Model.UserRoles;
+using QPCore.Model.TestPlans;
+using QPCore.Model.TestPlanTestCases;
 
 namespace QPCore.AutoMapper
 {
@@ -26,9 +30,48 @@ namespace QPCore.AutoMapper
             CreateMap<RegisterRequest, DB.OrgUser>()
                 .ForMember(d => d.LoginName, opt => opt.MapFrom(s => s.Email));
 
-            CreateMap<DB.OrgUser, AccountResponse>();
+            CreateMap<DB.OrgUser, AccountResponse>()
+                .ForMember(d => d.OrgName, s => s.MapFrom(f => f.Org.OrgName));
 
+            // Organization
             CreateMap<DB.Organization, OrganizationResponse>();
+            CreateMap<CreateOrganizationRequest, DB.Organization>();
+
+            CreateMap<DB.Role, RoleResponse>();
+
+            // Application
+            CreateMap<DB.Application, ApplicationResponse>()
+                .ForMember(d => d.OrgName, s => s.MapFrom(r => r.Org.OrgName));
+
+            CreateMap<CreateApplicationRequest, DB.Application>();
+
+            // User Role
+            CreateMap<DB.UserRole, UserRoleResponse>()
+                .ForMember(d => d.RoleName, s => s.MapFrom(f => f.Role.Rolename))
+                .ForMember(d => d.FirstName, s => s.MapFrom(f => f.OrgUser.FirstName))
+                .ForMember(d => d.LastName, s => s.MapFrom(f => f.OrgUser.LastName));
+
+            CreateMap<DB.UserRole, UserRoleInRoleResponse>()
+                .ForMember(d => d.RoleName, s => s.MapFrom(f => f.Role.Rolename));
+
+            CreateMap<DB.UserRole, UserRoleInUserResponse>()
+                .ForMember(d => d.FirstName, s => s.MapFrom(f => f.OrgUser.FirstName))
+                .ForMember(d => d.LastName, s => s.MapFrom(f => f.OrgUser.LastName));
+
+            CreateMap<CreateUserRoleRequest, DB.UserRole>();
+
+            // TestPlan
+            CreateMap<DB.TestPlan, TestPlanResponse>()
+                .ForMember(d => d.ParentName, s => s.MapFrom(p => p.Parent.Name))
+                .ForMember(d => d.AssignToFirstName, s => s.MapFrom(p => p.OrgUser.FirstName))
+                .ForMember(d => d.AssignToLastName, s => s.MapFrom(p => p.OrgUser.LastName));
+
+            CreateMap<CreateTestPlanRequest, DB.TestPlan>();
+
+            // TestPlan TestCase
+            CreateMap<DB.TestPlanTestCaseAssociation, TestPlanTestCaseResponse>()
+                .ForMember(d => d.TestPlanName, s => s.MapFrom(e => e.TestPlan.Name))
+                .ForMember(d => d.TestCaseName, s => s.MapFrom(e => e.TestCase.TestFlowName));
         }
     }
 }

@@ -88,6 +88,20 @@ namespace QPCore.Controllers
             return Ok(new { message = "Password reset successful, you can now login" });
         }
 
+        /// <summary>
+        /// Get all accounts in organization
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [Authorize]
+        [HttpGet("organization")]
+        public ActionResult<List<AccountResponse>> GetByOrgId()
+        {
+            var accounts = _accountService.GetByOrgId(Account.OrgId);
+
+            return Ok(accounts);
+        }
+
         #region private method
         private string ipAddress()
         {

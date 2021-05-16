@@ -11,6 +11,7 @@ namespace QPCore.Data.Enitites
         {
             TestFlowCategoryAssocs = new HashSet<TestFlowCategoryAssoc>();
             TestFlowSteps = new HashSet<TestFlowStep>();
+            TestPlanTestCaseAssociations = new HashSet<TestPlanTestCaseAssociation>();
         }
 
         public int TestFlowId { get; set; }
@@ -31,5 +32,6 @@ namespace QPCore.Data.Enitites
         public virtual Application Client { get; set; }
         public virtual ICollection<TestFlowCategoryAssoc> TestFlowCategoryAssocs { get; set; }
         public virtual ICollection<TestFlowStep> TestFlowSteps { get; set; }
+        public virtual ICollection<TestPlanTestCaseAssociation> TestPlanTestCaseAssociations { get; set; }
     }
 }
