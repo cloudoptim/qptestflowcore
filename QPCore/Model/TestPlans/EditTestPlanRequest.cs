@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QPCore.Model.TestPlans
 {
-    public class EditTestPlanRequest : CreateTestPlanRequest
+    public class EditTestPlanRequest : CreateTestPlanRequest, IValidatableObject
     {
         [Required]
         public int Id { get; set; }
@@ -14,5 +14,13 @@ namespace QPCore.Model.TestPlans
         [Required]
         public bool IsActive { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.ParentId.HasValue && this.ParentId.Value == this.Id)
+            {
+                yield return new ValidationResult("Parent Id should be different with current Test Plan Id", new[] { nameof(ParentId) });
+               
+            }
+        }
     }
 }

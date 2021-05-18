@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using QPCore.Model.Common.Validations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,7 @@ namespace QPCore.Model.TestPlans
     {
         [Required]
         [MaxLength(200)]
+        [IsNotNumber]
         public string Name { get; set; }
 
         public int? ParentId { get; set; }

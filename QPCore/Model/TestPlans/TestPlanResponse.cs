@@ -13,6 +13,14 @@ namespace QPCore.Model.TestPlans
 
         public string AssignToLastName { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return $"{AssignToFirstName} {AssignToLastName}";
+            }
+        }
+
         public DateTime CreatedDate { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
