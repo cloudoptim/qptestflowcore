@@ -78,7 +78,7 @@ namespace QPCore.Service
             var query = _repository.GetQuery()
                         .Where(p => p.TestPlanId == testPlanId)
                         .ProjectTo<TestPlanTestCaseResponse>(_mapper.ConfigurationProvider)
-                        .OrderBy(p => p.TestCaseId)
+                        .OrderByDescending(p => p.Id)
                         .ToList();
 
             return query;

@@ -77,8 +77,9 @@ namespace QPCore.Service
         public List<TestPlanResponse> GetAll()
         {
             var testPlans = _repository.GetQuery()
+                        .Where(p => !p.ParentId.HasValue)
                         .ProjectTo<TestPlanResponse>(_mapper.ConfigurationProvider)
-                        .OrderByDescending(p => p.CreatedDate)
+                        .OrderByDescending(p => p.Id)
                         .ToList();
 
             return testPlans;
