@@ -42,7 +42,8 @@ namespace QPCore.Service
         public async Task<List<TestPlanTestCaseResponse>> CreateAsync(CreateTestPlanTestCaseRequest createTestPlanTestCaseRequest, int userId)
         {
             var newAssignments = new List<TestPlanTestCaseAssociation>();
-            foreach (var item in createTestPlanTestCaseRequest.TestCaseIds)
+            var distinctTestCaseIdList = createTestPlanTestCaseRequest.TestCaseIds.Distinct();
+            foreach (var item in distinctTestCaseIdList)
             {
                 var isExisted = CheckExistedAssignment(createTestPlanTestCaseRequest.TestPlanId, item);
 
