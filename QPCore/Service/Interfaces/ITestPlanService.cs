@@ -28,8 +28,9 @@ namespace QPCore.Service.Interfaces
         /// </summary>
         /// <param name="name"></param>
         /// <param name="id"></param>
+        /// <param name="parentId"></param>
         /// <returns></returns>
-        CheckUniqueResponse CheckUniqueName(string name, int? id = null);
+        CheckUniqueResponse CheckUniqueName(string name, int? parentId = null, int? id = null);
 
         /// <summary>
         /// Get all test plan

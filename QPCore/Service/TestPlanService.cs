@@ -42,12 +42,13 @@ namespace QPCore.Service
             return query;
         }
 
-        public CheckUniqueResponse CheckUniqueName(string name, int? id = null)
+        public CheckUniqueResponse CheckUniqueName(string name, int? parentId = null, int? id = null)
         {
             name = name.Trim().ToLower();
 
             var isExisted = _repository.GetQuery()
                         .Any(p => p.Name.ToLower() == name
+                                && p.ParentId == parentId
                                 && (!id.HasValue || (id.HasValue && p.Id != id.Value)));
 
             var result = new CheckUniqueResponse()

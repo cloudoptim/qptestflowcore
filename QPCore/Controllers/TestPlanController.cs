@@ -83,9 +83,10 @@ namespace QPCore.Controllers
         /// Check unique test plan name
         /// </summary>
         /// <param name="testPlanName"></param>
+        /// <param name="parentId"></param>
         /// <returns></returns>
         [HttpGet("checkunique")]
-        public ActionResult<CheckUniqueResponse> CheckUniqueName(string testPlanName)
+        public ActionResult<CheckUniqueResponse> CheckUniqueName(string testPlanName, int? parentId)
         {
             if (string.IsNullOrEmpty(testPlanName))
             {
@@ -95,7 +96,7 @@ namespace QPCore.Controllers
                 });
             }
 
-            var isUniqueResult = _testPlanService.CheckUniqueName(testPlanName);
+            var isUniqueResult = _testPlanService.CheckUniqueName(testPlanName, parentId);
 
             return Ok(isUniqueResult);
         }
@@ -109,12 +110,12 @@ namespace QPCore.Controllers
         [HttpPost]
         public async Task<ActionResult<TestPlanResponse>> Create(CreateTestPlanRequest createTestPlanRequest)
         {
-            var isExistedName = _testPlanService.CheckUniqueName(createTestPlanRequest.Name);
+            var isExistedName = _testPlanService.CheckUniqueName(createTestPlanRequest.Name, createTestPlanRequest.ParentId);
             if (!isExistedName.IsUnique)
             {
                 return BadRequest(new BadRequestResponse()
                 {
-                    Message = TestPlanMessageList.EXISTED_TEST_PLAN_STRING
+                    Message = string.Format(TestPlanMessageList.EXISTED_TEST_PLAN_STRING, createTestPlanRequest.Name)
                 });
             }
 
@@ -151,12 +152,12 @@ namespace QPCore.Controllers
         [HttpPut]
         public async Task<ActionResult<TestPlanResponse>> Update(EditTestPlanRequest editTestPlanRequest)
         {
-            var isExistedName = _testPlanService.CheckUniqueName(editTestPlanRequest.Name, editTestPlanRequest.Id);
+            var isExistedName = _testPlanService.CheckUniqueName(editTestPlanRequest.Name, editTestPlanRequest.ParentId, editTestPlanRequest.Id);
             if (!isExistedName.IsUnique)
             {
                 return BadRequest(new BadRequestResponse()
                 {
-                    Message = TestPlanMessageList.EXISTED_TEST_PLAN_STRING
+                    Message = string.Format(TestPlanMessageList.EXISTED_TEST_PLAN_STRING, editTestPlanRequest.Name)
                 });
             }
 

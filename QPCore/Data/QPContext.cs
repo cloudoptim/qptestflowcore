@@ -1007,9 +1007,6 @@ namespace QPCore.Data
                     .HasMaxLength(200)
                     .IsRequired();
 
-                entity.HasIndex(e => e.Name, "ix_testplan_name")
-                    .IsUnique();
-
                 entity.Property(e => e.ParentId)
                     .HasColumnName("parent_id");
 
