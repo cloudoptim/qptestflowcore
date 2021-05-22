@@ -560,9 +560,9 @@ namespace QPCore.Data
 
                 entity.Property(e => e.TestFlowId).ValueGeneratedNever();
 
-                entity.Property(e => e.AssignedDatetTime).HasColumnType("date");
+                entity.Property(e => e.AssignedDatetTime);
 
-                entity.Property(e => e.LastUpdatedDateTime).HasColumnType("date");
+                entity.Property(e => e.LastUpdatedDateTime);
 
                 entity.Property(e => e.SourceFeatureName).HasMaxLength(1000);
 

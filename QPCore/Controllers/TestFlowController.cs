@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel.TestFlows;
+using QPCore.Model.TestFlows;
 using QPCore.Service;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
-    //[EnableCors("AnyOrignPolicy")]
+    [Authorize]
     [ApiController]
     public class TestFlowController : BaseController
     {
@@ -29,9 +30,9 @@ namespace QPCore.Controllers
         }
         // GET: api/<TestFlowController>
         [HttpGet]
-        public List<TestFlow> Get()
+        public List<TestFlowItemResponse> Get()
         {
-            return testFlowService.GetTestFlows();
+            return testFlowService.GetTestFlowItems();
         }
 
         // GET api/<TestFlowController>/5
@@ -45,10 +46,20 @@ namespace QPCore.Controllers
 
         // POST api/<TestFlowController>
         [HttpPost]
-        public TestFlowDTO Post(TestFlowDTO value)
+        public ActionResult<TestFlowDTO> Post(TestFlowDTO value)
         {
+
+            var isUnique = testFlowService.CheckUniqueTestFlow(value.TestFlowName);
+            if (!isUnique.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(TestFlowMessageList.EXISTED_NAME_STRING, value.TestFlowName)
+                });
+            }
+
             var testFlow = this._mapper.Map<TestFlow>(value);
-            testFlow = testFlowService.CreateTestFlow(testFlow);
+            testFlow = testFlowService.CreateTestFlow(testFlow, Account.UserId);
 
             var result = this._mapper.Map<TestFlowDTO>(testFlow);
             return result;
@@ -56,11 +67,29 @@ namespace QPCore.Controllers
 
         // PUT api/<TestFlowController>/5
         [HttpPut("{id}")]
-        public TestFlowDTO Put(int id, TestFlowDTO value)
+        public ActionResult<TestFlowDTO> Put(int id, TestFlowDTO value)
         {
+            var isExistId = testFlowService.CheckExistedId(id);
+            if (!isExistId)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = TestFlowMessageList.NOT_FOUND_ID
+                });
+            }
+
+            var isUnique = testFlowService.CheckUniqueTestFlow(value.TestFlowName, id);
+            if (!isUnique.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(TestFlowMessageList.EXISTED_NAME_STRING, value.TestFlowName)
+                });
+            }
+
             var testFlow = this._mapper.Map<TestFlow>(value);
 
-            testFlow = testFlowService.UpdateTestFlow(id, testFlow);
+            testFlow = testFlowService.UpdateTestFlow(id, testFlow, Account.UserId);
 
             var result = this._mapper.Map<TestFlowDTO>(testFlow);
             return result;
@@ -81,7 +110,6 @@ namespace QPCore.Controllers
         }
 
         [HttpPost("lock")]
-        [Authorize]
         public async Task<IActionResult> LockTestFlow(int id)
         {
             var userId = Account.UserId;
@@ -100,7 +128,6 @@ namespace QPCore.Controllers
         }
 
         [HttpPost("unlock")]
-        [Authorize]
         public async Task<IActionResult> UnlockTestFlow(int id)
         {
             var userId = Account.UserId;
@@ -118,7 +145,6 @@ namespace QPCore.Controllers
         }
 
         [HttpGet("checklocking")]
-        [Authorize]
         public ActionResult<CheckLockingDTO> CheckLockingTestFlow(int id)
         {
             var userId = Account.UserId;
