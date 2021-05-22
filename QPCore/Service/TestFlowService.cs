@@ -92,8 +92,8 @@ namespace QPCore.Service
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_testflow", stepsJson, NpgsqlDbType.Json));
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("user_id", userId, NpgsqlDbType.Integer));
 
-            var _data = _postgresDataBase.ProcedureJson("createtestusingjson", npgsqlParameters).ToList().FirstOrDefault();
-            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.createtestusingjson);
+            var _data = _postgresDataBase.ProcedureJson("create_test_using_json", npgsqlParameters).ToList().FirstOrDefault();
+            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.create_test_using_json);
 
             return appFeature;
         }
@@ -107,8 +107,8 @@ namespace QPCore.Service
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_testflow", stepsJson, NpgsqlDbType.Json));
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("user_id", userId, NpgsqlDbType.Integer));
 
-            var _data = _postgresDataBase.ProcedureJson("createtestusingjson", npgsqlParameters).ToList().FirstOrDefault();
-            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.createtestusingjson);
+            var _data = _postgresDataBase.ProcedureJson("create_test_using_json", npgsqlParameters).ToList().FirstOrDefault();
+            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.create_test_using_json);
 
             return appFeature;
         }
