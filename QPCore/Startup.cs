@@ -22,6 +22,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Text;
+using Quartz.Spi;
+using QPCore.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Microsoft.Extensions.Logging;
 
 namespace QPCore
 {
@@ -136,6 +141,18 @@ namespace QPCore
                 c.IncludeXmlComments(xmlPath);
             });
 
+            services.AddSingleton<IJobFactory, QPCoreJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            // AddDbContext
+            var sp = services.BuildServiceProvider();
+            var dbContext = sp.GetRequiredService<QPContext>();
+            var logger = sp.GetService<ILogger<ReactiveIdleLockedTestFlowJob>>();
+            services.AddSingleton(typeof(ILogger), logger);
+            services.AddSingleton(typeof(ReactiveIdleLockedTestFlowJob), new ReactiveIdleLockedTestFlowJob(logger, dbContext));
+
+            services.AddSingleton(new JobMetadata(Guid.NewGuid(), typeof(ReactiveIdleLockedTestFlowJob), "Reactive Idle Locked TestFlow Job", "0 */5 * ? * *"));
+            services.AddHostedService<QPCoreHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

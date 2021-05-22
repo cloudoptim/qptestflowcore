@@ -16,5 +16,9 @@ namespace QPCore.Data
         Task<TEntity> UpdateAsync(TEntity entity);
 
         Task DeleteAsync(int id);
+
+        void ExecuteNonQuery(string query);
+
+        Task ExecuteNonQueryAsync(string query);
     }
 }
