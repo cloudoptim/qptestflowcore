@@ -32,7 +32,7 @@ namespace QPCore
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "AnyOrignPolicy";
+        //readonly string MyAllowSpecificOrigins = "AnyOrignPolicy";
 
         public Startup(IConfiguration configuration)
         {
