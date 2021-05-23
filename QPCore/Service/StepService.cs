@@ -143,5 +143,17 @@ namespace QPCore.Service
 
             return query;
         }
+
+        /// <summary>
+        /// Don't allow delete step source equal to code
+        /// </summary>
+        /// <param name="stepId"></param>
+        /// <returns></returns>
+        internal bool CheckCanDeleteStepGlossary(int stepId)
+        {
+            var query = _stepGlossaryRepository.GetQuery()
+                .Any(p => p.StepSource.ToLower().Trim() == "code" && p.StepId == stepId);
+            return !query;
+        }
     }
 }

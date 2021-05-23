@@ -70,9 +70,14 @@ namespace QPCore.Controllers
         public IActionResult Delete(int id)
         {
             var isUsed = _stepService.CheckIsUsed(id);
+            var canStepSourceCode = _stepService.CheckCanDeleteStepGlossary(id);
             if (isUsed)
             {
                 return BadRequest("This step is being used by a TestFlow. Please remove it in the TestFlow before you do this action.");
+            }
+            else if(!canStepSourceCode)
+            {
+                return BadRequest("You aren't allowed to delete step with source equal to \"code\".");
             }
             else
             {
