@@ -594,6 +594,18 @@ namespace QPCore.Data
 
                 entity.Property(e => e.IsActive);
 
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedDate)
+                    .IsRequired();
+
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.TestFlowCategories)
                     .HasForeignKey(d => d.ClientId)

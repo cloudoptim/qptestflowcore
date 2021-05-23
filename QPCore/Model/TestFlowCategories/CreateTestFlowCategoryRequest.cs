@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using QPCore.Model.Common.Validations;
 
 namespace QPCore.Model.TestFlowCategories
 {
@@ -6,6 +7,7 @@ namespace QPCore.Model.TestFlowCategories
     {
         [Required]
         [MaxLength(100)]
+        [IsNotNumber]
         public string CategoryName { get; set; }
 
         [Required]

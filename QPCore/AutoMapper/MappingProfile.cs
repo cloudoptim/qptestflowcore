@@ -12,6 +12,8 @@ using QPCore.Model.Roles;
 using QPCore.Model.UserRoles;
 using QPCore.Model.TestPlans;
 using QPCore.Model.TestPlanTestCases;
+using QPCore.Model.TestFlowCategories;
+using QPCore.Model.TestFlowCategoryAssocs;
 
 namespace QPCore.AutoMapper
 {
@@ -72,6 +74,19 @@ namespace QPCore.AutoMapper
             CreateMap<DB.TestPlanTestCaseAssociation, TestPlanTestCaseResponse>()
                 .ForMember(d => d.TestPlanName, s => s.MapFrom(e => e.TestPlan.Name))
                 .ForMember(d => d.TestCaseName, s => s.MapFrom(e => e.TestCase.TestFlowName));
+            
+            // TestFlow Category
+            CreateMap<DB.TestFlowCategory, TestFlowCategoryResponse>()
+                .ForMember(d => d.ApplicationName, s => s.MapFrom(p => p.Client.ApplicationName));
+            
+            CreateMap<CreateTestFlowCategoryRequest, DB.TestFlowCategory>();
+            
+            // TestFlow Category Association
+            CreateMap<DB.TestFlowCategoryAssoc, TestFlowCategoryAssocResponse>()
+                .ForMember(d => d.CategoryName, s => s.MapFrom(p => p.Category.CategoryName))
+                .ForMember(d => d.TestFlowName, s => s.MapFrom(p => p.TestFlow.TestFlowName));
+            
+            CreateMap<CreateTestFlowCategoryAssocRequest, DB.TestFlowCategoryAssoc>();
         }
     }
 }
