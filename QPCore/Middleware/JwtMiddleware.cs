@@ -66,7 +66,7 @@ namespace QPCore.Middleware
                 // attach account to context on successful jwt validation
                 context.Items["Account"] = user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // do nothing if jwt validation fails
                 // account is not attached to context so request won't have access to secure routes

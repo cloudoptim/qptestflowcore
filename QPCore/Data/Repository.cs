@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace QPCore.Data
 {
@@ -95,6 +96,30 @@ namespace QPCore.Data
                     QPDataContext.Remove(entity);
                    await QPDataContext.SaveChangesAsync();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{typeof(TEntity).Name} could not be deleted: {ex.Message}");
+            }
+        }
+
+        public void ExecuteNonQuery(string query)
+        {
+            try
+            {
+                QPDataContext.Database.ExecuteSqlRaw(query);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{typeof(TEntity).Name} could not be deleted: {ex.Message}");
+            }
+        }
+
+        public async Task ExecuteNonQueryAsync(string query)
+        {
+            try
+            {
+                await QPDataContext.Database.ExecuteSqlRawAsync(query);
             }
             catch (Exception ex)
             {

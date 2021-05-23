@@ -135,7 +135,6 @@ namespace QPCore.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
         [HttpGet]
         [Route("/PageGroup")]
         public List<WebPageGroupViewModel> PageGroupGet()

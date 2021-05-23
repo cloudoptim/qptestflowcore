@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210522103211_Change datetime data type")]
+    partial class Changedatetimedatatype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -382,7 +384,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 5, 23, 15, 38, 1, 716, DateTimeKind.Local).AddTicks(80),
+                            CreatedDate = new DateTime(2021, 5, 22, 17, 32, 9, 612, DateTimeKind.Local).AddTicks(228),
                             OrgName = "Default Organization"
                         });
                 });
@@ -907,10 +909,7 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlowCategory", b =>
                 {
                     b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasIdentityOptions(100L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                        .HasColumnType("integer");
 
                     b.Property<string>("CategoryName")
                         .HasMaxLength(100)
@@ -919,20 +918,8 @@ namespace QPCore.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<BitArray>("IsActive")
+                        .HasColumnType("bit(1)");
 
                     b.HasKey("CategoryId")
                         .HasName("TestFlowCategory_pkey");
@@ -945,10 +932,7 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlowCategoryAssoc", b =>
                 {
                     b.Property<int>("TestFlowCatAssocId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasIdentityOptions(100L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                        .HasColumnType("integer");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");

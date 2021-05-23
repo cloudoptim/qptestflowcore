@@ -309,9 +309,7 @@ namespace QPCore.DAO
             }
 
             return typedPropertyResult;
-        }
-
-     
+        } 
 
         private dynamic CoreFunction(Func<string, NpgsqlCommand, dynamic, dynamic> function, Func<string, object[], string> formatQueryFunc, string query, params object[] parameters)
         {
@@ -320,8 +318,7 @@ namespace QPCore.DAO
             var commandText = formatQueryFunc(query, parameters);
 
             dynamic result = new ExpandoObject();
-
-         
+            
             try
             {
                 using (var sqlConnection = new NpgsqlConnection(_connectionString))
@@ -335,8 +332,7 @@ namespace QPCore.DAO
             }
             catch (Exception ex)
             {
-               
-                throw;
+                throw ex;
             }
         }
         private bool IsNullable(Type type)

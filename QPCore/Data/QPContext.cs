@@ -560,9 +560,9 @@ namespace QPCore.Data
 
                 entity.Property(e => e.TestFlowId).ValueGeneratedNever();
 
-                entity.Property(e => e.AssignedDatetTime).HasColumnType("date");
+                entity.Property(e => e.AssignedDatetTime);
 
-                entity.Property(e => e.LastUpdatedDateTime).HasColumnType("date");
+                entity.Property(e => e.LastUpdatedDateTime);
 
                 entity.Property(e => e.SourceFeatureName).HasMaxLength(1000);
 
@@ -588,11 +588,23 @@ namespace QPCore.Data
 
                 entity.ToTable("TestFlowCategory");
 
-                entity.Property(e => e.CategoryId).ValueGeneratedNever();
+                entity.Property(e => e.CategoryId).HasIdentityOptions(startValue: 100);
 
                 entity.Property(e => e.CategoryName).HasMaxLength(100);
 
-                entity.Property(e => e.IsActive).HasColumnType("bit(1)");
+                entity.Property(e => e.IsActive);
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedDate)
+                    .IsRequired();
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.TestFlowCategories)
@@ -608,7 +620,7 @@ namespace QPCore.Data
 
                 entity.ToTable("TestFlowCategoryAssoc");
 
-                entity.Property(e => e.TestFlowCatAssocId).ValueGeneratedNever();
+                entity.Property(e => e.TestFlowCatAssocId).HasIdentityOptions(startValue: 100);
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.TestFlowCategoryAssocs)

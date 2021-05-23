@@ -1,14 +1,15 @@
-﻿using System;
+﻿using QPCore.Model.DataBaseModel.TestFlows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace QPCore.Model.DataBaseModel.TestFlows
+namespace QPCore.Model.TestFlows
 {
-    public class TestFlowDTO : TestFlowBaseDTO
+    public class CreateTestFlowRequest
     {
-        public TestFlowDTO()
+        public CreateTestFlowRequest()
         {
             this.TestFlowGroup = new TestFlowGroup();
         }

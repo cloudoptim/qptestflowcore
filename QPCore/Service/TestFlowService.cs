@@ -22,6 +22,7 @@ namespace QPCore.Service
         /// </summary>
         /// <param name="postgresDataBase"></param>
         /// <param name="testFlowRepository"></param>
+        /// <param name="orgUserRepository"></param>
         public TestFlowService(PostgresDataBase postgresDataBase,
             IRepository<QPCore.Data.Enitites.TestFlow> testFlowRepository,
             IRepository<QPCore.Data.Enitites.OrgUser> orgUserRepository)
@@ -31,11 +32,41 @@ namespace QPCore.Service
             _orgUserRepository = orgUserRepository;
         }
 
+        [Obsolete("We will change into ")]
         internal List<TestFlow> GetTestFlows()
         {
             var _data = _postgresDataBase.Procedure("gettestflows").ToList().FirstOrDefault();
             List<TestFlow> Commands = JsonConvert.DeserializeObject<List<TestFlow>>(_data.gettestflows);
             return Commands;
+        }
+
+        public List<TestFlowItemResponse> GetTestFlowItems()
+        {
+            var query = _testFlowRepository.GetQuery()
+                 .Join(_orgUserRepository.GetQuery(), l => l.LastUpdatedUserId, r => r.UserId, (l, r) => new TestFlowItemResponse()
+                 {
+                     TestFlowId = l.TestFlowId,
+                     TestFlowName = l.TestFlowName,
+                     TestFlowDescription = l.TestFlowDescription,
+                     LastUpdatedUser = r.FirstName + " " + r.LastName,
+                     Islocked = l.Islocked ?? false,
+                     IsActive = l.IsActive ?? false,
+                     LockedBy = l.LockedBy,
+                     TestFlowStatus = l.TestFlowStatus,
+                     AssignedDatetTime = l.AssignedDatetTime,
+                     AssignedTo = l.AssignedTo,
+                     ClientId = l.ClientId,
+                     LastUpdatedUserId = l.LastUpdatedUserId.Value,
+                     LastUpdatedDateTime = l.LastUpdatedDateTime.HasValue ? l.LastUpdatedDateTime.Value.ToString("yyyy-MM-dd hh:mm:ss") : null,
+                     SourceFeatureId = l.SourceFeatureId ?? 1,
+                     SourceFeatureName = l.SourceFeatureName
+                 })
+                 .OrderByDescending(p => p.TestFlowId)
+                 .ToList();
+
+            return query;
+
+
         }
 
         internal TestFlow GetTestFlow(int id)
@@ -52,30 +83,32 @@ namespace QPCore.Service
             return Command;
         }
 
-        internal TestFlow CreateTestFlow(TestFlow value)
+        internal TestFlow CreateTestFlow(TestFlow value, int userId)
         {
             value.TestFlowId = 0;
             SetStepColumnRowIdstoZero(value);
             string stepsJson = JsonConvert.SerializeObject(value);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_testflow", stepsJson, NpgsqlDbType.Json));
+            npgsqlParameters.Add(_postgresDataBase.CreateParameter("user_id", userId, NpgsqlDbType.Integer));
 
-            var _data = _postgresDataBase.ProcedureJson("createtestusingjson", npgsqlParameters).ToList().FirstOrDefault();
-            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.createtestusingjson);
+            var _data = _postgresDataBase.ProcedureJson("create_test_using_json", npgsqlParameters).ToList().FirstOrDefault();
+            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.create_test_using_json);
 
             return appFeature;
         }
 
-        internal TestFlow UpdateTestFlow(int id, TestFlow value)
+        internal TestFlow UpdateTestFlow(int id, TestFlow value, int userId)
         {
             value.TestFlowId = id;
             SetStepColumnRowIdstoZero(value);
             string stepsJson = JsonConvert.SerializeObject(value);
             List<NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("j_testflow", stepsJson, NpgsqlDbType.Json));
+            npgsqlParameters.Add(_postgresDataBase.CreateParameter("user_id", userId, NpgsqlDbType.Integer));
 
-            var _data = _postgresDataBase.ProcedureJson("createtestusingjson", npgsqlParameters).ToList().FirstOrDefault();
-            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.createtestusingjson);
+            var _data = _postgresDataBase.ProcedureJson("create_test_using_json", npgsqlParameters).ToList().FirstOrDefault();
+            TestFlow appFeature = JsonConvert.DeserializeObject<TestFlow>(_data.create_test_using_json);
 
             return appFeature;
         }
@@ -110,11 +143,15 @@ namespace QPCore.Service
         /// Check unique Test Flow name
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="testFlowId"></param>
         /// <returns></returns>
-        internal CheckUniqueResponse CheckUniqueTestFlow(string name)
+        internal CheckUniqueResponse CheckUniqueTestFlow(string name, int? testFlowId = null)
         {
             var status = _testFlowRepository.GetQuery()
-               .Any(p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower());
+               .Any(
+                p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower() &&
+                (!testFlowId.HasValue || p.TestFlowId != testFlowId.Value)
+               );
             var result = new CheckUniqueResponse()
             {
                 IsUnique = !status
@@ -218,6 +255,19 @@ namespace QPCore.Service
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Check existing test flow id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal bool CheckExistedId(int id)
+        {
+            var query = _testFlowRepository.GetQuery()
+                .Any(p => p.TestFlowId == id);
+
+            return query;
         }
         #endregion
     }
