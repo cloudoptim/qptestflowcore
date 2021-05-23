@@ -588,11 +588,11 @@ namespace QPCore.Data
 
                 entity.ToTable("TestFlowCategory");
 
-                entity.Property(e => e.CategoryId).ValueGeneratedNever();
+                entity.Property(e => e.CategoryId).HasIdentityOptions(startValue: 100);
 
                 entity.Property(e => e.CategoryName).HasMaxLength(100);
 
-                entity.Property(e => e.IsActive).HasColumnType("bit(1)");
+                entity.Property(e => e.IsActive);
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.TestFlowCategories)
@@ -608,7 +608,7 @@ namespace QPCore.Data
 
                 entity.ToTable("TestFlowCategoryAssoc");
 
-                entity.Property(e => e.TestFlowCatAssocId).ValueGeneratedNever();
+                entity.Property(e => e.TestFlowCatAssocId).HasIdentityOptions(startValue: 100);
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.TestFlowCategoryAssocs)

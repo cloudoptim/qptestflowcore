@@ -15,7 +15,7 @@ namespace QPCore.Data.Enitites
 
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public BitArray IsActive { get; set; }
+        public bool IsActive { get; set; }
         public int ClientId { get; set; }
 
         public virtual Application Client { get; set; }

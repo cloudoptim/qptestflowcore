@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210523041301_update testflow catergory table to readd isactive column")]
+    partial class updatetestflowcatergorytabletoreaddisactivecolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -382,7 +384,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 5, 23, 11, 22, 20, 666, DateTimeKind.Local).AddTicks(7950),
+                            CreatedDate = new DateTime(2021, 5, 23, 11, 13, 0, 619, DateTimeKind.Local).AddTicks(5130),
                             OrgName = "Default Organization"
                         });
                 });
@@ -933,10 +935,7 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlowCategoryAssoc", b =>
                 {
                     b.Property<int>("TestFlowCatAssocId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasIdentityOptions(100L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                        .HasColumnType("integer");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
