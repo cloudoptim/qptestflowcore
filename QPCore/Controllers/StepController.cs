@@ -32,17 +32,37 @@ namespace QPCore.Controllers
 
         // POST api/<StepController>
         [HttpPost]
-        public Steps Post(Steps value)
+        public ActionResult<Steps> Post(Steps value)
         {
-            return _stepService.CreateStep(value);
+            var isExisted = _stepService.CheckUniqueStepInFeature(value.FeatureId, value.StepName);
+            if (!isExisted.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.StepName)
+                });
+            }
+            var result = _stepService.CreateStep(value);
+            return Ok(result);
         }
 
         // PUT api/<StepController>/5
         [HttpPut("{id}")]
-        public Steps Put(int id, Steps value)
+        public ActionResult<Steps> Put(int id, Steps value)
         {
             value.StepId = id;
-            return _stepService.UpdateStep(value);
+
+            var isExisted = _stepService.CheckUniqueStepInFeature(value.FeatureId, value.StepName, value.StepId);
+            if (!isExisted.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.StepName)
+                });
+            }
+
+            var result = _stepService.UpdateStep(value);
+            return Ok(result);
         }
 
         // DELETE api/<StepController>/5

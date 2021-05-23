@@ -102,6 +102,7 @@ namespace QPCore.Service
         /// <param name="featureId"></param>
         /// <param name="stepGlossaryName"></param>
         /// <returns></returns>
+        [Obsolete("We will replace it by CheckUniqueStepInFeature")]
         internal CheckUniqueResponse CheckUniqueStepGlossary(int featureId, string stepGlossaryName)
         {
             var status = _stepGlossaryRepository.GetQuery()
@@ -110,6 +111,21 @@ namespace QPCore.Service
             var result = new CheckUniqueResponse()
             {
                 IsUnique = status
+            };
+
+            return result;
+        }
+
+        internal CheckUniqueResponse CheckUniqueStepInFeature(int featureId, string stepGlossaryName, int? stepId = null)
+        {
+            var status = _stepGlossaryRepository.GetQuery()
+                .Any(p => p.FeatureId == featureId
+                && p.StepName.Trim().ToLower() == stepGlossaryName.Trim().ToLower()
+                && (!stepId.HasValue || p.StepId != stepId.Value)
+                );
+            var result = new CheckUniqueResponse()
+            {
+                IsUnique = !status
             };
 
             return result;

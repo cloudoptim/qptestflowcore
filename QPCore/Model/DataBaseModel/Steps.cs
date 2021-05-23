@@ -1,14 +1,18 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using QPCore.Model.Common.Validations;
 
 namespace QPCore.Model.DataBaseModel
 {
     public class Steps
     {
         public int StepId { get; set; }
+        [Required]
+        [IsNotNumber]
         public string StepName { get; set; }
         public string StepDescription { get; set; }
         public string StepType { get; set; }
