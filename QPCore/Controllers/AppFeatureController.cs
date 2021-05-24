@@ -74,9 +74,18 @@ namespace QPCore.Controllers
 
         // DELETE api/<AppFeatureController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            var canDelete = _featureService.CheckCanDelete(id);
+            if (!canDelete)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = "Can not delete item which is included step which step source is code"
+                });
+            }
             _featureService.DeleteFeature(id);
+            return Ok();
         }
     }
 }

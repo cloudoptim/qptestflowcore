@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210523150124_update parent app feature with zero")]
+    partial class updateparentappfeaturewithzero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,8 +184,6 @@ namespace QPCore.Migrations
 
                     b.HasKey("AppFeatureId")
                         .HasName("ApplicationFeatures_pkey");
-
-                    b.HasIndex("ParentFeatureId");
 
                     b.ToTable("ApplicationFeatures");
                 });
@@ -384,7 +384,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 5, 23, 22, 13, 20, 438, DateTimeKind.Local).AddTicks(3720),
+                            CreatedDate = new DateTime(2021, 5, 23, 22, 1, 23, 782, DateTimeKind.Local).AddTicks(810),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1517,17 +1517,6 @@ namespace QPCore.Migrations
                     b.Navigation("Org");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.ApplicationFeature", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.ApplicationFeature", "Parent")
-                        .WithMany("Childs")
-                        .HasForeignKey("ParentFeatureId")
-                        .HasConstraintName("fk_self_parent_id")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.ConfigTestFlowConfig", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Application", "Client")
@@ -1839,8 +1828,6 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.ApplicationFeature", b =>
                 {
-                    b.Navigation("Childs");
-
                     b.Navigation("StepGlossaryFeatureAssocs");
                 });
 

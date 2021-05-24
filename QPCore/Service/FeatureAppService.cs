@@ -15,6 +15,7 @@ namespace QPCore.Service
     {
         PostgresDataBase _postgresDataBase;
         private readonly IRepository<ApplicationFeature> _repository;
+
         /// <summary>
         /// 
         /// </summary>
@@ -97,6 +98,18 @@ namespace QPCore.Service
                                 && (!appFeatureId.HasValue || (appFeatureId.HasValue && p.AppFeatureId != appFeatureId.Value)));
 
             return isExisted;
+        }
+
+        internal bool CheckCanDelete(int appFeatureId)
+        {
+            var query = _repository.GetQuery()
+                .Any(p => p.AppFeatureId == appFeatureId && 
+                    (   p.StepGlossaryFeatureAssocs.Any(s => s.Step.StepSource.ToLower().Trim() == "code") ||
+                        p.Childs.Any(c => c.StepGlossaryFeatureAssocs.Any(s => s.Step.StepSource.ToLower().Trim() == "code"))
+                    )
+                    );
+
+            return !query;
         }
     }
 }

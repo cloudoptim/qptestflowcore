@@ -10,6 +10,7 @@ namespace QPCore.Data.Enitites
         public ApplicationFeature()
         {
             StepGlossaryFeatureAssocs = new HashSet<StepGlossaryFeatureAssoc>();
+            Childs = new HashSet<ApplicationFeature>();
         }
 
         public int AppFeatureId { get; set; }
@@ -18,6 +19,8 @@ namespace QPCore.Data.Enitites
         public int? ClientId { get; set; }
         public bool? IsActive { get; set; }
 
+        public virtual ApplicationFeature Parent { get; set; }
+        public virtual ICollection<ApplicationFeature> Childs { get; set; }
         public virtual ICollection<StepGlossaryFeatureAssoc> StepGlossaryFeatureAssocs { get; set; }
     }
 }

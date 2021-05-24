@@ -139,6 +139,12 @@ namespace QPCore.Data
                 entity.Property(e => e.AppFeatureId).ValueGeneratedNever();
 
                 entity.Property(e => e.FeatureName).HasMaxLength(255);
+
+                entity.HasMany(p => p.Childs)
+                    .WithOne(p => p.Parent)
+                    .HasForeignKey(p => p.ParentFeatureId)
+                    .HasConstraintName("fk_self_parent_id")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<ConfigTestFlowConfig>(entity =>
