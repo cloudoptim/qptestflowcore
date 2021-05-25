@@ -103,10 +103,10 @@ namespace QPCore.Service
         internal bool CheckCanDelete(int appFeatureId)
         {
             var query = _repository.GetQuery()
-                .Any(p => p.AppFeatureId == appFeatureId && 
-                    (   p.StepGlossaryFeatureAssocs.Any(s => s.Step.StepSource.ToLower().Trim() == "code") ||
-                        p.Childs.Any(c => c.StepGlossaryFeatureAssocs.Any(s => s.Step.StepSource.ToLower().Trim() == "code"))
-                    )
+                .Any(p => p.AppFeatureId == appFeatureId &&
+                        (   p.StepGlossaries.Any(s => s.StepSource.ToLower().Trim() == "code") ||
+                            p.Childs.Any(c => c.StepGlossaries.Any(s => s.StepSource.ToLower().Trim() == "code"))
+                        )
                     );
 
             return !query;

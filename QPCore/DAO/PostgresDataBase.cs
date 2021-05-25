@@ -156,7 +156,7 @@ namespace QPCore.DAO
 
                             foreach (var property in properties)
                             {
-                                var sqlParameter = new NpgsqlParameter(property.Name, property.GetValue(parameters, null));
+                                var sqlParameter = new NpgsqlParameter(property.Name, property.GetValue(parameters, null) ?? DBNull.Value);
 
                                 procedure.Parameters.Add(sqlParameter);
                             }
