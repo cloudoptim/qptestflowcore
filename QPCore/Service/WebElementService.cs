@@ -1,8 +1,11 @@
 ﻿using DataBaseModel;
 using Newtonsoft.Json;
+using Npgsql;
+using NpgsqlTypes;
 using QPCore.DAO;
 using QPCore.Model.ViewModels;
 using QPCore.Model.WebElement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -200,14 +203,13 @@ namespace QPCore.Service
 
         public List<CheckingWebElementItem> CheckingWebElements(CheckingWebElementDTO webElementDTO)
         {
-            var joinedElementString = string.Join(',', webElementDTO.ElementNames);
+            string elements = JsonConvert.SerializeObject(webElementDTO.ElementNames);
+            List<Npgsql.NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
+            npgsqlParameters.Add(_postgresDataBase.CreateParameter("p_elementnames", elements, NpgsqlDbType.Json));
+            npgsqlParameters.Add(_postgresDataBase.CreateParameter("p_pageId", webElementDTO.PageId, NpgsqlDbType.Integer));
 
-            var result = _postgresDataBase.Procedure<CheckingWebElementItem>("checkingwebelementnames", new
-            {
-                p_pageId = webElementDTO.PageId,
-                p_elementnames = joinedElementString,
-            }).ToList();
-
+            var data = _postgresDataBase.ProcedureJson("checkingwebelementnames", npgsqlParameters).ToList();
+            var result = JsonConvert.DeserializeObject<List<CheckingWebElementItem>>(JsonConvert.SerializeObject(data));
             return result;
         }
     }
