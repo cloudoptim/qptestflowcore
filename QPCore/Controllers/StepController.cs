@@ -7,14 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
     //[EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class StepController : ControllerBase
+    [Authorize]
+    public class StepController : BaseController
     {
         StepService _stepService;
 

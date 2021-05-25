@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using QPCore.Model.DataBaseModel.Commands;
 using QPCore.Service;
@@ -14,7 +15,8 @@ namespace QPCore.Controllers
     [Route("api/[controller]")]
     //[EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class CommandController : ControllerBase
+    [Authorize]
+    public class CommandController : BaseController
     {
         private CommandService commandService;
         public CommandController(CommandService pcommandService)

@@ -4,6 +4,7 @@ using QPCore.Model.DataBaseModel;
 using Microsoft.AspNetCore.Cors;
 using QPCore.Service;
 using QPCore.Model.Common;
+using Microsoft.AspNetCore.Authorization;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace QPCore.Controllers
@@ -11,7 +12,8 @@ namespace QPCore.Controllers
     [Route("api/[controller]")]
     //[EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class AppFeatureController : ControllerBase
+    [Authorize]
+    public class AppFeatureController : BaseController
     {
         private FeatureAppService _featureService;
         /// <summary>
