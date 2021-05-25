@@ -5,6 +5,7 @@ namespace QPCore.Model.WebElement
     public class CheckingWebElementItem
     {
         public string PageId { get; set; }
+        public int? ElementId { get; set; }
         
         [JsonPropertyName("name")]
         public string ElementAliasName { get; set; }
