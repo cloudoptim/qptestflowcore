@@ -203,9 +203,9 @@ namespace QPCore.Service
 
         public List<CheckingWebElementItem> CheckingWebElements(CheckingWebElementDTO webElementDTO)
         {
-            string elements = JsonConvert.SerializeObject(webElementDTO.ElementNames);
+            string elements = JsonConvert.SerializeObject(webElementDTO.Elements);
             List<Npgsql.NpgsqlParameter> npgsqlParameters = new List<NpgsqlParameter>();
-            npgsqlParameters.Add(_postgresDataBase.CreateParameter("p_elementnames", elements, NpgsqlDbType.Json));
+            npgsqlParameters.Add(_postgresDataBase.CreateParameter("p_elements", elements, NpgsqlDbType.Json));
             npgsqlParameters.Add(_postgresDataBase.CreateParameter("p_pageId", webElementDTO.PageId, NpgsqlDbType.Integer));
 
             var data = _postgresDataBase.ProcedureJson("checkingwebelementnames", npgsqlParameters).ToList();
