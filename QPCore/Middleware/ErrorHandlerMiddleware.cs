@@ -31,6 +31,9 @@ namespace QPCore.Middleware
 
                 switch (error)
                 {
+                    case TokenException e:
+                        response.StatusCode = 409; // Invalid refresh token
+                        break;
                     case AppException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;

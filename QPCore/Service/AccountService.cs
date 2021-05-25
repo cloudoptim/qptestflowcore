@@ -270,7 +270,7 @@ namespace QPCore.Service
                 account.UpdatedBy = userId;
                 account.UpdatedDate = DateTime.Now;
 
-               await _orgUsersRepository.UpdateAsync(account);
+                await _orgUsersRepository.UpdateAsync(account);
 
                 return GetById(editAccountRequest.UserId);
             }
@@ -349,11 +349,11 @@ namespace QPCore.Service
             var account = _orgUsersRepository.GetQuery()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
             if (account == null)
-                throw new AppException("Invalid token");
+                throw new TokenException("Invalid token");
 
             var refreshToken = _refreshTokenRepository.GetQuery().SingleOrDefault(x => x.Token == token);
             if (!refreshToken.IsActive)
-                throw new AppException("Invalid token");
+                throw new TokenException("Invalid token");
             return (refreshToken, account);
         }
 
