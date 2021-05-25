@@ -148,10 +148,10 @@ namespace QPCore.Service
         internal CheckUniqueResponse CheckUniqueTestFlow(string name, int? testFlowId = null)
         {
             var status = _testFlowRepository.GetQuery()
-               .Any(
+                .Any(
                 p => p.TestFlowName.Trim().ToLower() == name.Trim().ToLower() &&
                 (!testFlowId.HasValue || p.TestFlowId != testFlowId.Value)
-               );
+                );
             var result = new CheckUniqueResponse()
             {
                 IsUnique = !status
@@ -181,7 +181,9 @@ namespace QPCore.Service
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id && p.Islocked == false);
+                .FirstOrDefault(p => p.TestFlowId == id
+                    && (p.Islocked == false || (p.Islocked == true && p.LockedBy == userId))
+                    );
 
             if (item != null)
             {
@@ -207,7 +209,9 @@ namespace QPCore.Service
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id && p.LockedBy == userId);
+                .FirstOrDefault(p => p.TestFlowId == id && 
+                        (p.LockedBy == userId || p.Islocked == false)
+                    );
 
             if (item != null)
             {
