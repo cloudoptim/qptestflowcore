@@ -11,13 +11,13 @@ namespace QPCore.Model.WebElement
     {
         public CheckingWebElementDTO()
         {
-            this.ElementNames = new List<WebElementItem>();
+            this.Elements = new List<WebElementItem>();
         }
 
         [Required]
         public int PageId { get; set; }
 
         [Required]
-        public List<WebElementItem> ElementNames { get; set; }
+        public List<WebElementItem> Elements { get; set; }
     }
 }
