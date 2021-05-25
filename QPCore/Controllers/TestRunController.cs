@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,7 +18,8 @@ namespace QPCore.Controllers
     [Route("api/[controller]")]
     //[EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class TestRunController : ControllerBase
+    [Authorize]
+    public class TestRunController : BaseController
     {
         private TestRunService testRunService;
         public TestRunController(TestRunService pcommandService)

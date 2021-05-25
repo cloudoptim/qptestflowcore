@@ -11,7 +11,9 @@ namespace DataBaseModel
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using QPCore.Model.Common.Validations;
+
     public partial class WebElement
     {
        
@@ -22,6 +24,8 @@ namespace DataBaseModel
     
         public int elementid { get; set; }
         public int pageid { get; set; }
+        [Required]
+        [IsNotNumber]
         public string elementaliasname { get; set; }
         public string elementtype { get; set; }
         public string itype { get; set; }

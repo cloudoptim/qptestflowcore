@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
 using QPCore.DAO;
+using QPCore.Data;
+using QPCore.Data.Enitites;
+using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel;
 using System;
 using System.Collections.Generic;
@@ -11,13 +14,18 @@ namespace QPCore.Service
     public class FeatureAppService
     {
         PostgresDataBase _postgresDataBase;
+        private readonly IRepository<ApplicationFeature> _repository;
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
-        public FeatureAppService(PostgresDataBase postgresDataBase)
+        /// <param name="repository"></param>
+        public FeatureAppService(PostgresDataBase postgresDataBase,
+            IRepository<ApplicationFeature> repository)
         {
             _postgresDataBase = postgresDataBase;
+            _repository = repository;
         }
 
         public List<AppFeature>  GetAppFeature()
@@ -79,6 +87,29 @@ namespace QPCore.Service
         internal void DeleteFeature(int id)
         {
             _postgresDataBase.Procedure("deletefeature", new { pfeatureid = id }).ToList().FirstOrDefault();
+        }
+
+        internal bool CheckFeatureNameExisted(string name, int? parentAppFeatureId = null, int? appFeatureId = null)
+        {
+            name = name.Trim().ToLower();
+            var isExisted = _repository.GetQuery()
+                        .Any(p => p.FeatureName.ToLower() == name
+                                && (p.ParentFeatureId == parentAppFeatureId)
+                                && (!appFeatureId.HasValue || (appFeatureId.HasValue && p.AppFeatureId != appFeatureId.Value)));
+
+            return isExisted;
+        }
+
+        internal bool CheckCanDelete(int appFeatureId)
+        {
+            var query = _repository.GetQuery()
+                .Any(p => p.AppFeatureId == appFeatureId &&
+                        (   p.StepGlossaries.Any(s => s.StepSource.ToLower().Trim() == "code") ||
+                            p.Childs.Any(c => c.StepGlossaries.Any(s => s.StepSource.ToLower().Trim() == "code"))
+                        )
+                    );
+
+            return !query;
         }
     }
 }

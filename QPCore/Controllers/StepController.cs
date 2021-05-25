@@ -7,14 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace QPCore.Controllers
 {
     [Route("api/[controller]")]
     //[EnableCors("AnyOrignPolicy")]
     [ApiController]
-    public class StepController : ControllerBase
+    [Authorize]
+    public class StepController : BaseController
     {
         StepService _stepService;
 
@@ -32,17 +33,37 @@ namespace QPCore.Controllers
 
         // POST api/<StepController>
         [HttpPost]
-        public Steps Post(Steps value)
+        public ActionResult<Steps> Post(Steps value)
         {
-            return _stepService.CreateStep(value);
+            var isExisted = _stepService.CheckUniqueStepInFeature(value.FeatureId, value.StepName);
+            if (!isExisted.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.StepName)
+                });
+            }
+            var result = _stepService.CreateStep(value);
+            return Ok(result);
         }
 
         // PUT api/<StepController>/5
         [HttpPut("{id}")]
-        public Steps Put(int id, Steps value)
+        public ActionResult<Steps> Put(int id, Steps value)
         {
             value.StepId = id;
-            return _stepService.UpdateStep(value);
+
+            var isExisted = _stepService.CheckUniqueStepInFeature(value.FeatureId, value.StepName, value.StepId);
+            if (!isExisted.IsUnique)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.StepName)
+                });
+            }
+
+            var result = _stepService.UpdateStep(value);
+            return Ok(result);
         }
 
         // DELETE api/<StepController>/5
@@ -50,9 +71,14 @@ namespace QPCore.Controllers
         public IActionResult Delete(int id)
         {
             var isUsed = _stepService.CheckIsUsed(id);
+            var canStepSourceCode = _stepService.CheckCanDeleteStepGlossary(id);
             if (isUsed)
             {
                 return BadRequest("This step is being used by a TestFlow. Please remove it in the TestFlow before you do this action.");
+            }
+            else if(!canStepSourceCode)
+            {
+                return BadRequest("You aren't allowed to delete step with source equal to \"code\".");
             }
             else
             {

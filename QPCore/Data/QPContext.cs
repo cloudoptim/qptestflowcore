@@ -36,7 +36,6 @@ namespace QPCore.Data
         public virtual DbSet<StepGlossary> StepGlossaries { get; set; }
         public virtual DbSet<StepGlossaryAssoc> StepGlossaryAssocs { get; set; }
         public virtual DbSet<StepGlossaryColumn> StepGlossaryColumns { get; set; }
-        public virtual DbSet<StepGlossaryFeatureAssoc> StepGlossaryFeatureAssocs { get; set; }
         public virtual DbSet<StepGlossaryRow> StepGlossaryRows { get; set; }
         public virtual DbSet<TestFlow> TestFlows { get; set; }
         public virtual DbSet<TestFlowCategory> TestFlowCategories { get; set; }
@@ -139,6 +138,12 @@ namespace QPCore.Data
                 entity.Property(e => e.AppFeatureId).ValueGeneratedNever();
 
                 entity.Property(e => e.FeatureName).HasMaxLength(255);
+
+                entity.HasMany(p => p.Childs)
+                    .WithOne(p => p.Parent)
+                    .HasForeignKey(p => p.ParentFeatureId)
+                    .HasConstraintName("fk_self_parent_id")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<ConfigTestFlowConfig>(entity =>
@@ -492,6 +497,12 @@ namespace QPCore.Data
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("StepGlossaryClientAssoc");
+                
+                entity.HasOne(e => e.ApplicationFeature)
+                    .WithMany(e => e.StepGlossaries)
+                    .HasForeignKey(e => e.FeatureId)
+                    .HasConstraintName("fk_stepglossary_applicationfeature_featureid")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<StepGlossaryAssoc>(entity =>
@@ -519,30 +530,6 @@ namespace QPCore.Data
                     .WithMany(p => p.StepGlossaryColumns)
                     .HasForeignKey(d => d.StepId)
                     .HasConstraintName("StepColumGlossAssoc");
-            });
-
-            modelBuilder.Entity<StepGlossaryFeatureAssoc>(entity =>
-            {
-                entity.HasKey(e => e.FeatureAssocId)
-                    .HasName("StepFeaureAssoc");
-
-                entity.ToTable("StepGlossaryFeatureAssoc");
-
-                entity.Property(e => e.FeatureAssocId).ValueGeneratedNever();
-
-                entity.Property(e => e.IsActive).HasColumnType("bit(1)");
-
-                entity.HasOne(d => d.Feature)
-                    .WithMany(p => p.StepGlossaryFeatureAssocs)
-                    .HasForeignKey(d => d.Featureid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FeaureAssoc");
-
-                entity.HasOne(d => d.Step)
-                    .WithMany(p => p.StepGlossaryFeatureAssocs)
-                    .HasForeignKey(d => d.StepId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("StepGlossaryAssoc");
             });
 
             modelBuilder.Entity<StepGlossaryRow>(entity =>

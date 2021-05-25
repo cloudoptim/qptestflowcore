@@ -91,7 +91,7 @@ namespace QPCore
             services.AddSingleton<WebModelService>();
 
             services.AddSingleton<WebElementService>();
-            services.AddSingleton<FeatureAppService>();
+            services.AddTransient<FeatureAppService>();
             services.AddTransient<StepService>();
             services.AddSingleton<CommandService>();
             services.AddTransient<TestFlowService>();

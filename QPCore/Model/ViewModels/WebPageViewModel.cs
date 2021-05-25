@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using QPCore.Model.Common.Validations;
 
 namespace QPCore.Model.ViewModels
 {/// <summary>
@@ -11,6 +13,8 @@ namespace QPCore.Model.ViewModels
     {
         public int pageId { get; set; }
         public int groupId { get; set; }
+        [Required]
+        [IsNotNumber]
         public string pageName { get; set; }
         public string createdBy { get; set; }
         public Nullable<System.DateTime> createdDateTime { get; set; }
@@ -22,14 +26,15 @@ namespace QPCore.Model.ViewModels
     
     public class UpdatePageViewModel:CreatePageViewModel
     {
+        [Required]
         public int pageId { get; set; }
     }
     public class CreatePageViewModel
     {
         public int groupId { get; set; }
+        [Required]
+        [IsNotNumber]
         public string pageName { get; set; }
         public string createdBy { get; set; }
-     
-
     }
 }

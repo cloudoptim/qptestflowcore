@@ -10,7 +10,6 @@ namespace QPCore.Data.Enitites
         public StepGlossary()
         {
             StepGlossaryColumns = new HashSet<StepGlossaryColumn>();
-            StepGlossaryFeatureAssocs = new HashSet<StepGlossaryFeatureAssoc>();
         }
 
         public int StepId { get; set; }
@@ -25,7 +24,7 @@ namespace QPCore.Data.Enitites
         public bool? IsActive { get; set; }
 
         public virtual Application Client { get; set; }
+        public virtual ApplicationFeature ApplicationFeature { get; set; }
         public virtual ICollection<StepGlossaryColumn> StepGlossaryColumns { get; set; }
-        public virtual ICollection<StepGlossaryFeatureAssoc> StepGlossaryFeatureAssocs { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210523150124_update parent app feature with zero")]
+    partial class updateparentappfeaturewithzero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,8 +184,6 @@ namespace QPCore.Migrations
 
                     b.HasKey("AppFeatureId")
                         .HasName("ApplicationFeatures_pkey");
-
-                    b.HasIndex("ParentFeatureId");
 
                     b.ToTable("ApplicationFeatures");
                 });
@@ -384,7 +384,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 5, 25, 7, 53, 34, 728, DateTimeKind.Local).AddTicks(2230),
+                            CreatedDate = new DateTime(2021, 5, 23, 22, 1, 23, 782, DateTimeKind.Local).AddTicks(810),
                             OrgName = "Default Organization"
                         });
                 });
@@ -765,8 +765,6 @@ namespace QPCore.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("FeatureId");
-
                     b.ToTable("StepGlossary");
                 });
 
@@ -808,6 +806,30 @@ namespace QPCore.Migrations
                     b.HasIndex("StepId");
 
                     b.ToTable("StepGlossaryColumn");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.StepGlossaryFeatureAssoc", b =>
+                {
+                    b.Property<int>("FeatureAssocId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Featureid")
+                        .HasColumnType("integer");
+
+                    b.Property<BitArray>("IsActive")
+                        .HasColumnType("bit(1)");
+
+                    b.Property<int>("StepId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FeatureAssocId")
+                        .HasName("StepFeaureAssoc");
+
+                    b.HasIndex("Featureid");
+
+                    b.HasIndex("StepId");
+
+                    b.ToTable("StepGlossaryFeatureAssoc");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.StepGlossaryRow", b =>
@@ -1495,17 +1517,6 @@ namespace QPCore.Migrations
                     b.Navigation("Org");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.ApplicationFeature", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.ApplicationFeature", "Parent")
-                        .WithMany("Childs")
-                        .HasForeignKey("ParentFeatureId")
-                        .HasConstraintName("fk_self_parent_id")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.ConfigTestFlowConfig", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.Application", "Client")
@@ -1611,14 +1622,6 @@ namespace QPCore.Migrations
                         .HasConstraintName("StepGlossaryClientAssoc")
                         .IsRequired();
 
-                    b.HasOne("QPCore.Data.Enitites.ApplicationFeature", "ApplicationFeature")
-                        .WithMany("StepGlossaries")
-                        .HasForeignKey("FeatureId")
-                        .HasConstraintName("fk_stepglossary_applicationfeature_featureid")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ApplicationFeature");
-
                     b.Navigation("Client");
                 });
 
@@ -1628,6 +1631,25 @@ namespace QPCore.Migrations
                         .WithMany("StepGlossaryColumns")
                         .HasForeignKey("StepId")
                         .HasConstraintName("StepColumGlossAssoc");
+
+                    b.Navigation("Step");
+                });
+
+            modelBuilder.Entity("QPCore.Data.Enitites.StepGlossaryFeatureAssoc", b =>
+                {
+                    b.HasOne("QPCore.Data.Enitites.ApplicationFeature", "Feature")
+                        .WithMany("StepGlossaryFeatureAssocs")
+                        .HasForeignKey("Featureid")
+                        .HasConstraintName("FeaureAssoc")
+                        .IsRequired();
+
+                    b.HasOne("QPCore.Data.Enitites.StepGlossary", "Step")
+                        .WithMany("StepGlossaryFeatureAssocs")
+                        .HasForeignKey("StepId")
+                        .HasConstraintName("StepGlossaryAssoc")
+                        .IsRequired();
+
+                    b.Navigation("Feature");
 
                     b.Navigation("Step");
                 });
@@ -1806,9 +1828,7 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.ApplicationFeature", b =>
                 {
-                    b.Navigation("Childs");
-
-                    b.Navigation("StepGlossaries");
+                    b.Navigation("StepGlossaryFeatureAssocs");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.ConfigTestFlowConfig", b =>
@@ -1862,6 +1882,8 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.StepGlossary", b =>
                 {
                     b.Navigation("StepGlossaryColumns");
+
+                    b.Navigation("StepGlossaryFeatureAssocs");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.TestFlow", b =>
