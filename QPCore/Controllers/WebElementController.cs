@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using QPCore.Model.DataBaseModel;
+using QPCore.Model.Common;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -36,8 +38,8 @@ namespace QPCore.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-       [HttpGet]
-       [Route("ElementTree")]
+        [HttpGet]
+        [Route("ElementTree")]
         public IEnumerable<WebPageGroup> Get()
         {
             return _webElementService.GetWebElementTree();
@@ -62,15 +64,77 @@ namespace QPCore.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost]
-        public WebElement Post(WebElement value)
+        public ActionResult<WebElement> Post(WebElement value)
         {
+            var result = _webElementService.CheckingWebElements(new CheckingWebElementDTO()
+            {
+                PageId = value.pageid,
+                Elements = new List<WebElementItem>()
+                {
+                    new WebElementItem()
+                    {
+                        ElementId = null, 
+                        ElementAliasName = value.elementaliasname
+                    }
+                }
+            });
+
+            if (result.FirstOrDefault().IsExisted)
+            {
+                return BadRequest(new BadRequestResponse() 
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.elementaliasname)
+                });
+            }
+
             return _webElementService.AddWebElement(value);
         }
-/// <summary>
-/// 
-/// </summary>
-/// <param name="groupId"></param>
-/// <returns></returns>
+
+        /// <summary>
+        /// Edit web element
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public ActionResult<WebElement> Put(EditWebElementRequest value)
+        {
+            var isExisted = _webElementService.CheckExistedId(value.elementid);
+            if (!isExisted)
+            {
+                return BadRequest(new BadRequestResponse() 
+                {
+                    Message = string.Format(CommonMessageList.NOT_FOUND_THE_ID, value.elementid)
+                });
+            }
+
+            var result = _webElementService.CheckingWebElements(new CheckingWebElementDTO()
+            {
+                PageId = value.pageid,
+                Elements = new List<WebElementItem>()
+                {
+                    new WebElementItem()
+                    {
+                        ElementId = value.elementid, 
+                        ElementAliasName = value.elementaliasname
+                    }
+                }
+            });
+
+            if (result.FirstOrDefault().IsExisted)
+            {
+                return BadRequest(new BadRequestResponse() 
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.elementaliasname)
+                });
+            }
+
+            return _webElementService.UpdateWebElement(value);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
 
         [HttpGet]
         [Route("/WebPage")]
@@ -132,7 +196,7 @@ namespace QPCore.Controllers
         [Route("/PageGroup")]
         public void PageGroupDelete(int id)
         {
-             _webElementService.deletePageGroup(id);
+            _webElementService.deletePageGroup(id);
         }
         /// <summary>
         /// 

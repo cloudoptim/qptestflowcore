@@ -90,7 +90,7 @@ namespace QPCore
             services.AddSingleton<PostgresDataBase>();
             services.AddSingleton<WebModelService>();
 
-            services.AddSingleton<WebElementService>();
+            services.AddTransient<WebElementService>();
             services.AddTransient<FeatureAppService>();
             services.AddTransient<StepService>();
             services.AddSingleton<CommandService>();
