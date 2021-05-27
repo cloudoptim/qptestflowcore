@@ -1,8 +1,11 @@
-﻿using DataBaseModel;
+﻿using AutoMapper;
+using DataBaseModel;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
 using QPCore.DAO;
+using QPCore.Data;
+using QPCore.Model.DataBaseModel;
 using QPCore.Model.ViewModels;
 using QPCore.Model.WebElement;
 using System;
@@ -16,13 +19,19 @@ namespace QPCore.Service
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
         PostgresDataBase _postgresDataBase;
+        IRepository<QPCore.Data.Enitites.WebElement> _repository;
+        IMapper _mapper;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="postgresDataBase"></param>
-        public WebElementService(PostgresDataBase postgresDataBase)
+        /// <param name="mapper"></param>
+        /// <param name="repository"></param>
+        public WebElementService(PostgresDataBase postgresDataBase, IMapper mapper, IRepository<QPCore.Data.Enitites.WebElement> repository)
         {
             _postgresDataBase = postgresDataBase;
+            _mapper = mapper;
+            _repository = repository;
         }
         /// <summary>
         /// 
@@ -73,6 +82,12 @@ namespace QPCore.Service
             WebElement webModel = JsonConvert.DeserializeObject<WebElement>(json.addorupdatewebelement);
 
             return webModel;
+        }
+
+        internal WebElement UpdateWebElement(EditWebElementRequest value)
+        {
+            var data = _mapper.Map<WebElement>(value);
+            return AddWebElement(data);
         }
 
         internal WebPageViewModel AddWebPage(CreatePageViewModel value)
@@ -211,6 +226,14 @@ namespace QPCore.Service
             var data = _postgresDataBase.ProcedureJson("checkingwebelementnames", npgsqlParameters).ToList();
             var result = JsonConvert.DeserializeObject<List<CheckingWebElementItem>>(JsonConvert.SerializeObject(data));
             return result;
+        }
+
+        public bool CheckExistedId(int elementId)
+        {
+            var isExisted = _repository.GetQuery()
+                .Any(p => p.Elementid == elementId);
+
+            return isExisted;
         }
     }
 }

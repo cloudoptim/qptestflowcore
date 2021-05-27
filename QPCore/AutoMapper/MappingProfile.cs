@@ -14,6 +14,8 @@ using QPCore.Model.TestPlans;
 using QPCore.Model.TestPlanTestCases;
 using QPCore.Model.TestFlowCategories;
 using QPCore.Model.TestFlowCategoryAssocs;
+using QPCore.Model.DataBaseModel;
+using DataBaseModel;
 
 namespace QPCore.AutoMapper
 {
@@ -87,6 +89,9 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.TestFlowName, s => s.MapFrom(p => p.TestFlow.TestFlowName));
             
             CreateMap<CreateTestFlowCategoryAssocRequest, DB.TestFlowCategoryAssoc>();
+
+            // Web Element
+            CreateMap<EditWebElementRequest, WebElement>();
         }
     }
 }
