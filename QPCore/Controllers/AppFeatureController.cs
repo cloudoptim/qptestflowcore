@@ -29,20 +29,20 @@ namespace QPCore.Controllers
         [HttpGet]
         public List<AppFeature> Get()
         {
-            List<AppFeature> appfeatures = _featureService.GetAppFeature(); 
+            List<AppFeature> appfeatures = _featureService.GetAppFeature();
             return appfeatures;
         }
-       
+
         [HttpGet("{id}/steps")]
         public List<Steps> Get(int id)
         {
-            List<Steps> steps  = _featureService.GetAppFeatureSteps(id);
+            List<Steps> steps = _featureService.GetAppFeatureSteps(id);
             return steps;
         }
 
         // POST api/<AppFeatureController>
         [HttpPost]
-        public ActionResult<AppFeatureView> Post (AppFeatureView feature)
+        public ActionResult<AppFeatureView> Post(AppFeatureView feature)
         {
             var isExitedName = _featureService.CheckFeatureNameExisted(feature.FeatureName, feature.ParentFeatureId);
             if (isExitedName)
@@ -52,6 +52,18 @@ namespace QPCore.Controllers
                     Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, feature.FeatureName)
                 });
             }
+            if (feature.ParentFeatureId.HasValue)
+            {
+                var isExistedParentId = _featureService.CheckExistedId(feature.ParentFeatureId.Value);
+                if (!isExistedParentId)
+                {
+                    return BadRequest(new BadRequestResponse()
+                    {
+                        Message = string.Format("Parent Id: " + CommonMessageList.NOT_FOUND_THE_ID, feature.ParentFeatureId.Value)
+                    });
+                }
+            }
+
             AppFeatureView appfeature = _featureService.CreateFeature(feature);
             return Ok(appfeature);
         }
@@ -62,6 +74,15 @@ namespace QPCore.Controllers
         {
             feature.AppFeatureId = id;
 
+            var isExistedId = _featureService.CheckExistedId(feature.AppFeatureId);
+            if (!isExistedId)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.NOT_FOUND_THE_ID, feature.AppFeatureId)
+                });
+            }
+
             var isExitedName = _featureService.CheckFeatureNameExisted(feature.FeatureName, feature.ParentFeatureId, feature.AppFeatureId);
             if (isExitedName)
             {
@@ -70,6 +91,19 @@ namespace QPCore.Controllers
                     Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, feature.FeatureName)
                 });
             }
+
+            if (feature.ParentFeatureId.HasValue)
+            {
+                var isExistedParentId = _featureService.CheckExistedId(feature.ParentFeatureId.Value);
+                if (!isExistedParentId)
+                {
+                    return BadRequest(new BadRequestResponse()
+                    {
+                        Message = string.Format("Parent Id: " + CommonMessageList.NOT_FOUND_THE_ID, feature.ParentFeatureId.Value)
+                    });
+                }
+            }
+
             AppFeatureView appfeature = _featureService.UpdateFeature(feature);
             return Ok(appfeature);
         }

@@ -111,5 +111,13 @@ namespace QPCore.Service
 
             return !query;
         }
+
+        internal bool CheckExistedId(int id)
+        {
+            var isExisted = _repository.GetQuery()
+                    .Any(p => p.AppFeatureId == id);
+
+            return isExisted;
+        }
     }
 }
