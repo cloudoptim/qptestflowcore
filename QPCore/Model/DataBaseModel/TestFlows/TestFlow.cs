@@ -51,6 +51,10 @@ namespace QPCore.Model.DataBaseModel.TestFlows
 
     public class TestFlowStep
     {
+        public TestFlowStep()
+        {
+            this.Columns = new List<TestFlowStepColumn>();
+        }
         public int TestFlowId { get; set; }
         public int TestFlowStepId { get; set; }
         public int StepGlossaryStepId { get; set; }
@@ -69,6 +73,10 @@ namespace QPCore.Model.DataBaseModel.TestFlows
 
     public class TestFlowStepColumn
     {
+        public TestFlowStepColumn()
+        {
+            this.Rows = new List<TestFlowStepRow>();
+        }
         public int ColumnId { get; set; }
         public string ColumnName { get; set; }
         public int ColumnIndex { get; set; }
