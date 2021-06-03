@@ -16,6 +16,7 @@ using QPCore.Model.TestFlowCategories;
 using QPCore.Model.TestFlowCategoryAssocs;
 using QPCore.Model.DataBaseModel;
 using DataBaseModel;
+using QPCore.Model.WebPageGroups;
 
 namespace QPCore.AutoMapper
 {
@@ -92,6 +93,11 @@ namespace QPCore.AutoMapper
 
             // Web Element
             CreateMap<EditWebElementRequest, WebElement>();
+
+            // PageGroup
+            CreateMap<DB.WebPageGroup, PageGroupItemResponse>();
+            CreateMap<CreatePageGroupRequest, DB.WebPageGroup>();
+            CreateMap<EditPageGroupRequest, DB.WebPageGroup>();
         }
     }
 }
