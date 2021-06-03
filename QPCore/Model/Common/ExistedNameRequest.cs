@@ -1,14 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using QPCore.Model.Common.Validations;
 
-namespace QPCore.Model.WebPageGroups
+namespace QPCore.Model.Common
 {
-    public class CreatePageGroupRequest
+    public class ExistedNameRequest
     {
+        public int? Id { get; set; }
+
         [Required]
         [MaxLength(250)]
         [IsNotNumber]
         public string Name { get; set; }
-        public int? VersionId { get; set; }
     }
 }

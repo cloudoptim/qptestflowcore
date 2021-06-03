@@ -16,18 +16,18 @@ namespace QPCore.Service
                                         where TCreateEntity : class, new()
                                         where TEditEntity : class, new()
     {
-        private readonly IBaseRepository<TEntity> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IBaseRepository<TEntity> Repository;
+        protected readonly IMapper Mapper;
         public BaseService(IBaseRepository<TEntity> repository,
                 IMapper mapper)
         {
-            _repository = repository;
-            _mapper = mapper;
+            Repository = repository;
+            Mapper = mapper;
         }
         public ExistedResponse CheckExistedId(int id)
         {
             var result = new ExistedResponse();
-            result.IsExisted = this._repository.GetQuery()
+            result.IsExisted = this.Repository.GetQuery()
                 .Any(p => p.Id == id);
 
             return result;
@@ -37,7 +37,7 @@ namespace QPCore.Service
         {
             var result = new ExistedResponse();
             name = name.Trim().ToLower();
-            result.IsExisted = this._repository.GetQuery()
+            result.IsExisted = this.Repository.GetQuery()
                 .Any(p => p.Name.ToLower() == name &&
                         (!id.HasValue || p.Id != id.Value)
                     );
@@ -46,38 +46,38 @@ namespace QPCore.Service
 
         public async Task<TResponseEntity> CreateAsync(TCreateEntity entity, int userId)
         {
-            var insertEntity = _mapper.Map<TEntity>(entity);
+            var insertEntity = Mapper.Map<TEntity>(entity);
             insertEntity.CreatedBy = userId;
             insertEntity.CreatedDate = System.DateTime.Now;
             insertEntity.UpdatedBy = userId;
             insertEntity.UpdatedDate = System.DateTime.Now;
 
-            var result = await _repository.AddAsync(insertEntity);
+            var result = await Repository.AddAsync(insertEntity);
 
             return GetById(result.Id);
         }
 
         public async Task DeleteAsync(int id)
         {
-            await this._repository.DeleteAsync(id);
+            await this.Repository.DeleteAsync(id);
         }
 
         public async Task<TResponseEntity>  EditAsync(TEditEntity entity, int userId)
         {
-            var insertEntity = _mapper.Map<TEntity>(entity);
+            var insertEntity = Mapper.Map<TEntity>(entity);
             insertEntity.UpdatedBy = userId;
             insertEntity.UpdatedDate = System.DateTime.Now;
 
-            var result = await _repository.UpdateAsync(insertEntity);
+            var result = await this.Repository.UpdateAsync(insertEntity);
 
             return GetById(result.Id);
         }
 
         public List<TResponseEntity> GetAll()
         {
-            var result = this._repository.GetQuery()
+            var result = this.Repository.GetQuery()
                 .OrderByDescending(p => p.Id)
-                .ProjectTo<TResponseEntity>(_mapper.ConfigurationProvider)
+                .ProjectTo<TResponseEntity>(Mapper.ConfigurationProvider)
                 .ToList();
 
             return result;
@@ -85,9 +85,9 @@ namespace QPCore.Service
 
         public TResponseEntity GetById(int id)
         {
-            var result = _repository.GetQuery()
+            var result = this.Repository.GetQuery()
                 .Where(p => p.Id == id)
-                .ProjectTo<TResponseEntity>(_mapper.ConfigurationProvider)
+                .ProjectTo<TResponseEntity>(Mapper.ConfigurationProvider)
                 .FirstOrDefault();
             
             return result;

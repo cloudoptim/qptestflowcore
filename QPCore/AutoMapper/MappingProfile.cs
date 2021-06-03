@@ -17,6 +17,7 @@ using QPCore.Model.TestFlowCategoryAssocs;
 using QPCore.Model.DataBaseModel;
 using DataBaseModel;
 using QPCore.Model.WebPageGroups;
+using QPCore.Model.WebPages;
 
 namespace QPCore.AutoMapper
 {
@@ -98,6 +99,12 @@ namespace QPCore.AutoMapper
             CreateMap<DB.WebPageGroup, PageGroupItemResponse>();
             CreateMap<CreatePageGroupRequest, DB.WebPageGroup>();
             CreateMap<EditPageGroupRequest, DB.WebPageGroup>();
+
+            // Page
+            CreateMap<DB.WebPage, WebPageItemResponse>()
+                .ForMember(d => d.GroupName, s => s.MapFrom(p => p.WebPageGroup.Name));
+            CreateMap<CreateWebPageRequest, DB.WebPage>();
+            CreateMap<EditWebPageRequest, DB.WebPage>();
         }
     }
 }

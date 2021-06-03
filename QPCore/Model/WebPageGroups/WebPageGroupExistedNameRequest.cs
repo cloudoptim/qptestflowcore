@@ -1,15 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using QPCore.Model.Common.Validations;
+using QPCore.Model.Common;
 
 namespace QPCore.Model.WebPageGroups
 {
-    public class WebPageGroupExistedNameRequest
+    public class WebPageGroupExistedNameRequest : ExistedNameRequest
     {
-        public int? Id { get; set; }
-
-        [Required]
-        [MaxLength(250)]
-        [IsNotNumber]
-        public string Name { get; set; }
     }
 }

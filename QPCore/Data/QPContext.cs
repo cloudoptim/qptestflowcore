@@ -899,6 +899,11 @@ namespace QPCore.Data
                     .IsRequired()
                     .HasDefaultValueSql("CURRENT_TIMESTAMP")
                     .HasColumnName("created_date");
+                
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasColumnName("is_active")
+                    .HasDefaultValue(false);
 
                 entity.Property(e => e.UpdatedBy)
                     .HasColumnName("updated_by");

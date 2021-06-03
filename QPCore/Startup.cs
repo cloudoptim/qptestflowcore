@@ -75,6 +75,7 @@ namespace QPCore
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient(typeof(IBaseService<,,,>), typeof(BaseService<,,,>));
+            services.AddTransient(typeof(IBaseGroupService<,,,>), typeof(BaseGroupService<,,,>));
             services.AddTransient(typeof(IEmailService), typeof(EmailService));
             services.AddTransient(typeof(IAccountService), typeof(AccountService));
             services.AddTransient(typeof(IOrganizationService), typeof(OrganizationService));
@@ -86,6 +87,7 @@ namespace QPCore
             services.AddTransient(typeof(ITestFlowCategoryService), typeof(TestFlowCategoryService));
             services.AddTransient(typeof(ITestFlowCategoryAssocService), typeof(TestFlowCategoryAssocService));
             services.AddTransient(typeof(IWebPageGroupService), typeof(WebPageGroupService));
+            services.AddTransient(typeof(IWebPageService), typeof(WebPageService));
             
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
