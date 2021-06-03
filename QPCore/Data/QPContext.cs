@@ -873,41 +873,44 @@ namespace QPCore.Data
 
             modelBuilder.Entity<WebPage>(entity =>
             {
-                entity.HasKey(e => e.Pageid)
+                entity.HasKey(e => e.Id)
                     .HasName("webpageid");
 
                 entity.ToTable("WebPage");
 
-                entity.Property(e => e.Pageid)
-                    .ValueGeneratedNever()
-                    .HasColumnName("pageid");
+                entity.Property(e => e.Id)
+                    .HasIdentityOptions(startValue: 100)
+                    .HasColumnName("page_id");
 
-                entity.Property(e => e.Createdby)
-                    .HasMaxLength(100)
-                    .HasColumnName("createdby");
+                entity.Property(e => e.GroupId)
+                    .HasColumnName("group_id");
 
-                entity.Property(e => e.Createddatetime)
-                    .HasColumnType("date")
-                    .HasColumnName("createddatetime");
-
-                entity.Property(e => e.Groupid).HasColumnName("groupid");
-
-                entity.Property(e => e.Isactive)
-                    .HasColumnType("bit(1)")
-                    .HasColumnName("isactive");
-
-                entity.Property(e => e.Pagename)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250)
-                    .HasColumnName("pagename");
+                    .HasColumnName("page_name");
+                
+                entity.Property(e => e.CreatedBy)
+                    .HasDefaultValue(1)
+                    .IsRequired()
+                    .HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasColumnName("created_date");
 
                 entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(100)
-                    .HasColumnName("updatedBy");
+                    .HasColumnName("updated_by");
 
-                entity.Property(e => e.Updateddatetime)
-                    .HasColumnType("date")
-                    .HasColumnName("updateddatetime");
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+                
+                entity.HasOne(e => e.WebPageGroup)
+                    .WithMany(e => e.WebPages)
+                    .HasForeignKey(e => e.GroupId)
+                    .HasConstraintName("fk_webpagegroup_webpage_group_id")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<WebPageGroup>(entity =>

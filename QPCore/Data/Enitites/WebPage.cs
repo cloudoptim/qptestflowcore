@@ -6,15 +6,10 @@ using System.Collections;
 
 namespace QPCore.Data.Enitites
 {
-    public partial class WebPage
+    public partial class WebPage : BaseEntity
     {
-        public int Pageid { get; set; }
-        public int Groupid { get; set; }
-        public string Pagename { get; set; }
-        public string Createdby { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime? Updateddatetime { get; set; }
-        public BitArray Isactive { get; set; }
+        public int GroupId { get; set; }
+
+        public virtual WebPageGroup WebPageGroup { get; set; }
     }
 }
