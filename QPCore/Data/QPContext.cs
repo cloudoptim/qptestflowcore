@@ -248,7 +248,6 @@ namespace QPCore.Data
                     .HasColumnName("created-by");
 
                 entity.Property(e => e.UpdatedDate)
-                    .IsRequired()
                     .HasColumnName("updated-date");
 
                 entity.Property(e => e.UpdatedBy)
