@@ -912,33 +912,42 @@ namespace QPCore.Data
 
             modelBuilder.Entity<WebPageGroup>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_webpagegroup_page_group_id");
 
                 entity.ToTable("WebPageGroup");
 
-                entity.Property(e => e.Createdby)
-                    .HasMaxLength(100)
-                    .HasColumnName("createdby");
-
-                entity.Property(e => e.Createddatetime)
-                    .HasColumnType("date")
-                    .HasColumnName("createddatetime");
-
-                entity.Property(e => e.Groupname)
+                entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(250)
-                    .HasColumnName("groupname");
+                    .HasColumnName("group_name");
+                
+                entity.HasIndex(e => e.Name)
+                    .HasDatabaseName("uq_group_name")
+                    .IsUnique();
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("page_group_id")
+                    .HasIdentityOptions(startValue: 100);
 
-                entity.Property(e => e.Updatedby)
-                    .HasMaxLength(100)
-                    .HasColumnName("updatedby");
+                entity.Property(e => e.CreatedBy)
+                    .HasDefaultValue(1)
+                    .IsRequired()
+                    .HasColumnName("created_by");
 
-                entity.Property(e => e.Updateddatetime)
-                    .HasColumnType("date")
-                    .HasColumnName("updateddatetime");
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasColumnName("created_date");
 
-                entity.Property(e => e.Versionid).HasColumnName("versionid");
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.Property(e => e.VersionId)
+                    .HasColumnName("version_id");
             });
 
             modelBuilder.Entity<RefreshToken>(entity =>

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210603160007_refactor webpagegroup table")]
+    partial class refactorwebpagegrouptable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,7 +385,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 3, 23, 24, 21, 549, DateTimeKind.Local).AddTicks(4890),
+                            CreatedDate = new DateTime(2021, 6, 3, 23, 0, 6, 430, DateTimeKind.Local).AddTicks(1780),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1468,7 +1470,7 @@ namespace QPCore.Migrations
                         .HasColumnName("version_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_webpagegroup_page_group_id");
+                        .HasName("fk_webpagegroup_page_group_id");
 
                     b.HasIndex("Name")
                         .IsUnique()

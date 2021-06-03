@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using QPCore.Data.BaseEntites;
 
 #nullable disable
 
 namespace QPCore.Data.Enitites
 {
-    public partial class WebPageGroup
+    public partial class WebPageGroup : IBaseEntity
     {
         public int Id { get; set; }
-        public string Groupname { get; set; }
-        public string Createdby { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public string Updatedby { get; set; }
-        public DateTime? Updateddatetime { get; set; }
-        public int? Versionid { get; set; }
+        public string Name { get; set; }
+        public int? VersionId { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int? UpdatedBy { get; set;}
+        public DateTime? UpdatedDate { get; set; }
     }
 }
