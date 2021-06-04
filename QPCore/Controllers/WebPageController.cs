@@ -148,6 +148,14 @@ namespace QPCore.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("pagegroups/{groupid:int:min(1)}")]
+        public ActionResult<List<WebPageItemResponse>> GetByGroupId(int groupid)
+        {
+            var result = _service.GetByGroupId(groupid);
+            return Ok(result);
+        }
+
         /// <summary>
         /// Delete page
         /// </summary>
