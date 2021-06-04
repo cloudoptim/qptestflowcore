@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210603192449_rename column in webpage table")]
+    partial class renamecolumninwebpagetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,7 +385,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 4, 2, 48, 20, 856, DateTimeKind.Local).AddTicks(580),
+                            CreatedDate = new DateTime(2021, 6, 4, 2, 24, 49, 100, DateTimeKind.Local).AddTicks(2480),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1393,27 +1395,9 @@ namespace QPCore.Migrations
                         .HasIdentityOptions(100L, null, null, null, null, null)
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
-                    b.Property<int>("CreatedBy")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
                     b.Property<int>("GroupId")
                         .HasColumnType("integer")
                         .HasColumnName("group_id");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_active");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1421,18 +1405,8 @@ namespace QPCore.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("page_name");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("updated_date");
-
                     b.HasKey("Id")
                         .HasName("webpageid");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("WebPage");
                 });
@@ -1808,18 +1782,6 @@ namespace QPCore.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.WebPage", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.WebPageGroup", "WebPageGroup")
-                        .WithMany("WebPages")
-                        .HasForeignKey("GroupId")
-                        .HasConstraintName("fk_webpagegroup_webpage_group_id")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("WebPageGroup");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
                     b.Navigation("AppUsers");
@@ -1931,11 +1893,6 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.WebModelGroup", b =>
                 {
                     b.Navigation("WebModelProps");
-                });
-
-            modelBuilder.Entity("QPCore.Data.Enitites.WebPageGroup", b =>
-                {
-                    b.Navigation("WebPages");
                 });
 #pragma warning restore 612, 618
         }

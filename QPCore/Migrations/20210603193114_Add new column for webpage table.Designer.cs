@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210603193114_Add new column for webpage table")]
+    partial class Addnewcolumnforwebpagetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,7 +385,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 4, 2, 48, 20, 856, DateTimeKind.Local).AddTicks(580),
+                            CreatedDate = new DateTime(2021, 6, 4, 2, 31, 13, 372, DateTimeKind.Local).AddTicks(5300),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1408,12 +1410,6 @@ namespace QPCore.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("integer")
                         .HasColumnName("group_id");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_active");
 
                     b.Property<string>("Name")
                         .IsRequired()

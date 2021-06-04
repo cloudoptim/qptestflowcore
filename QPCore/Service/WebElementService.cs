@@ -133,9 +133,7 @@ namespace QPCore.Service
 
         internal List<WebPageGroupViewModel> GetPageGroup()
         {
-            var json = _postgresDataBase.Multiple<WebPageGroupViewModel>("Select we.* from  public.\"WebPageGroup\" we").ToList();
-
-
+            var json = _postgresDataBase.Multiple<WebPageGroupViewModel>("Select we.\"page_group_id\" as \"id\", we.\"group_name\" as \"groupname\", we.\"version_id\" as \"versionid\" from  public.\"WebPageGroup\" we").ToList();
 
             return json;
         }
@@ -144,10 +142,7 @@ namespace QPCore.Service
         {
             //addorUpdateWebElement
 
-
-            var json = _postgresDataBase.Multiple<WebPageViewModel>("Select we.* from  public.\"WebPage\" we where  we.\"groupid\" ={0} ",groupid).ToList();
-
-
+            var json = _postgresDataBase.Multiple<WebPageViewModel>("Select we.\"page_id\" as \"pageId\", we.\"page_name\" as \"pageName\", we.\"is_active\" as \"isActive\", we.\"group_id\" as \"groupid\" from  public.\"WebPage\" we where  we.\"group_id\" ={0} ",groupid).ToList();
 
             return json;
         }

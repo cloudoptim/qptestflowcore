@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210603162422_rename primary key on webpagegroup")]
+    partial class renameprimarykeyonwebpagegroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,7 +385,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 4, 2, 48, 20, 856, DateTimeKind.Local).AddTicks(580),
+                            CreatedDate = new DateTime(2021, 6, 3, 23, 24, 21, 549, DateTimeKind.Local).AddTicks(4890),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1386,53 +1388,44 @@ namespace QPCore.Migrations
 
             modelBuilder.Entity("QPCore.Data.Enitites.WebPage", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Pageid")
                         .HasColumnType("integer")
-                        .HasColumnName("page_id")
-                        .HasIdentityOptions(100L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                        .HasColumnName("pageid");
 
-                    b.Property<int>("CreatedBy")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Createdby")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("createdby");
+
+                    b.Property<DateTime?>("Createddatetime")
+                        .HasColumnType("date")
+                        .HasColumnName("createddatetime");
+
+                    b.Property<int>("Groupid")
                         .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("created_by");
+                        .HasColumnName("groupid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    b.Property<BitArray>("Isactive")
+                        .HasColumnType("bit(1)")
+                        .HasColumnName("isactive");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer")
-                        .HasColumnName("group_id");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_active");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Pagename")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)")
-                        .HasColumnName("page_name");
+                        .HasColumnName("pagename");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by");
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("updatedBy");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("updated_date");
+                    b.Property<DateTime?>("Updateddatetime")
+                        .HasColumnType("date")
+                        .HasColumnName("updateddatetime");
 
-                    b.HasKey("Id")
+                    b.HasKey("Pageid")
                         .HasName("webpageid");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("WebPage");
                 });
@@ -1808,18 +1801,6 @@ namespace QPCore.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.WebPage", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.WebPageGroup", "WebPageGroup")
-                        .WithMany("WebPages")
-                        .HasForeignKey("GroupId")
-                        .HasConstraintName("fk_webpagegroup_webpage_group_id")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("WebPageGroup");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.Application", b =>
                 {
                     b.Navigation("AppUsers");
@@ -1931,11 +1912,6 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.WebModelGroup", b =>
                 {
                     b.Navigation("WebModelProps");
-                });
-
-            modelBuilder.Entity("QPCore.Data.Enitites.WebPageGroup", b =>
-                {
-                    b.Navigation("WebPages");
                 });
 #pragma warning restore 612, 618
         }
