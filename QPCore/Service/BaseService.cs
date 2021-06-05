@@ -35,12 +35,18 @@ namespace QPCore.Service
 
         public ExistedResponse CheckExistedName(string name, int? id = null)
         {
-            var result = new ExistedResponse();
             name = name.Trim().ToLower();
-            result.IsExisted = this.Repository.GetQuery()
-                .Any(p => p.Name.ToLower() == name &&
+            var existedItem = this.Repository.GetQuery()
+                .FirstOrDefault(p => p.Name.ToLower() == name &&
                         (!id.HasValue || p.Id != id.Value)
                     );
+            
+            var result = new ExistedResponse()
+            {
+                IsExisted = existedItem != null,
+                ExistedId = existedItem?.Id
+            };
+
             return result;
         }
 
