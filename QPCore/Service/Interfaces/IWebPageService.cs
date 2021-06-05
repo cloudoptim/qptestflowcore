@@ -8,5 +8,7 @@ namespace QPCore.Service.Interfaces
     public interface IWebPageService : IBaseGroupService<WebPage, WebPageItemResponse, CreateWebPageRequest, EditWebPageRequest>
     {
         List<WebPageItemResponse> GetByGroupId(int groupId);
+
+        List<ExistedBulkResponse> CheckExistedBulkName(ExistedBulkNameRequest data);
     }
 }
