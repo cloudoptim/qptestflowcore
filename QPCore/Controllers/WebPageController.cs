@@ -52,6 +52,20 @@ namespace QPCore.Controllers
         }
 
         /// <summary>
+        /// Check existed bulk page name
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("existed/bulk")]
+        public ActionResult<List<ExistedBulkResponse>> CheckExistedBulk(ExistedBulkNameRequest request)
+        {
+            var result = _service.CheckExistedBulkName(request);
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get all pages
         /// </summary>
         /// <returns></returns>
