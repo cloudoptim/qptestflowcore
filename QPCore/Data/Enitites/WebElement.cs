@@ -20,5 +20,9 @@ namespace QPCore.Data.Enitites
         public int? Elementparentid { get; set; }
         public string Applicationsection { get; set; }
         public string Value { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

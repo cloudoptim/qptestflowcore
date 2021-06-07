@@ -23,6 +23,8 @@ namespace DataBaseModel
          
     
         public int elementid { get; set; }
+
+        [Required]
         public int pageid { get; set; }
         [Required]
         [IsNotNumber]
