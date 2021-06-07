@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-
-#nullable disable
-
-namespace QPCore.Data.Enitites
+﻿namespace QPCore.Data.Enitites
 {
     public partial class WebPage : BaseGroupEntity
     {

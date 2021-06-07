@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QPCore.Data.Enitites;
+// using Streamx.Linq.SQL.EFCore;
+// using Streamx.Linq.SQL.PostgreSQL;
 
 #nullable disable
 
@@ -54,6 +56,8 @@ namespace QPCore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // ELinq.Configuration.RegisterVendorCapabilities();
+
             modelBuilder.HasAnnotation("Relational:Collation", "en_US.UTF-8");
 
             modelBuilder.Entity<AppUser>(entity =>

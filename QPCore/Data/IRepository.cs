@@ -26,6 +26,7 @@ namespace QPCore.Data
 
     public interface IBaseRepository<TEntity> where TEntity : class, new()
     {
+        QPContext QPDataContext { get; }
         IQueryable<TEntity> GetQuery();
 
         Task<TEntity> AddAsync(TEntity entity);

@@ -112,7 +112,7 @@ namespace QPCore.Controllers
             if (!isExistedGroupId.IsExisted)
             {
                 return BadRequest(new BadRequestResponse()
-                { 
+                {
                     Message = string.Format("Page Group Id: " + CommonMessageList.NOT_FOUND_THE_ID, page.GroupId)
                 });
             }
@@ -152,7 +152,7 @@ namespace QPCore.Controllers
             if (!isExistedGroupId.IsExisted)
             {
                 return BadRequest(new BadRequestResponse()
-                { 
+                {
                     Message = string.Format("Page Group Id: " + CommonMessageList.NOT_FOUND_THE_ID, page.GroupId)
                 });
             }
@@ -181,6 +181,23 @@ namespace QPCore.Controllers
         {
             await _service.DeleteAsync(id);
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("bulk")]
+        public async Task<ActionResult<List<ExistedBulkResponse>>> BulkUpsert(ExistedBulkNameRequest bulkRequest)
+        {
+            var isExistedGroupId = _pageGroupService.CheckExistedId(bulkRequest.GroupId);
+            if (!isExistedGroupId.IsExisted)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format("Page Group Id: " + CommonMessageList.NOT_FOUND_THE_ID, bulkRequest.GroupId)
+                });
+            }
+
+            var result = await _service.UpsertsAsync(bulkRequest, Account.UserId);
+            return Ok(result);
         }
     }
 }
