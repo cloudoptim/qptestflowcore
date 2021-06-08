@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QPCore.Data.Enitites;
+// using Streamx.Linq.SQL.EFCore;
+// using Streamx.Linq.SQL.PostgreSQL;
 
 #nullable disable
 
@@ -54,6 +56,8 @@ namespace QPCore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // ELinq.Configuration.RegisterVendorCapabilities();
+
             modelBuilder.HasAnnotation("Relational:Collation", "en_US.UTF-8");
 
             modelBuilder.Entity<AppUser>(entity =>
@@ -753,7 +757,7 @@ namespace QPCore.Data
                 entity.ToTable("WebElement");
 
                 entity.Property(e => e.Elementid)
-                    .ValueGeneratedNever()
+                    .HasIdentityOptions(startValue: 100)
                     .HasColumnName("elementid");
 
                 entity.Property(e => e.Applicationsection)
@@ -799,6 +803,22 @@ namespace QPCore.Data
                 entity.Property(e => e.Value)
                     .HasMaxLength(100)
                     .HasColumnName("value");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasDefaultValue(1)
+                    .IsRequired()
+                    .HasColumnName("created_by");
+
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                    .HasColumnName("created_date");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
             });
 
             modelBuilder.Entity<WebModel>(entity =>

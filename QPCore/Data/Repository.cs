@@ -96,7 +96,7 @@ namespace QPCore.Data
                 if (entity != null)
                 {
                     QPDataContext.Remove(entity);
-                   await QPDataContext.SaveChangesAsync();
+                    await QPDataContext.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -132,11 +132,19 @@ namespace QPCore.Data
 
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, new()
     {
-        protected readonly QPContext QPDataContext;
+        public QPContext QPDataContext
+        {
+            get
+            {
+                return _qpDataContext;
+            }
+        }
+        
+        protected readonly QPContext _qpDataContext;
 
         public BaseRepository(QPContext qpDataContext)
         {
-            QPDataContext = qpDataContext;
+            _qpDataContext = qpDataContext;
         }
 
         public IQueryable<TEntity> GetQuery()

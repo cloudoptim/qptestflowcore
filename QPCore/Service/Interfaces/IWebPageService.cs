@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using QPCore.Data.Enitites;
 using QPCore.Model.Common;
 using QPCore.Model.WebPages;
@@ -10,5 +11,7 @@ namespace QPCore.Service.Interfaces
         List<WebPageItemResponse> GetByGroupId(int groupId);
 
         List<ExistedBulkResponse> CheckExistedBulkName(ExistedBulkNameRequest data);
+
+        Task<List<BulkUpsertResponse>> UpsertsAsync(ExistedBulkNameRequest bulkRequest, int userId);
     }
 }

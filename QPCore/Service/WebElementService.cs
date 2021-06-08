@@ -11,6 +11,7 @@ using QPCore.Model.WebElement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QPCore.Service
 {
@@ -40,10 +41,10 @@ namespace QPCore.Service
         public List<WebPageGroup> GetWebElementTree()
         {
             var _data = _postgresDataBase.Procedure("getwebelementtree").ToList().FirstOrDefault();
-             List<WebPageGroup>  webModel = JsonConvert.DeserializeObject<List<WebPageGroup>>(_data.getwebelementtree);
+            List<WebPageGroup> webModel = JsonConvert.DeserializeObject<List<WebPageGroup>>(_data.getwebelementtree);
 
             return webModel;
-          }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -61,21 +62,22 @@ namespace QPCore.Service
         {
             //addorUpdateWebElement
             value.screenshot = value.screenshot == null ? string.Empty : value.screenshot;
-           var json = _postgresDataBase.Procedure("addorUpdateWebElement", new {
+            var json = _postgresDataBase.Procedure("addorUpdateWebElement", new
+            {
 
                 elementid = value.elementid,
-                elementaliasname = value.elementaliasname??string.Empty,
-                elementtype = value.elementtype??string.Empty,
-                itype = value.itype??string.Empty,
-                ivalue = value.ivalue??string.Empty,
-                framenavigation = value.framenavigation??string.Empty,
-                command = value.command??string.Empty,
-                locationpath = value.locationpath??string.Empty,
-                screenshot = value.screenshot??string.Empty,
-                elementparentid = value.elementparentid??0,
-                applicationsection = value.applicationsection??string.Empty,
-                value = value.value??string.Empty,
-                pageid =  value.pageid
+                elementaliasname = value.elementaliasname ?? string.Empty,
+                elementtype = value.elementtype ?? string.Empty,
+                itype = value.itype ?? string.Empty,
+                ivalue = value.ivalue ?? string.Empty,
+                framenavigation = value.framenavigation ?? string.Empty,
+                command = value.command ?? string.Empty,
+                locationpath = value.locationpath ?? string.Empty,
+                screenshot = value.screenshot ?? string.Empty,
+                elementparentid = value.elementparentid ?? 0,
+                applicationsection = value.applicationsection ?? string.Empty,
+                value = value.value ?? string.Empty,
+                pageid = value.pageid
 
             }).ToList().FirstOrDefault();
 
@@ -94,15 +96,15 @@ namespace QPCore.Service
         {
             //addorUpdateWebElement
 
-           
+
             var json = _postgresDataBase.Procedure("CreateOrUpdateWebPage", new
             {
 
                 pageid = 0,
                 pagename = value.pageName,
-                groupid =  value.groupId,
+                groupid = value.groupId,
                 userid = value.createdBy
-                
+
             }).ToList().FirstOrDefault();
             WebPageViewModel WebPage = JsonConvert.DeserializeObject<WebPageViewModel>(json.createorupdatewebpage);
 
@@ -122,7 +124,7 @@ namespace QPCore.Service
                 pagename = value.pageName,
                 groupid = value.groupId,
                 userid = value.createdBy
-              
+
             }).ToList().FirstOrDefault();
 
             WebPageViewModel WebPage = JsonConvert.DeserializeObject<WebPageViewModel>(json.createorupdatewebpage);
@@ -142,7 +144,7 @@ namespace QPCore.Service
         {
             //addorUpdateWebElement
 
-            var json = _postgresDataBase.Multiple<WebPageViewModel>("Select we.\"page_id\" as \"pageId\", we.\"page_name\" as \"pageName\", we.\"is_active\" as \"isActive\", we.\"group_id\" as \"groupid\" from  public.\"WebPage\" we where  we.\"group_id\" ={0} ",groupid).ToList();
+            var json = _postgresDataBase.Multiple<WebPageViewModel>("Select we.\"page_id\" as \"pageId\", we.\"page_name\" as \"pageName\", we.\"is_active\" as \"isActive\", we.\"group_id\" as \"groupid\" from  public.\"WebPage\" we where  we.\"group_id\" ={0} ", groupid).ToList();
 
             return json;
         }
@@ -168,7 +170,7 @@ namespace QPCore.Service
                 groupid = 0,
                 groupname = value.groupname,
                 userid = value.createdby,
-                versionid =  value.versionid
+                versionid = value.versionid
             }).ToList().FirstOrDefault();
 
 
@@ -229,6 +231,69 @@ namespace QPCore.Service
                 .Any(p => p.Elementid == elementId);
 
             return isExisted;
+        }
+
+        public async Task<List<WebElementItem>> UpsertBulkAsync(List<WebElement> elements, int userId)
+        {
+            var result = new List<WebElementItem>();
+
+            foreach (var element in elements)
+            {
+                var item = await this.UpsertAsync(element, userId);
+                result.Add(new WebElementItem()
+                {
+                    ElementId = item.Elementid,
+                    ElementAliasName = item.Elementaliasname
+                });
+            }
+            return result;
+        }
+
+        private async Task<QPCore.Data.Enitites.WebElement> UpsertAsync(WebElement element, int userId)
+        {
+            var item = this._repository.GetQuery()
+                .FirstOrDefault(p => p.Elementaliasname.Trim().ToLower() == element.elementaliasname.Trim().ToLower() &&
+                    p.Pageid == element.pageid);
+
+            if (item != null) // Update current elemment
+            {
+                item.Elementtype = element.elementtype ?? string.Empty;
+                item.Itype = element.itype ?? string.Empty;
+                item.Framenavigation = element.framenavigation ?? string.Empty;
+                item.Command = element.command;
+                item.Locationpath = element.locationpath ?? string.Empty;
+                item.Screenshot = element.screenshot ?? string.Empty;
+                item.Elementparentid = element.pageid;
+                item.Applicationsection = element.applicationsection ?? string.Empty;
+                item.Value = element.value ?? string.Empty;
+                item.UpdatedBy = userId;
+                item.UpdatedDate = DateTime.Now;
+
+                item = await this._repository.UpdateAsync(item);
+            }
+            else // insert new one
+            {
+                item = new QPCore.Data.Enitites.WebElement()
+                {
+                    Elementaliasname = element.elementaliasname.Trim(),
+                    Elementtype = element.elementtype ?? string.Empty,
+                    Itype = element.itype ?? string.Empty,
+                    Framenavigation = element.framenavigation ?? string.Empty,
+                    Command = element.command,
+                    Locationpath = element.locationpath ?? string.Empty,
+                    Screenshot = element.screenshot ?? string.Empty,
+                    Elementparentid = element.pageid,
+                    Applicationsection = element.applicationsection ?? string.Empty,
+                    Value = element.value ?? string.Empty,
+                    Pageid = element.pageid,
+                    CreatedBy = userId,
+                    CreatedDate = DateTime.Now
+                };
+
+                item = await this._repository.AddAsync(item);
+            }
+
+            return item;
         }
     }
 }

@@ -81,6 +81,8 @@ namespace QPCore.Controllers
 
             if (result.FirstOrDefault().IsExisted)
             {
+                // Checking if it's existing element which is same all properties
+
                 return BadRequest(new BadRequestResponse() 
                 {
                     Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, value.elementaliasname)
@@ -241,6 +243,15 @@ namespace QPCore.Controllers
         {
             var result = _webElementService.CheckingWebElements(data);
             return result;
+        }
+        
+        [HttpPost]
+        [Route("bulk")]
+        public async Task<ActionResult<List<WebElementItem>>> UpsertBulkElements(List<WebElement> elements)
+        {
+            var result = await _webElementService.UpsertBulkAsync(elements, Account.UserId);
+
+            return Ok(result);
         }
     }
 }
