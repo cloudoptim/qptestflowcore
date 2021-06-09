@@ -12,7 +12,7 @@ namespace QPCore.Data.Enitites
         public string Elementaliasname { get; set; }
         public string Elementtype { get; set; }
         public string Itype { get; set; }
-        public string Ivalue { get; set; }
+        public string IValue { get; set; }
         public string Framenavigation { get; set; }
         public string Command { get; set; }
         public string Locationpath { get; set; }

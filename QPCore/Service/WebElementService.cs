@@ -266,6 +266,7 @@ namespace QPCore.Service
                 item.Elementparentid = element.pageid;
                 item.Applicationsection = element.applicationsection ?? string.Empty;
                 item.Value = element.value ?? string.Empty;
+                item.IValue = element.value ?? string.Empty;
                 item.UpdatedBy = userId;
                 item.UpdatedDate = DateTime.Now;
 
@@ -285,6 +286,7 @@ namespace QPCore.Service
                     Elementparentid = element.pageid,
                     Applicationsection = element.applicationsection ?? string.Empty,
                     Value = element.value ?? string.Empty,
+                    IValue = element.ivalue ?? string.Empty,
                     Pageid = element.pageid,
                     CreatedBy = userId,
                     CreatedDate = DateTime.Now
