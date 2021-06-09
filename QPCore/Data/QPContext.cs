@@ -786,7 +786,7 @@ namespace QPCore.Data
                     .HasMaxLength(250)
                     .HasColumnName("itype");
 
-                entity.Property(e => e.Ivalue)
+                entity.Property(e => e.IValue)
                     .HasMaxLength(550)
                     .HasColumnName("ivalue");
 
