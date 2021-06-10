@@ -584,6 +584,11 @@ namespace QPCore.Data
 
                 entity.Property(e => e.IsActive);
 
+                entity.Property(e => e.Type)
+                    .HasMaxLength(100)
+                    .IsRequired()
+                    .HasColumnName("type");
+
                 entity.Property(e => e.CreatedBy)
                     .IsRequired();
 

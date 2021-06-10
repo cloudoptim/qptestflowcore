@@ -108,6 +108,7 @@ namespace QPCore.Service
                 dataItem.CategoryName = editTestFlowCategoryRequest.CategoryName;
                 dataItem.ClientId = editTestFlowCategoryRequest.ClientId;
                 dataItem.IsActive = editTestFlowCategoryRequest.IsActive;
+                dataItem.Type = editTestFlowCategoryRequest.Type;
                 dataItem.UpdatedBy = userId;
                 dataItem.UpdatedDate = DateTime.Now;
 

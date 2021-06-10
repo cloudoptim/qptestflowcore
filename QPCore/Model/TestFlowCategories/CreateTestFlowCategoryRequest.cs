@@ -11,6 +11,11 @@ namespace QPCore.Model.TestFlowCategories
         public string CategoryName { get; set; }
 
         [Required]
+        [MaxLength(100)]
+        [RegularExpression("Area|Category", ErrorMessage = "Type should only be Area or Category")]
+        public string Type { get; set; }
+
+        [Required]
         public int ClientId { get; set; }
     }
 }
