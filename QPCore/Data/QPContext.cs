@@ -1133,6 +1133,79 @@ namespace QPCore.Data
                     .HasForeignKey(e => e.TestCaseId);
             });
 
+            modelBuilder.Entity<CompositeWebElement>(entity =>
+            {
+                entity.ToTable("CompositeWebElements");
+
+                entity.HasKey(e => e.Id)
+                    .HasName("pk_compositewebelement_id");
+
+                entity.Property(e => e.Id)
+                    .HasIdentityOptions(startValue: 100)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255)
+                    .HasColumnName("element_alias_name")
+                    .IsRequired();
+
+                entity.Property(e => e.IsComposite)
+                    .HasColumnName("is_composite");
+
+                entity.Property(e => e.Command)
+                    .HasMaxLength(255)
+                    .IsRequired()
+                    .HasColumnName("command");
+
+                entity.Property(e => e.Index)
+                    .IsRequired()
+                    .HasColumnName("index");
+
+                entity.Property(e => e.PageId)
+                    .IsRequired()
+                    .HasColumnName("page_id");
+
+                entity.Property(e => e.WebElementId)
+                    .HasColumnName("web_element_id");
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .IsRequired();
+
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("created_date")
+                    .IsRequired();
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDate)
+                    .HasColumnName("updated_date");
+
+                entity.HasOne(e => e.WebPage)
+                    .WithMany(e => e.CompositeWebElements)
+                    .HasForeignKey(e => e.PageId)
+                    .HasConstraintName("fk_webpage_compositewebelement_id_pageid")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(e => e.WebElement)
+                    .WithMany(e => e.CompositeWebElements)
+                    .HasForeignKey(e => e.WebElementId)
+                    .HasConstraintName("fk_webelement_compositewebelement_id_webelementid")
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired(false);
+
+                entity.HasOne(e => e.Parent)
+                    .WithMany(e => e.Childs)
+                    .HasForeignKey(e => e.ParentId)
+                    .HasConstraintName("fk_self_compositewebelement_id")
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired(false);
+            });
+
             modelBuilder.HasSequence("applicationfeaturesseq");
 
             modelBuilder.HasSequence("batchseq");

@@ -7,6 +7,10 @@ namespace QPCore.Data.Enitites
 {
     public partial class WebElement
     {
+        public WebElement()
+        {
+            this.CompositeWebElements = new HashSet<CompositeWebElement>();
+        }
         public int Elementid { get; set; }
         public int Pageid { get; set; }
         public string Elementaliasname { get; set; }
@@ -24,5 +28,7 @@ namespace QPCore.Data.Enitites
         public DateTime CreatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+
+        public virtual ICollection<CompositeWebElement> CompositeWebElements { get; set; }
     }
 }
