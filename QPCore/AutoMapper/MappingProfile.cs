@@ -114,7 +114,11 @@ namespace QPCore.AutoMapper
             CreateMap<CreateChildCompositeWebElementRequest, DB.CompositeWebElement>()
                 .ForMember(d => d.IsComposite, s => s.MapFrom(p => true));
             
-            CreateMap<DB.CompositeWebElement, CompositeWebElementResponse>();
+            CreateMap<DB.CompositeWebElement, CompositeWebElementResponse>()
+                .ForMember(d => d.PageName, s => s.MapFrom(p => p.WebPage.Name))
+                .ForMember(d => d.WebPageGroupId, s => s.MapFrom(p => p.WebPage.GroupId))
+                .ForMember(d => d.WebPageGroupName, s => s.MapFrom(p => p.WebPage.WebPageGroup.Name));
+            
             CreateMap<CreateCompositeWebElementRequest, DB.CompositeWebElement>()
                 .ForMember(d => d.IsComposite, s => s.MapFrom(p => true));  
         }
