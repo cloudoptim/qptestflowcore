@@ -88,7 +88,7 @@ namespace QPCore.Data
             }
         }
 
-                public async Task UpdateRangeAsync(List<TEntity> entities)
+        public async Task UpdateRangeAsync(List<TEntity> entities)
         {
             if (entities == null || entities.Count == 0)
             {
