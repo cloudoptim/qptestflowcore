@@ -54,6 +54,48 @@ namespace QPCore.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Edit composite web element
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<CompositeWebElementResponse>> Edit(EditCompositeWebElementRequest data)
+        {
+            var isExistedId = _compositeService.CheckExistedId(data.Id);
+            if (!isExistedId.IsExisted)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.NOT_FOUND_THE_ID, data.Id)
+                });
+            }
+
+            var isExistedPage = _webPageService.CheckExistedId(data.GroupId);
+            if(!isExistedPage.IsExisted) 
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format("PageId: " + CommonMessageList.NOT_FOUND_THE_ID, data.GroupId)
+                });
+            }
+
+            var isExistedName = _compositeService.CheckExistedName(data.Name, data.GroupId, data.Id);
+            if (isExistedName.IsExisted)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_NAME_STRING, data.Name)
+                });
+            }
+
+            data.Childs = data.Childs.OrderBy(p => p.Index).Distinct().ToList();
+
+            var result = await _compositeService.EditAsync(data, Account.UserId);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [Route("{id:int:min(1)}")]
         public ActionResult<CompositeWebElementResponse> Get(int id)

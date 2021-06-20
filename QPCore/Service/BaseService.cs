@@ -64,7 +64,7 @@ namespace QPCore.Service
             await this.Repository.DeleteAsync(id);
         }
 
-        public async Task<TResponseEntity> EditAsync(TEditEntity entity, int userId)
+        public virtual async Task<TResponseEntity> EditAsync(TEditEntity entity, int userId)
         {
             var insertEntity = Mapper.Map<TEntity>(entity);
             insertEntity.UpdatedBy = userId;
