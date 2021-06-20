@@ -18,6 +18,7 @@ using QPCore.Model.DataBaseModel;
 using DataBaseModel;
 using QPCore.Model.WebPageGroups;
 using QPCore.Model.WebPages;
+using QPCore.Model.CompositeWebElements;
 
 namespace QPCore.AutoMapper
 {
@@ -105,6 +106,17 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.GroupName, s => s.MapFrom(p => p.WebPageGroup.Name));
             CreateMap<CreateWebPageRequest, DB.WebPage>();
             CreateMap<EditWebPageRequest, DB.WebPage>();
+
+            // Composite Web Elemenet
+            CreateMap<DB.CompositeWebElement, ChildCompositeWebElementResponse>()
+                // .ForMember(d => d.Name, s => s.MapFrom(p => p.WebElement.Elementaliasname))
+                ;
+            CreateMap<CreateChildCompositeWebElementRequest, DB.CompositeWebElement>()
+                .ForMember(d => d.IsComposite, s => s.MapFrom(p => true));
+            
+            CreateMap<DB.CompositeWebElement, CompositeWebElementResponse>();
+            CreateMap<CreateCompositeWebElementRequest, DB.CompositeWebElement>()
+                .ForMember(d => d.IsComposite, s => s.MapFrom(p => true));  
         }
     }
 }

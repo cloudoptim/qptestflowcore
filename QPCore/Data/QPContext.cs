@@ -1154,14 +1154,13 @@ namespace QPCore.Data
 
                 entity.Property(e => e.Command)
                     .HasMaxLength(255)
-                    .IsRequired()
                     .HasColumnName("command");
 
                 entity.Property(e => e.Index)
                     .IsRequired()
                     .HasColumnName("index");
 
-                entity.Property(e => e.PageId)
+                entity.Property(e => e.GroupId)
                     .IsRequired()
                     .HasColumnName("page_id");
 
@@ -1187,7 +1186,7 @@ namespace QPCore.Data
 
                 entity.HasOne(e => e.WebPage)
                     .WithMany(e => e.CompositeWebElements)
-                    .HasForeignKey(e => e.PageId)
+                    .HasForeignKey(e => e.GroupId)
                     .HasConstraintName("fk_webpage_compositewebelement_id_pageid")
                     .OnDelete(DeleteBehavior.SetNull);
 
@@ -1202,8 +1201,13 @@ namespace QPCore.Data
                     .WithMany(e => e.Childs)
                     .HasForeignKey(e => e.ParentId)
                     .HasConstraintName("fk_self_compositewebelement_id")
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired(false);
+                
+                entity.HasIndex(e => new { e.GroupId, e.ParentId , e.WebElementId, e.Command })
+                    .HasDatabaseName("unique_compositewebelement_pageid_parentid_webelementid_command")
+                    .IsUnique();
+                
             });
 
             modelBuilder.HasSequence("applicationfeaturesseq");

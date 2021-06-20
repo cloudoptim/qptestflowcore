@@ -2,13 +2,12 @@ using System.Collections.Generic;
 
 namespace QPCore.Data.Enitites
 {
-    public class CompositeWebElement : BaseEntity
+    public class CompositeWebElement : BaseGroupEntity
     {
         public CompositeWebElement()
         {
             this.Childs = new HashSet<CompositeWebElement>();
         }
-        public int PageId { get; set; }
 
         public bool IsComposite { get; set; }
 

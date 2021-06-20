@@ -52,11 +52,7 @@ namespace QPCore.Service
 
         public async Task<TResponseEntity> CreateAsync(TCreateEntity entity, int userId)
         {
-            var insertEntity = Mapper.Map<TEntity>(entity);
-            insertEntity.CreatedBy = userId;
-            insertEntity.CreatedDate = System.DateTime.Now;
-            insertEntity.UpdatedBy = userId;
-            insertEntity.UpdatedDate = System.DateTime.Now;
+            TEntity insertEntity = ConvertEntity(entity, userId);
 
             var result = await Repository.AddAsync(insertEntity);
 
@@ -68,7 +64,7 @@ namespace QPCore.Service
             await this.Repository.DeleteAsync(id);
         }
 
-        public async Task<TResponseEntity>  EditAsync(TEditEntity entity, int userId)
+        public async Task<TResponseEntity> EditAsync(TEditEntity entity, int userId)
         {
             var insertEntity = Mapper.Map<TEntity>(entity);
             insertEntity.UpdatedBy = userId;
@@ -89,7 +85,7 @@ namespace QPCore.Service
             return result;
         }
 
-        public TResponseEntity GetById(int id)
+        public virtual TResponseEntity GetById(int id)
         {
             var result = this.Repository.GetQuery()
                 .Where(p => p.Id == id)
@@ -97,6 +93,16 @@ namespace QPCore.Service
                 .FirstOrDefault();
             
             return result;
+        }
+
+        protected virtual TEntity ConvertEntity(TCreateEntity entity, int userId)
+        {
+            var insertEntity = Mapper.Map<TEntity>(entity);
+            insertEntity.CreatedBy = userId;
+            insertEntity.CreatedDate = System.DateTime.Now;
+            insertEntity.UpdatedBy = userId;
+            insertEntity.UpdatedDate = System.DateTime.Now;
+            return insertEntity;
         }
     }
 }
