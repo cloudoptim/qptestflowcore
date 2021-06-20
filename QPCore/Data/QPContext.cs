@@ -824,6 +824,12 @@ namespace QPCore.Data
 
                 entity.Property(e => e.UpdatedDate)
                     .HasColumnName("updated_date");
+
+                entity.HasOne(e => e.WebPage)
+                    .WithMany(e => e.WebElements)
+                    .HasForeignKey(e => e.Pageid)
+                    .HasConstraintName("fk_webpage_webelement_webpageid_pageid")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<WebModel>(entity =>

@@ -13,14 +13,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace QPCore.Service
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class WebElementService
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
-        PostgresDataBase _postgresDataBase;
-        IRepository<QPCore.Data.Enitites.WebElement> _repository;
+        private readonly PostgresDataBase _postgresDataBase;
+        private readonly IRepository<QPCore.Data.Enitites.WebElement> _repository;
+
+        private readonly IRepository<QPCore.Data.Enitites.WebPageGroup> _webPageGroupRepository;
+
         IMapper _mapper;
         /// <summary>
         /// 
@@ -28,11 +32,14 @@ namespace QPCore.Service
         /// <param name="postgresDataBase"></param>
         /// <param name="mapper"></param>
         /// <param name="repository"></param>
-        public WebElementService(PostgresDataBase postgresDataBase, IMapper mapper, IRepository<QPCore.Data.Enitites.WebElement> repository)
+        /// <param name="compositeRepository"></param>
+        public WebElementService(PostgresDataBase postgresDataBase, IMapper mapper, IRepository<QPCore.Data.Enitites.WebElement> repository,
+            IRepository<QPCore.Data.Enitites.WebPageGroup> webPageGroupRepository)
         {
             _postgresDataBase = postgresDataBase;
             _mapper = mapper;
             _repository = repository;
+            _webPageGroupRepository = webPageGroupRepository;
         }
         /// <summary>
         /// 
@@ -45,6 +52,47 @@ namespace QPCore.Service
 
             return webModel;
         }
+
+        public List<WebPageGroupTree> GetHierarchyTree()
+        {
+            var tree = this._webPageGroupRepository.GetQuery()
+                .Select(p => new WebPageGroupTree
+                {
+                    Id = p.Id,
+                    GroupName = p.Name,
+                    WebPages = p.WebPages
+                        .OrderBy(wp => wp.Name)
+                        .Select(wp => new WebPageTreeItem
+                        {
+                            PageId = wp.Id,
+                            GroupId = wp.GroupId,
+                            PageName = wp.Name,
+                            CompositeElements = wp.CompositeWebElements // Composite Web Element
+                            .Where(ce => ce.ParentId == null)
+                            .Select(ce => new ElementTreeItem
+                            {
+                                ElementId = ce.Id,
+                                ElementName = ce.Name,
+                                PageId = ce.GroupId,
+                                GroupId = p.Id,
+                                IsComposite = true
+                            }),
+                            WebElements = wp.WebElements.Select(we => new ElementTreeItem
+                            {
+                                ElementId = we.Elementid,
+                                ElementName = we.Elementaliasname,
+                                PageId = we.Pageid,
+                                GroupId = p.Id,
+                                IsComposite = false
+                            })
+                        })
+                })
+                .OrderBy(p => p.GroupName)
+                .ToList();
+
+            return tree;
+        }
+
         /// <summary>
         /// 
         /// </summary>

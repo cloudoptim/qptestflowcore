@@ -29,6 +29,8 @@ namespace QPCore.Data.Enitites
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
+        public virtual WebPage WebPage { get; set; }
+
         public virtual ICollection<CompositeWebElement> CompositeWebElements { get; set; }
     }
 }
