@@ -115,14 +115,32 @@ namespace QPCore.Service
 
         private void SetStepColumnRowIdstoZero(TestFlow value)
         {
+            if (value == null)
+            {
+                value = new TestFlow();
+            }
+
+            if (value.Steps == null)
+            {
+                value.Steps = new List<TestFlowStep>();
+            }
+
             foreach (var step in value.Steps)
             {
                 step.TestFlowStepId = 0;
+                if (step.Columns == null)
+                {
+                    step.Columns = new List<TestFlowStepColumn>();
+                }
                 if (step.Columns != null)
                 {
                     foreach (var col in step.Columns)
                     {
                         col.ColumnId = 0;
+                        if (col.Rows == null)
+                        {
+                            col.Rows = new List<TestFlowStepRow>();
+                        }
                         foreach (var row in col.Rows)
                         {
                             row.RowId = 0;
