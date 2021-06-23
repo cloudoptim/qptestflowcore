@@ -33,9 +33,9 @@ namespace QPCore.Controllers
         {
             _webElementService = webElementService;
         }
-        // GET: api/<WebModelController
+        // GET: api/ElementTree
         /// <summary>
-        /// 
+        /// Obsolete: We should change to new endpoint api/webelement/webelementtree
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -45,6 +45,17 @@ namespace QPCore.Controllers
             return _webElementService.GetWebElementTree();
         }
 
+        /// <summary>
+        /// Get web element hierarchy tree
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("webelementtree")]
+        public ActionResult<IEnumerable<WebPageGroupTree>> GetHierachyTree()
+        {
+            var treeView = _webElementService.GetHierarchyTree();
+            return Ok(treeView);
+        }
+        
         //// GET api/<WebModelController>/5
         /// <summary>
         /// returns webElement

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210620083936_add unique constrain")]
+    partial class adduniqueconstrain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,7 +455,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 20, 18, 36, 42, 37, DateTimeKind.Local).AddTicks(7340),
+                            CreatedDate = new DateTime(2021, 6, 20, 15, 39, 35, 645, DateTimeKind.Local).AddTicks(8080),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1390,8 +1392,6 @@ namespace QPCore.Migrations
                     b.HasKey("Elementid")
                         .HasName("elementid");
 
-                    b.HasIndex("Pageid");
-
                     b.ToTable("WebElement");
                 });
 
@@ -1915,18 +1915,6 @@ namespace QPCore.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.WebElement", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.WebPage", "WebPage")
-                        .WithMany("WebElements")
-                        .HasForeignKey("Pageid")
-                        .HasConstraintName("fk_webpage_webelement_webpageid_pageid")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("WebPage");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.WebModelGroup", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.WebModel", "Model")
@@ -2087,8 +2075,6 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.WebPage", b =>
                 {
                     b.Navigation("CompositeWebElements");
-
-                    b.Navigation("WebElements");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.WebPageGroup", b =>

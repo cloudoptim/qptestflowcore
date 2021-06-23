@@ -17,6 +17,8 @@ namespace QPCore.Data
 
         Task<TEntity> UpdateAsync(TEntity entity);
 
+        Task UpdateRangeAsync(List<TEntity> entities);
+
         Task DeleteAsync(int id);
 
         void ExecuteNonQuery(string query);
@@ -34,6 +36,8 @@ namespace QPCore.Data
         Task AddRangeAsync(List<TEntity> entities);
 
         Task<TEntity> UpdateAsync(TEntity entity);
+
+        Task UpdateRangeAsync(List<TEntity> entities);
 
         Task DeleteAsync(int id);
 

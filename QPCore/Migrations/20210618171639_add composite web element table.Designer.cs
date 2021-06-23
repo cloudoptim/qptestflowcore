@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210618171639_add composite web element table")]
+    partial class addcompositewebelementtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,6 +200,7 @@ namespace QPCore.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<string>("Command")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("command");
@@ -209,10 +212,6 @@ namespace QPCore.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_date");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer")
-                        .HasColumnName("page_id");
 
                     b.Property<int>("Index")
                         .HasColumnType("integer")
@@ -227,6 +226,10 @@ namespace QPCore.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("element_alias_name");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("page_id");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("integer")
@@ -247,13 +250,11 @@ namespace QPCore.Migrations
                     b.HasKey("Id")
                         .HasName("pk_compositewebelement_id");
 
+                    b.HasIndex("PageId");
+
                     b.HasIndex("ParentId");
 
                     b.HasIndex("WebElementId");
-
-                    b.HasIndex("GroupId", "ParentId", "WebElementId", "Command")
-                        .IsUnique()
-                        .HasDatabaseName("unique_compositewebelement_pageid_parentid_webelementid_command");
 
                     b.ToTable("CompositeWebElements");
                 });
@@ -453,7 +454,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 20, 18, 36, 42, 37, DateTimeKind.Local).AddTicks(7340),
+                            CreatedDate = new DateTime(2021, 6, 19, 0, 16, 37, 648, DateTimeKind.Local).AddTicks(1160),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1390,8 +1391,6 @@ namespace QPCore.Migrations
                     b.HasKey("Elementid")
                         .HasName("elementid");
 
-                    b.HasIndex("Pageid");
-
                     b.ToTable("WebElement");
                 });
 
@@ -1632,7 +1631,7 @@ namespace QPCore.Migrations
                 {
                     b.HasOne("QPCore.Data.Enitites.WebPage", "WebPage")
                         .WithMany("CompositeWebElements")
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("PageId")
                         .HasConstraintName("fk_webpage_compositewebelement_id_pageid")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
@@ -1641,7 +1640,7 @@ namespace QPCore.Migrations
                         .WithMany("Childs")
                         .HasForeignKey("ParentId")
                         .HasConstraintName("fk_self_compositewebelement_id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("QPCore.Data.Enitites.WebElement", "WebElement")
                         .WithMany("CompositeWebElements")
@@ -1915,18 +1914,6 @@ namespace QPCore.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.WebElement", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.WebPage", "WebPage")
-                        .WithMany("WebElements")
-                        .HasForeignKey("Pageid")
-                        .HasConstraintName("fk_webpage_webelement_webpageid_pageid")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("WebPage");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.WebModelGroup", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.WebModel", "Model")
@@ -2087,8 +2074,6 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.WebPage", b =>
                 {
                     b.Navigation("CompositeWebElements");
-
-                    b.Navigation("WebElements");
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.WebPageGroup", b =>

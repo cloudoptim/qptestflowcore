@@ -1,0 +1,34 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+namespace QPCore.Model.CompositeWebElements
+{
+    public class CompositeWebElementResponse
+    {     
+        public CompositeWebElementResponse()
+        {
+            this.Childs = new List<ChildCompositeWebElementResponse>();
+        }
+
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        [JsonPropertyName("pageId")]
+        public int GroupId { get; set; }
+        public string PageName { get; set; }
+
+        [JsonPropertyName("groupId")]
+        public int WebPageGroupId { get; set; }
+
+        [JsonPropertyName("groupName")]
+        public string WebPageGroupName { get; set; }
+
+        public string Command { get; set; }
+
+        public int? ParentId { get; set; }
+
+        public List<ChildCompositeWebElementResponse> Childs {get ; set;}
+    }
+}

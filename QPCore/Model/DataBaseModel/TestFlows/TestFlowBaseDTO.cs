@@ -20,6 +20,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public int? LockedBy { get; set; }
 
         [MaxLength(50)]
+        [RegularExpression("Draft|Ready|Template|Active")]
         public string TestFlowStatus { get; set; }
 
         public int AssignedTo { get; set; }
