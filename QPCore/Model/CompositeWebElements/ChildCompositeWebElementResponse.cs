@@ -6,5 +6,8 @@ namespace QPCore.Model.CompositeWebElements
     {
         [JsonPropertyName("pageId")]
         public int GroupId { get; set; }
+
+        [JsonPropertyName("elementAliasName")]
+        public string Name { get; set; }
     }
 }
