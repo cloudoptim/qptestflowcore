@@ -314,7 +314,7 @@ namespace QPCore.Service
                 item.Elementparentid = element.pageid;
                 item.Applicationsection = element.applicationsection ?? string.Empty;
                 item.Value = element.value ?? string.Empty;
-                item.IValue = element.value ?? string.Empty;
+                item.IValue = element.ivalue ?? string.Empty;
                 item.UpdatedBy = userId;
                 item.UpdatedDate = DateTime.Now;
 
