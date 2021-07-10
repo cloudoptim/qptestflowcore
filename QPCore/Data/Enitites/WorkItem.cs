@@ -12,7 +12,11 @@ namespace QPCore.Data.Enitites
 
         public int AzureFeatureId { get; set; }
 
-        public string FeatureName { get; set; }
+        public string AzureFeatureName { get; set; }
+
+        public int WorkItemTypeId { get; set; }
+
+        public virtual WorkItemType WorkItemType { get; set; }
 
         public virtual ICollection<WorkItemTestcaseAssoc> WorkItemTestcaseAssocs { get; set; }
     }
