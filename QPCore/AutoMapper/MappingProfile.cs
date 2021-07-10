@@ -21,6 +21,7 @@ using QPCore.Model.WebPages;
 using QPCore.Model.CompositeWebElements;
 using QPCore.Model.WorkItemTypes;
 using QPCore.Model.WorkItems;
+using QPCore.Model.WorkItemTestcaseAssoc;
 
 namespace QPCore.AutoMapper
 {
@@ -134,6 +135,13 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.WorkItemTypeName, s => s.MapFrom(p => p.WorkItemType.Name));
             CreateMap<CreateWorkItemRequest, DB.WorkItem>();
             CreateMap<EditWorkItemRequest, DB.WorkItem>();
+
+            // WorkItemTestcaseAssoc
+            CreateMap<DB.WorkItemTestcaseAssoc, WorkItemTestcaseAssocResponse>()
+                .ForMember(d => d.WorkItemName, s => s.MapFrom(p => p.WorkItem.Name))
+                .ForMember(d => d.TestcaseName, s => s.MapFrom(p => p.Testcase.TestFlowName));
+            CreateMap<CreateWorkItemTestcaseAssocRequest, DB.WorkItemTestcaseAssoc>();
+            CreateMap<EditWorkItemTestcaseAssocRequest, DB.WorkItemTestcaseAssoc>();
         }
     }
 }

@@ -91,6 +91,7 @@ namespace QPCore
             services.AddTransient(typeof(ICompositeWebElementService), typeof(CompositeWebElementService));
             services.AddTransient<IWorkItemTypeService,WorkItemTypeService>();
             services.AddTransient<IWorkItemService,WorkItemService>();
+            services.AddTransient<IWorkItemTestcaseAssocService,WorkItemTestcaseAssocService>();
             
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
