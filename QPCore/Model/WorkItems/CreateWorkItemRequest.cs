@@ -15,6 +15,9 @@ namespace QPCore.Model.WorkItems
 
         public int AzureFeatureId { get; set; }
 
+        [Required]
+        public int WorkItemTypeId { get; set; }
+
         [MaxLength(500)]
         public string AzureFeatureName { get; set; }
     }

@@ -20,6 +20,7 @@ using QPCore.Model.WebPageGroups;
 using QPCore.Model.WebPages;
 using QPCore.Model.CompositeWebElements;
 using QPCore.Model.WorkItemTypes;
+using QPCore.Model.WorkItems;
 
 namespace QPCore.AutoMapper
 {
@@ -127,6 +128,12 @@ namespace QPCore.AutoMapper
             CreateMap<DB.WorkItemType, WorkItemTypeResponse>();
             CreateMap<CreateWorkItemTypeRequest, DB.WorkItemType>();
             CreateMap<EditWorkItemTypeRequest, DB.WorkItemType>();
+
+            // WorkItem
+            CreateMap<DB.WorkItem, WorkItemResponse>()
+                .ForMember(d => d.WorkItemTypeName, s => s.MapFrom(p => p.WorkItemType.Name));
+            CreateMap<CreateWorkItemRequest, DB.WorkItem>();
+            CreateMap<EditWorkItemRequest, DB.WorkItem>();
         }
     }
 }
