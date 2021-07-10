@@ -22,6 +22,7 @@ using QPCore.Model.CompositeWebElements;
 using QPCore.Model.WorkItemTypes;
 using QPCore.Model.WorkItems;
 using QPCore.Model.WorkItemTestcaseAssoc;
+using QPCore.Model.TestFlows;
 
 namespace QPCore.AutoMapper
 {
@@ -34,6 +35,8 @@ namespace QPCore.AutoMapper
 
             CreateMap<TestFlowDTO, TestFlow>()
                 .ForMember(d => d.Steps, opt => opt.MapFrom(s => s.UngroupStep()));
+
+            CreateMap<DB.TestFlow, TestFlowResponse>();
 
             CreateMap<DB.OrgUser, AuthenticateResponse>();
 

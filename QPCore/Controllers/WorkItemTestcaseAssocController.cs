@@ -8,6 +8,7 @@ using QPCore.Model.Common;
 using Microsoft.AspNetCore.Authorization;
 using QPCore.Model.WorkItems;
 using QPCore.Service;
+using QPCore.Model.DataBaseModel.TestFlows;
 
 namespace QPCore.Controllers
 {
@@ -48,6 +49,15 @@ namespace QPCore.Controllers
                 });
             }
 
+            var isExistedAssignment = _workItemTestcaseService.CheckUniqueAssignment(request.TestcaseId, request.WorkItemId);
+            if (isExistedAssignment)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_ASSIGNMENT_STRING, request.TestcaseId, request.WorkItemId)
+                });
+            }
+
             var result = await _workItemTestcaseService.CreateAsync(request, Account.UserId);
             return Ok(result);
         }
@@ -82,6 +92,15 @@ namespace QPCore.Controllers
                 });
             }
 
+            var isExistedAssignment = _workItemTestcaseService.CheckUniqueAssignment(request.TestcaseId, request.WorkItemId);
+            if (isExistedAssignment)
+            {
+                return BadRequest(new BadRequestResponse()
+                {
+                    Message = string.Format(CommonMessageList.EXISTED_ASSIGNMENT_STRING, request.TestcaseId, request.WorkItemId)
+                });
+            }
+
             var result = await _workItemTestcaseService.EditAsync(request, Account.UserId);
             return Ok(result);
         }
@@ -91,6 +110,22 @@ namespace QPCore.Controllers
         {
             var result = _workItemTestcaseService.GetAll();
             result = result.OrderByDescending(p => p.Id).ToList();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("testcase/{testcaseId:int:min(1)}")]
+        public ActionResult<List<WorkItemResponse>> GetWorkItemsByTestcaseId(int testcaseId)
+        {
+            var result = _workItemTestcaseService.GetWorkItemsByTestcaseId(testcaseId);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("workitem/{workItemId:int:min(1)}")]
+        public ActionResult<List<TestFlowItemResponse>> GetTestcasesByWorkItemId(int workItemId)
+        {
+            var result = _workItemTestcaseService.GetTestcaseByWorkItemId(workItemId);
             return Ok(result);
         }
 
