@@ -42,6 +42,12 @@ namespace QPCore.Data.Seeds
                 Name = "Issue",
                 CreatedBy = 1,
                 CreatedDate = createdDate
+            },new WorkItemType()
+            {
+                Id = 6,
+                Name = "Feature",
+                CreatedBy = 1,
+                CreatedDate = createdDate
             });
         }
     }
