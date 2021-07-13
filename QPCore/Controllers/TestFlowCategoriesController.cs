@@ -147,6 +147,21 @@ namespace QPCore.Controllers
         }
 
         /// <summary>
+        /// Get category by type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="keyword"></param>
+        /// <param name="skip"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        [HttpGet("search")]
+        public ActionResult<List<TestFlowCategoryResponse>> GetByType(string type, string keyword, int skip = 0, int limit = 20)
+        {
+            var dataItems = _testFlowCategoryService.GetByType(type, keyword, skip, limit);
+            return Ok(dataItems);
+        }
+
+        /// <summary>
         /// Delete category
         /// </summary>
         /// <param name="categoryId"></param>
