@@ -66,6 +66,18 @@ namespace QPCore.Controllers
         }
 
         /// <summary>
+        /// Multiple assign categories to testcases
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("bulk")]
+        public async Task<ActionResult> Bulk(BulkCreateRequest request)
+        {
+            await _testFlowCategoryAssocService.BulkAsync(request);
+            return Ok();
+        }
+
+        /// <summary>
         /// Delete association
         /// </summary>
         /// <param name="testFlowCategoryAssocId"></param>
