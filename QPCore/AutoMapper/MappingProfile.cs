@@ -95,7 +95,8 @@ namespace QPCore.AutoMapper
             // TestFlow Category Association
             CreateMap<DB.TestFlowCategoryAssoc, TestFlowCategoryAssocResponse>()
                 .ForMember(d => d.CategoryName, s => s.MapFrom(p => p.Category.CategoryName))
-                .ForMember(d => d.TestFlowName, s => s.MapFrom(p => p.TestFlow.TestFlowName));
+                .ForMember(d => d.TestFlowName, s => s.MapFrom(p => p.TestFlow.TestFlowName))
+                .ForMember(d => d.Type, s => s.MapFrom(p => p.Category.Type));
             
             CreateMap<CreateTestFlowCategoryAssocRequest, DB.TestFlowCategoryAssoc>();
 

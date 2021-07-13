@@ -42,6 +42,13 @@ namespace QPCore.Service.Interfaces
         Task<TestFlowCategoryAssocResponse> AddAsync(CreateTestFlowCategoryAssocRequest model);
 
         /// <summary>
+        /// Bulk insert for category
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task BulkAsync(BulkCreateRequest request);
+
+        /// <summary>
         /// Check existed id
         /// </summary>
         /// <param name="associateId"></param>

@@ -13,12 +13,15 @@ namespace QPCore.Service
     public class TestFlowCategoryAssocService : ITestFlowCategoryAssocService
     {
         private readonly IRepository<TestFlowCategoryAssoc> _repository;
+        private readonly IRepository<TestFlow> _testFlowRepository;
         private readonly IMapper _mapper;
 
         public TestFlowCategoryAssocService(IRepository<TestFlowCategoryAssoc> repository,
+            IRepository<TestFlow> testFlowRepository,
             IMapper mapper)
         {
             _repository = repository;
+            _testFlowRepository = testFlowRepository;
             _mapper = mapper;
         }
 
@@ -67,7 +70,7 @@ namespace QPCore.Service
             var query = _repository.GetQuery()
                 .Where(p => p.TestFlowCatAssocId == associateId)
                 .ProjectTo<TestFlowCategoryAssocResponse>(_mapper.ConfigurationProvider)
-                .FirstOrDefault ();
+                .FirstOrDefault();
             return query;
         }
 
@@ -80,6 +83,38 @@ namespace QPCore.Service
                 .ToList();
 
             return query;
+        }
+
+        public async Task BulkAsync(BulkCreateRequest request)
+        {
+            var testcaseList = new List<TestFlow>();
+            foreach (var testFlowId in request.TestcaseIdList)
+            {
+                var testcase = _testFlowRepository.GetQuery()
+                    .FirstOrDefault(p => p.TestFlowId == testFlowId);
+
+                if (testcase != null)
+                {
+                    foreach (var categoryId in request.CategoryIdList)
+                    {
+                        var checkEixsted = _repository.GetQuery()
+                            .Any(p => p.TestFlowId == testFlowId && p.CategoryId == categoryId);
+                        if (!checkEixsted)
+                        {
+                            testcase.TestFlowCategoryAssocs.Add(new TestFlowCategoryAssoc()
+                            {
+                                TestFlowId = testFlowId,
+                                CategoryId = categoryId
+                            });
+                        }
+
+                    }
+
+                    testcaseList.Add(testcase);
+                }
+            }
+
+            await this._testFlowRepository.UpdateRangeAsync(testcaseList);
         }
     }
 }
