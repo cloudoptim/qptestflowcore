@@ -62,13 +62,13 @@ namespace QPCore.Service
             dataItem.UpdatedDate = DateTime.Now;
 
             var dateItem = await _repository.AddAsync(dataItem);
-            
+
             return GetById(dataItem.CategoryId);
         }
 
         public async Task Delete(int categoryId)
         {
-           await _repository.DeleteAsync(categoryId);
+            await _repository.DeleteAsync(categoryId);
         }
 
         public List<TestFlowCategoryResponse> GetAll()
@@ -117,6 +117,30 @@ namespace QPCore.Service
             }
 
             return null;
+        }
+
+        public PaginationResponse<TestFlowCategoryResponse> GetByType(string type, string keyword, int skip, int limit)
+        {
+            keyword = string.IsNullOrWhiteSpace(keyword)? string.Empty : keyword.Trim().ToLower();
+
+            var query = _repository.GetQuery()
+                    .Where(p => p.Type == type && (string.IsNullOrWhiteSpace(keyword) || p.CategoryName.ToLower().Contains(keyword)))
+                    .OrderByDescending(p => p.CategoryName)
+                    .ProjectTo<TestFlowCategoryResponse>(_mapper.ConfigurationProvider);
+            
+            var total = query.Count();
+            var items = query
+                    .Skip(skip)
+                    .Take(limit)
+                    .ToList();
+
+            var result = new PaginationResponse<TestFlowCategoryResponse>()
+            {
+                Items = items,
+                Total = total
+            };
+
+            return result;
         }
     }
 }

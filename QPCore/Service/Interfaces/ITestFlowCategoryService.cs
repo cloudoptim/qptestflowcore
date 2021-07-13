@@ -20,6 +20,15 @@ namespace QPCore.Service.Interfaces
         /// <returns></returns>
         List<TestFlowCategoryResponse> GetByClientId(int clientId);
 
+        /// Get category by type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="keyword"></param>
+        /// <param name="skip"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        PaginationResponse<TestFlowCategoryResponse> GetByType(string type, string keyword, int skip, int limit);
+
         /// <summary>
         /// Get category by id
         /// </summary>
