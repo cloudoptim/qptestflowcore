@@ -1271,6 +1271,8 @@ namespace QPCore.Data
             modelBuilder.HasSequence("refreshtokenseq").HasMin(0);
 
             OnModelCreatingPartial(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(QPContext).Assembly);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

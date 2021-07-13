@@ -89,6 +89,9 @@ namespace QPCore
             services.AddTransient(typeof(IWebPageGroupService), typeof(WebPageGroupService));
             services.AddTransient(typeof(IWebPageService), typeof(WebPageService));
             services.AddTransient(typeof(ICompositeWebElementService), typeof(CompositeWebElementService));
+            services.AddTransient<IWorkItemTypeService,WorkItemTypeService>();
+            services.AddTransient<IWorkItemService,WorkItemService>();
+            services.AddTransient<IWorkItemTestcaseAssocService,WorkItemTestcaseAssocService>();
             
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
@@ -176,8 +179,7 @@ namespace QPCore
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                //c.RoutePrefix = string.Empty;
-
+                c.RoutePrefix = string.Empty;
             });
 
             if (env.IsDevelopment())

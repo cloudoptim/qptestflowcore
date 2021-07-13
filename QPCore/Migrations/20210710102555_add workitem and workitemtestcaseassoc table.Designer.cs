@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QPCore.Data;
@@ -10,9 +11,10 @@ using QPCore.Data;
 namespace QPCore.Migrations
 {
     [DbContext(typeof(QPContext))]
-    partial class QPContextModelSnapshot : ModelSnapshot
+    [Migration("20210710102555_add workitem and workitemtestcaseassoc table")]
+    partial class addworkitemandworkitemtestcaseassoctable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,7 +455,7 @@ namespace QPCore.Migrations
                         {
                             OrgId = 1,
                             CreatedBy = 0,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2021, 7, 10, 17, 25, 54, 663, DateTimeKind.Local).AddTicks(5930),
                             OrgName = "Default Organization"
                         });
                 });
@@ -1600,10 +1602,6 @@ namespace QPCore.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("azure_feature_id");
 
-                    b.Property<string>("AzureFeatureName")
-                        .HasColumnType("text")
-                        .HasColumnName("azure_feature_name");
-
                     b.Property<int>("AzureWorkItemId")
                         .HasColumnType("integer")
                         .HasColumnName("azure_workitem_id");
@@ -1615,6 +1613,10 @@ namespace QPCore.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_date");
+
+                    b.Property<string>("FeatureName")
+                        .HasColumnType("text")
+                        .HasColumnName("azure_feature_name");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1630,14 +1632,8 @@ namespace QPCore.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_date");
 
-                    b.Property<int>("WorkItemTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("work_item_type_id");
-
                     b.HasKey("Id")
                         .HasName("pk_workitem_id");
-
-                    b.HasIndex("WorkItemTypeId");
 
                     b.ToTable("WorkItems");
                 });
@@ -1683,90 +1679,6 @@ namespace QPCore.Migrations
                     b.HasIndex("WorkItemId");
 
                     b.ToTable("WorkItemTestcaseAssocs");
-                });
-
-            modelBuilder.Entity("QPCore.Data.Enitites.WorkItemType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("updated_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_workitemtype_id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("uq_workiten_type_name");
-
-                    b.ToTable("WorkItemTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Story"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Product backlog item"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Task"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bug"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Issue"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedBy = 1,
-                            CreatedDate = new DateTime(2021, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Feature"
-                        });
                 });
 
             modelBuilder.Entity("QPCore.Data.Enitites.AppUser", b =>
@@ -2143,18 +2055,6 @@ namespace QPCore.Migrations
                     b.Navigation("WebPageGroup");
                 });
 
-            modelBuilder.Entity("QPCore.Data.Enitites.WorkItem", b =>
-                {
-                    b.HasOne("QPCore.Data.Enitites.WorkItemType", "WorkItemType")
-                        .WithMany("WorkItems")
-                        .HasForeignKey("WorkItemTypeId")
-                        .HasConstraintName("fk_workitem_workitemtype_workitemtypeid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("WorkItemType");
-                });
-
             modelBuilder.Entity("QPCore.Data.Enitites.WorkItemTestcaseAssoc", b =>
                 {
                     b.HasOne("QPCore.Data.Enitites.TestFlow", "Testcase")
@@ -2316,11 +2216,6 @@ namespace QPCore.Migrations
             modelBuilder.Entity("QPCore.Data.Enitites.WorkItem", b =>
                 {
                     b.Navigation("WorkItemTestcaseAssocs");
-                });
-
-            modelBuilder.Entity("QPCore.Data.Enitites.WorkItemType", b =>
-                {
-                    b.Navigation("WorkItems");
                 });
 #pragma warning restore 612, 618
         }

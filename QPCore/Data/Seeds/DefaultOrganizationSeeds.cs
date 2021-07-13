@@ -12,10 +12,11 @@ namespace QPCore.Data.Seeds
     {
         public static void Seed(ModelBuilder modelBuilder)
         {
+            var createdDate = new DateTime(2021, 06, 10);
             modelBuilder.Entity<Organization>().HasData(new Enitites.Organization()
             {
                 OrgId = GlobalConstants.DEFAUTL_ORGANIZATION_ID,
-                CreatedDate = DateTime.Now,
+                CreatedDate = createdDate,
                 OrgName = "Default Organization",
             });
         }
