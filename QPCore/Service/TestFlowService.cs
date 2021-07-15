@@ -5,6 +5,7 @@ using QPCore.DAO;
 using QPCore.Data;
 using QPCore.Model.Common;
 using QPCore.Model.DataBaseModel.TestFlows;
+using QPCore.Model.TestFlowCategories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +41,14 @@ namespace QPCore.Service
             return Commands;
         }
 
-        public List<TestFlowItemResponse> GetTestFlowItems()
+        public List<TestFlowItemResponse> GetTestFlowItems(string keyword, int clientId)
         {
+            keyword = string.IsNullOrWhiteSpace(keyword) ? string.Empty : keyword.Trim().ToLower();
             var query = _testFlowRepository.GetQuery()
+                 .Where(p =>
+                        (string.IsNullOrEmpty(keyword) || p.TestFlowName.ToLower().Contains(keyword)) &&
+                        p.ClientId == clientId
+                    )
                  .Join(_orgUserRepository.GetQuery(), l => l.LastUpdatedUserId, r => r.UserId, (l, r) => new TestFlowItemResponse()
                  {
                      TestFlowId = l.TestFlowId,
@@ -56,10 +62,17 @@ namespace QPCore.Service
                      AssignedDatetTime = l.AssignedDatetTime,
                      AssignedTo = l.AssignedTo,
                      ClientId = l.ClientId,
+                     AreaId = l.AreaId,
+                     AreaName = l.Area.CategoryName,
                      LastUpdatedUserId = l.LastUpdatedUserId.Value,
                      LastUpdatedDateTime = l.LastUpdatedDateTime.HasValue ? l.LastUpdatedDateTime.Value.ToString("yyyy-MM-dd hh:mm:ss") : null,
                      SourceFeatureId = l.SourceFeatureId ?? 1,
-                     SourceFeatureName = l.SourceFeatureName
+                     SourceFeatureName = l.SourceFeatureName,
+                     Categories = l.TestFlowCategoryAssocs.Select(s => new TestFlowCategoryItem()
+                     {
+                        CategoryId = s.CategoryId,
+                        CategoryName = s.Category.CategoryName
+                     }).ToList()
                  })
                  .OrderByDescending(p => p.TestFlowId)
                  .ToList();
@@ -227,7 +240,7 @@ namespace QPCore.Service
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id && 
+                .FirstOrDefault(p => p.TestFlowId == id &&
                         (p.LockedBy == userId || p.Islocked == false)
                     );
 

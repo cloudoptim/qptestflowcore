@@ -23,11 +23,16 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         [RegularExpression("Draft|Ready|Template|Active")]
         public string TestFlowStatus { get; set; }
 
+        public int? AreaId { get; set; }
+
+        public string AreaName { get; set; }
+
         public int AssignedTo { get; set; }
         
         public string AssignedDatetTime { get; set; }
         
         public int ClientId { get; set; }
+        public string ApplicationName { get; set; }
         
         public int LastUpdatedUserId { get; set; }
         
@@ -41,5 +46,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public bool Islocked { get; set; }
         
         public bool IsActive { get; set; }
+
+        public string Categories { get; set; }
     }
 }

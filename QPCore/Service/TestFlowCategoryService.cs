@@ -40,10 +40,10 @@ namespace QPCore.Service
             return query;
         }
 
-        public CheckUniqueResponse CheckUnique(string name, int? categoryId = null)
+        public CheckUniqueResponse CheckUnique(string name, string type, int? categoryId = null)
         {
             var query = _repository.GetQuery()
-                .Any(p => p.CategoryName == name &&
+                .Any(p => p.CategoryName == name && p.Type == type &&
                     (!categoryId.HasValue || p.CategoryId != categoryId.Value));
 
             return new CheckUniqueResponse()

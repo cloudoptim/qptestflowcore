@@ -40,7 +40,7 @@ namespace QPCore.Controllers
                 });
             }
 
-            var isUnique = _testFlowCategoryService.CheckUnique(model.CategoryName);
+            var isUnique = _testFlowCategoryService.CheckUnique(model.CategoryName, model.Type);
             if (!isUnique.IsUnique)
             {
                 return BadRequest(new BadRequestResponse()
@@ -79,7 +79,7 @@ namespace QPCore.Controllers
                 });
             }
 
-            var isUnique = _testFlowCategoryService.CheckUnique(model.CategoryName, model.CategoryId);
+            var isUnique = _testFlowCategoryService.CheckUnique(model.CategoryName, model.Type, model.CategoryId);
             if (!isUnique.IsUnique)
             {
                 return BadRequest(new BadRequestResponse()

@@ -11,6 +11,7 @@ namespace QPCore.Data.Enitites
         public TestFlowCategory()
         {
             TestFlowCategoryAssocs = new HashSet<TestFlowCategoryAssoc>();
+            TestFlows = new HashSet<TestFlow>();
         }
 
         public int CategoryId { get; set; }
@@ -24,5 +25,6 @@ namespace QPCore.Data.Enitites
         public DateTime UpdatedDate { get; set; }
         public virtual Application Client { get; set; }
         public virtual ICollection<TestFlowCategoryAssoc> TestFlowCategoryAssocs { get; set; }
+        public virtual ICollection<TestFlow> TestFlows { get; set; }
     }
 }

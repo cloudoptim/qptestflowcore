@@ -564,11 +564,19 @@ namespace QPCore.Data
 
                 entity.Property(e => e.TestFlowStatus).HasMaxLength(50);
 
+                entity.Property(e => e.AreaId);
+                    
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.TestFlows)
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("TestFlowClient");
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.TestFlows)
+                    .HasForeignKey(p => p.AreaId)
+                    .HasConstraintName("fk_testflow_testflowcategory_area_id")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<TestFlowCategory>(entity =>

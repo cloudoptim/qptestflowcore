@@ -30,9 +30,9 @@ namespace QPCore.Controllers
         }
         // GET: api/<TestFlowController>
         [HttpGet]
-        public List<TestFlowItemResponse> Get()
+        public List<TestFlowItemResponse> Get(string keyword = "", int clientId = 1)
         {
-            return testFlowService.GetTestFlowItems();
+            return testFlowService.GetTestFlowItems(keyword, clientId);
         }
 
         // GET api/<TestFlowController>/5
