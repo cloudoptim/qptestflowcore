@@ -1,21 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace QPCore.Model.Integrations
 {
-    public class CreateIntegrationRequest
+    public class EditIntegrationRequest
     {
-        public CreateIntegrationRequest()
-        {
-            this.IsActive = true;
-        }
-        public bool IsActive { get; internal set; } 
-
         [Required]
-        public int SourceId { get; set; }
-
-        [JsonIgnore]
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(5000)]
@@ -29,7 +19,5 @@ namespace QPCore.Model.Integrations
 
         [MaxLength(300)]
         public string Url { get; set; }
-
-        
     }
 }

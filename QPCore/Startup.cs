@@ -27,6 +27,7 @@ using QPCore.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace QPCore
 {
@@ -69,6 +70,8 @@ namespace QPCore
             services.AddSingleton<IAADatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<AADatabaseSettings>>().Value);
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddDbContext<QPContext>(options =>
                 options.UseNpgsql(Configuration.GetValue<string>("AADatabaseSettings:ConnectionString"), o => o.SetPostgresVersion(9, 6)));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
@@ -91,6 +94,7 @@ namespace QPCore
             services.AddTransient<IWorkItemTypeService,WorkItemTypeService>();
             services.AddTransient<IWorkItemService,WorkItemService>();
             services.AddTransient<IWorkItemTestcaseAssocService,WorkItemTestcaseAssocService>();
+            services.AddTransient<IIntegrationService, IntegrationService>();
             
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(Startup));
