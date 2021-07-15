@@ -30,6 +30,9 @@ namespace QPCore.Data.Enitites
         public bool? Islocked { get; set; }
         public bool? IsActive { get; set; }
 
+        public int? AreaId { get; set; }
+
+        public virtual TestFlowCategory Area { get; set; }
         public virtual Application Client { get; set; }
         public virtual ICollection<TestFlowCategoryAssoc> TestFlowCategoryAssocs { get; set; }
         public virtual ICollection<TestFlowStep> TestFlowSteps { get; set; }

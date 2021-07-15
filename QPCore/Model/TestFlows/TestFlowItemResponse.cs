@@ -15,6 +15,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public int? AssignedTo { get; set; }
         public DateTime? AssignedDatetTime { get; set; }
         public int ClientId { get; set; }
+        public string ApplicationName { get; set; }
         public int LastUpdatedUserId { get; set; }
         public string LastUpdatedUser { get; set; }
         public string LastUpdatedDateTime { get; set; }
@@ -22,5 +23,7 @@ namespace QPCore.Model.DataBaseModel.TestFlows
         public int SourceFeatureId { get; set; }
         public bool Islocked { get; set; }
         public bool IsActive { get; set; }
+        public int? AreaId { get; set; }
+        public string AreaName { get; set; }
     }
 }

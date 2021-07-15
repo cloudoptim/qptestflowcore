@@ -56,6 +56,8 @@ namespace QPCore.Service
                      AssignedDatetTime = l.AssignedDatetTime,
                      AssignedTo = l.AssignedTo,
                      ClientId = l.ClientId,
+                     AreaId = l.AreaId,
+                     AreaName = l.Area.CategoryName,
                      LastUpdatedUserId = l.LastUpdatedUserId.Value,
                      LastUpdatedDateTime = l.LastUpdatedDateTime.HasValue ? l.LastUpdatedDateTime.Value.ToString("yyyy-MM-dd hh:mm:ss") : null,
                      SourceFeatureId = l.SourceFeatureId ?? 1,
@@ -227,7 +229,7 @@ namespace QPCore.Service
         {
             Data.Enitites.TestFlow result = null;
             var item = _testFlowRepository.GetQuery()
-                .FirstOrDefault(p => p.TestFlowId == id && 
+                .FirstOrDefault(p => p.TestFlowId == id &&
                         (p.LockedBy == userId || p.Islocked == false)
                     );
 

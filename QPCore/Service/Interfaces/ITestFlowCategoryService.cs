@@ -54,9 +54,10 @@ namespace QPCore.Service.Interfaces
         /// Check unique name
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="type"></param>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        CheckUniqueResponse CheckUnique(string name, int? categoryId = null);
+        CheckUniqueResponse CheckUnique(string name, string type, int? categoryId = null);
 
         /// <summary>
         /// Create testflow category
