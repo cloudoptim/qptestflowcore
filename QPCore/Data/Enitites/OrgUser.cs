@@ -14,6 +14,7 @@ namespace QPCore.Data.Enitites
             this.AppUsers = new HashSet<AppUser>();
             this.UserRoles = new HashSet<UserRole>();
             this.TestPlans = new HashSet<TestPlan>();
+            this.Integrations = new HashSet<Integration>();
         }
         public int UserId { get; set; }
         public int OrgId { get; set; }
@@ -39,5 +40,6 @@ namespace QPCore.Data.Enitites
         public virtual ICollection<AppUser> AppUsers { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<TestPlan> TestPlans { get; set; }
+        public virtual ICollection<Integration> Integrations { get; set; }
     }
 }

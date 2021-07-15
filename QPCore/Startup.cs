@@ -58,8 +58,7 @@ namespace QPCore
 
             //                       });
             // });
-             services.AddCors();
-
+            services.AddCors();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
@@ -187,7 +186,7 @@ namespace QPCore
                 app.UseDeveloperExceptionPage();
             }
 
-
+            app.UseStaticFiles();
             app.UseRouting();
             //app.UseCors(MyAllowSpecificOrigins);
             

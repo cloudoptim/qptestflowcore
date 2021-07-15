@@ -14,6 +14,7 @@ namespace QPCore.Data
             DefaultOrganizationSeeds.Seed(modelBuilder);
             DefaultRoleSeeds.Seed(modelBuilder);
             DefaultWorkItemTypeSeed.Seed(modelBuilder);
+            DefaultIntegrationSourceSeed.Seed(modelBuilder);
         }
     }
 }
