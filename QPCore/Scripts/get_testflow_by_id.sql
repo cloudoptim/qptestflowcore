@@ -21,8 +21,14 @@ from (
             t."Islocked",
             t."IsActive",
             t."AreaId",
-            c."CategoryName" as "AreaName",
-            public.gettestflowstep(t."TestFlowId") as "Steps"
+            c."CategoryName" As "AreaName",
+            public.gettestflowstep(t."TestFlowId") as "Steps",
+            (
+                select string_agg(tfc."CategoryName", ', ')
+                from public."TestFlowCategory" as tfc
+                    join public."TestFlowCategoryAssoc" as tfca on tfc."CategoryId" = tfca."CategoryId"
+                where tfca."TestFlowId" = ptestFlowId
+            ) AS "Categories"
         FROM public."TestFlow" t
             LEFT JOIN public."TestFlowCategory" c ON t."AreaId" = c."CategoryId"
             LEFT JOIN public."Application" a ON t."ClientId" = a."client_id"
