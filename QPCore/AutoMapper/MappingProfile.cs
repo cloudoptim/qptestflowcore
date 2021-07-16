@@ -23,6 +23,7 @@ using QPCore.Model.WorkItemTypes;
 using QPCore.Model.WorkItems;
 using QPCore.Model.WorkItemTestcaseAssoc;
 using QPCore.Model.TestFlows;
+using QPCore.Model.Integrations;
 
 namespace QPCore.AutoMapper
 {
@@ -144,6 +145,15 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.TestcaseName, s => s.MapFrom(p => p.Testcase.TestFlowName));
             CreateMap<CreateWorkItemTestcaseAssocRequest, DB.WorkItemTestcaseAssoc>();
             CreateMap<EditWorkItemTestcaseAssocRequest, DB.WorkItemTestcaseAssoc>();
+
+            // Integrations
+            CreateMap<DB.Integration, IntegrationResponse>()
+                .ForMember(d => d.SourceName, s => s.MapFrom(p => p.Source.Name))
+                .ForMember(d => d.Readme, s => s.MapFrom(p => p.Source.Readme))
+                .ForMember(d => d.Logo, s => s.MapFrom(p => p.Source.Logo));
+            
+            CreateMap<CreateIntegrationRequest, DB.Integration>();
+            CreateMap<EditIntegrationRequest, DB.Integration>();
         }
     }
 }
