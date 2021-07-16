@@ -49,6 +49,7 @@ namespace QPCore.Controllers
         public async Task<ActionResult<IntegrationResponse>> Create(CreateIntegrationRequest model)
         {
             model.UserId = this.Account.UserId;
+            model.IsActive = true;
             var result = await _integrationService.CreateAsync(model, Account.UserId);
             result.BindObsoluteLogoPath(_httpContextAccessor);
 
