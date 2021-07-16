@@ -7,10 +7,6 @@ namespace QPCore.Model.Integrations
         [Required]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(5000)]
-        public string Pat { get; set; }
-
         [MaxLength(128)]
         public string Organization { get; set; }
 

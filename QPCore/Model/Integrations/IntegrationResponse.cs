@@ -10,7 +10,6 @@ namespace QPCore.Model.Integrations
         public string Readme { get; set; }
         public string Logo { get; set; }
         public bool IsActive { get; set; }
-        public string Pat { get; set; }
         public string Organization { get; set; }
         public string Project { get; set; }
         public string Url { get; set; }

@@ -30,7 +30,6 @@ namespace QPCore.Service
                         SourceName = s.Source.Name,
                         Readme = s.Source.Readme,
                         SourceId = s.Source.Id,
-                        Pat = s.Integration == null ? string.Empty : s.Integration.Pat,
                         Project = s.Integration == null ? string.Empty : s.Integration.Project,
                         Organization = s.Integration == null ? string.Empty : s.Integration.Organization,
                         Url = s.Integration == null ? string.Empty : s.Integration.Url,
