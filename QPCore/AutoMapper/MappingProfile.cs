@@ -153,6 +153,7 @@ namespace QPCore.AutoMapper
                 .ForMember(d => d.Logo, s => s.MapFrom(p => p.Source.Logo));
             
             CreateMap<CreateIntegrationRequest, DB.Integration>();
+            CreateMap<EditIntegrationRequest, DB.Integration>();
         }
     }
 }

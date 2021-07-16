@@ -5,6 +5,7 @@ using QPCore.Data.Enitites;
 using QPCore.Model.Integrations;
 using QPCore.Service.Interfaces;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QPCore.Service
 {
@@ -36,6 +37,53 @@ namespace QPCore.Service
                         IsActive = s.Integration == null ? false : s.Integration.IsActive,
                     }).ToList();
             return query;
+        }
+
+        public override async Task<IntegrationResponse> EditAsync(EditIntegrationRequest entity, int userId)
+        {
+            var updateEntity = this.Repository.GetQuery().FirstOrDefault(p => p.Id == entity.Id);
+            if (updateEntity != null)
+            {
+                updateEntity.Organization = entity.Organization;
+                updateEntity.Project = entity.Project;
+                updateEntity.Url = entity.Url;
+                updateEntity.UpdatedBy = userId;
+                updateEntity.UpdatedDate = System.DateTime.Now;
+
+                var result = await this.Repository.UpdateAsync(updateEntity);
+            }
+            
+            return GetById(entity.Id);
+        }
+
+        public async Task<IntegrationResponse> EditPatAsync(EditPatRequest entity, int userId)
+        {
+            var updateEntity = this.Repository.GetQuery().FirstOrDefault(p => p.Id == entity.Id);
+            if (updateEntity != null)
+            {
+                updateEntity.Pat = entity.Pat;
+                updateEntity.UpdatedBy = userId;
+                updateEntity.UpdatedDate = System.DateTime.Now;
+
+                var result = await this.Repository.UpdateAsync(updateEntity);
+            }
+            
+            return GetById(entity.Id);
+        }
+
+        public async Task<IntegrationResponse> EditActivationAsync(EditActivateRequest entity, int userId)
+        {
+            var updateEntity = this.Repository.GetQuery().FirstOrDefault(p => p.Id == entity.Id);
+            if (updateEntity != null)
+            {
+                updateEntity.IsActive = entity.IsActive;
+                updateEntity.UpdatedBy = userId;
+                updateEntity.UpdatedDate = System.DateTime.Now;
+
+                var result = await this.Repository.UpdateAsync(updateEntity);
+            }
+            
+            return GetById(entity.Id);
         }
     }
 }

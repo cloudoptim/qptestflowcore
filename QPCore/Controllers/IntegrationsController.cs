@@ -55,6 +55,33 @@ namespace QPCore.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        public async Task<ActionResult<IntegrationResponse>> Update(EditIntegrationRequest model)
+        {
+            var result = await _integrationService.EditAsync(model, Account.UserId);
+            result.BindObsoluteLogoPath(_httpContextAccessor);
+
+            return Ok(result);
+        }
+
+        [HttpPut("pat")]
+        public async Task<ActionResult<IntegrationResponse>> UpdatePat(EditPatRequest model)
+        {
+            var result = await _integrationService.EditPatAsync(model, Account.UserId);
+            result.BindObsoluteLogoPath(_httpContextAccessor);
+
+            return Ok(result);
+        }
+
+        [HttpPut("active")]
+        public async Task<ActionResult<IntegrationResponse>> UpdatePat(EditActivateRequest model)
+        {
+            var result = await _integrationService.EditActivationAsync(model, Account.UserId);
+            result.BindObsoluteLogoPath(_httpContextAccessor);
+
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
