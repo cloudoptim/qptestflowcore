@@ -95,21 +95,24 @@ namespace QPCore.Service
 
                 if (testcase != null)
                 {
+                    var assignments = _repository.GetQuery().Where(p => p.TestFlowId == testFlowId).Select(p => p.TestFlowCatAssocId).ToList();
+                    foreach (var assignmentId in assignments)
+                    {
+                        await  _repository.DeleteAsync(assignmentId);
+                    }
+                    
+                    var categories = new List<TestFlowCategoryAssoc>();
                     foreach (var categoryId in request.CategoryIdList)
                     {
-                        var checkEixsted = _repository.GetQuery()
-                            .Any(p => p.TestFlowId == testFlowId && p.CategoryId == categoryId);
-                        if (!checkEixsted)
+                        categories.Add(new TestFlowCategoryAssoc()
                         {
-                            testcase.TestFlowCategoryAssocs.Add(new TestFlowCategoryAssoc()
-                            {
-                                TestFlowId = testFlowId,
-                                CategoryId = categoryId
-                            });
-                        }
+                            TestFlowId = testFlowId,
+                            CategoryId = categoryId
+                        });
 
                     }
 
+                    testcase.TestFlowCategoryAssocs = categories;
                     testcaseList.Add(testcase);
                 }
             }
