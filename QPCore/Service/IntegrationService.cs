@@ -35,6 +35,7 @@ namespace QPCore.Service
                         Organization = s.Integration == null ? string.Empty : s.Integration.Organization,
                         Url = s.Integration == null ? string.Empty : s.Integration.Url,
                         IsActive = s.Integration == null ? false : s.Integration.IsActive,
+                        Pat =  s.Integration == null ? string.Empty : s.Integration.Pat
                     }).ToList();
             return query;
         }
