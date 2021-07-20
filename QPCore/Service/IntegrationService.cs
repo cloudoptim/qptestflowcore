@@ -34,8 +34,7 @@ namespace QPCore.Service
                         Project = s.Integration == null ? string.Empty : s.Integration.Project,
                         Organization = s.Integration == null ? string.Empty : s.Integration.Organization,
                         Url = s.Integration == null ? string.Empty : s.Integration.Url,
-                        IsActive = s.Integration == null ? false : s.Integration.IsActive,
-                        Pat =  s.Integration == null ? string.Empty : s.Integration.Pat
+                        IsActive = s.Integration == null ? false : s.Integration.IsActive
                     }).ToList();
             return query;
         }
@@ -85,6 +84,16 @@ namespace QPCore.Service
             }
             
             return GetById(entity.Id);
+        }
+
+        public bool CheckExistedAssignment(int sourceId, int userId, int? id = null)
+        {
+            var query = this.Repository.GetQuery()
+                .Any(p => p.UserId == userId &&
+                    p.SourceId == sourceId &&
+                    (id == null || p.Id != id));
+            
+            return query;
         }
     }
 }
