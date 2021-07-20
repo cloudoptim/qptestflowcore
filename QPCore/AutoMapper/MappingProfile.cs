@@ -150,7 +150,8 @@ namespace QPCore.AutoMapper
             CreateMap<DB.Integration, IntegrationResponse>()
                 .ForMember(d => d.SourceName, s => s.MapFrom(p => p.Source.Name))
                 .ForMember(d => d.Readme, s => s.MapFrom(p => p.Source.Readme))
-                .ForMember(d => d.Logo, s => s.MapFrom(p => p.Source.Logo));
+                .ForMember(d => d.Logo, s => s.MapFrom(p => p.Source.Logo))
+                .ForMember(d => d.Pat, s => s.MapFrom(p => p.Pat));
             
             CreateMap<CreateIntegrationRequest, DB.Integration>();
             CreateMap<EditIntegrationRequest, DB.Integration>();

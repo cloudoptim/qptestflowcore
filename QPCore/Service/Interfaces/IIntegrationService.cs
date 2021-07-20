@@ -10,5 +10,6 @@ namespace QPCore.Service.Interfaces
         List<IntegrationResponse> GetAllSources(int userId);
         Task<IntegrationResponse> EditPatAsync(EditPatRequest entity, int userId);
         Task<IntegrationResponse> EditActivationAsync(EditActivateRequest entity, int userId);
+        bool CheckExistedAssignment(int sourceId, int userId, int? id = null);
     }
 }
